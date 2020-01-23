@@ -1,0 +1,21 @@
+{"comments": [
+  "//got amazing\nlet /* how*/x /*are*/ = /*you*/10/*?*/;/*:)*/",
+  "//leading\n{/* inner */}//trailing",
+  "/*first*/function /*second */ test()/*third*/{/* test */} /*fourth*/",
+  "var a = 1 /* first*/ / /* 2nd*/ 2;",
+  "/* first*/(/*second*/y./*third*/x = 10)//fourth;",
+  "/* first*/(/*second*/y./*third*/x = 10, x++ /*random*/)//fourth;",
+  "( /*comment*/\"hello\");",
+  "/*first*/;//second",
+  "function test(i){/*first*/;//second\n}",
+  "function test(i){\n//first\nif /*second*/(i>10) {\n  //third\n  return \"hoi\";\n  //fourth\n} else {\n  //fifth\n  return \"hello\";\n  //sixth\n}\n//seventh\n}",
+  "/*first*/ for /*second*/ ( /*third*/var i=0; i<10/*fourth*/; /*fifth*/ i++ /*sixth*/) /*seventh*/ { /*eighth*/ i += 10; /*ninth*/ } /*tenth*/",
+  "/*first*/ while /*second*/ (/*third*/  true) /*fourth*/ { /*fifth*/ i += 10; /*sixth*/ } /*seventh*/",
+  "/* first */ do /* second*/{ /* third */ i += 1; /* fourth */ }while(/* fifth */i<10); /* sixth */",
+  "/*first*/ class Test{ /*second*/ constructor(name) { this.name = name; } /*third*/ } /*fourth*/",
+  "/*first*/x = /*second*/`this is test data` /*third*/;/*fourth*/",
+  "/*first*/x = /*second*/`this is test data${/*fourth*/x++/*fifth*/}${/*sixth*/x--/*seventh*/}` /*eighth*/;/*ninth*/",
+  "/*first*/ label: /*second*/ { /*third*/ log(x); /*fourth*/ } /*fifth*/",
+  "/*first*/x>10/*second*/?/*third*/true/*fourth*/:/*fifth*/false;/*sixth*/"
+  ]
+}
