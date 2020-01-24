@@ -1917,7 +1917,12 @@ export function parseLetIdentOrVarDeclarationStatement(
     matchOrInsertSemicolon(parser, context | Context.AllowRegExp);
 
     // put the leading comment in var decl
-    parser.leadingComments && expr.leadingComments && parser.leadingComments.push(expr.leadingComments);
+    if (expr.leadingComments) {
+      parser.leadingComments && parser.leadingComments.push(expr.leadingComments);
+    } else {
+      parser.leadingComments && parser.leadingComments.push([]);
+    }
+
     return finishNode(parser, context, start, line, column, {
       //done
       type: 'VariableDeclaration',
@@ -4455,9 +4460,9 @@ export function parsePrimaryExpression(
         column
       );
       if (exprNode.leadingComment && leadingComment) {
-        exprNode.leadingComment.concat(leadingComment);
+        exprNode.leadingComments.concat(leadingComment);
       } else if (leadingComment.length > 0) {
-        exprNode.leadingComment = leadingComment;
+        exprNode.leadingComments = leadingComment;
       }
       return exprNode;
     case Token.FalseKeyword:
