@@ -56,7 +56,8 @@ export function create(
   source: string,
   sourceFile: string | void,
   onComment: OnComment | void,
-  onToken: OnToken | void
+  onToken: OnToken | void,
+  attachComments: boolean
 ): ParserState {
   return {
     /**
@@ -182,6 +183,11 @@ export function create(
     onToken,
 
     /**
+     * Holds boolean value to decide whether to attach Comments to AST
+     */
+    attachComments,
+
+    /**
      * Holds leading decorators before "export" or "class" keywords
      */
     leadingDecorators: []
@@ -228,6 +234,8 @@ export interface Options {
   onToken?: OnToken;
   // Creates unique key for in ObjectPattern when key value are same
   uniqueKeyInPattern?: boolean;
+  // attaches comments in the AST
+  attachComments?: boolean;
 }
 
 /**
@@ -237,6 +245,7 @@ export function parseSource(source: string, options: Options | void, context: Co
   let sourceFile = '';
   let onComment;
   let onToken;
+  let attachComments = false;
   if (options != null) {
     if (options.module) context |= Context.Module | Context.Strict;
     if (options.next) context |= Context.OptionsNext;
@@ -262,10 +271,12 @@ export function parseSource(source: string, options: Options | void, context: Co
     if (options.onToken != null) {
       onToken = Array.isArray(options.onToken) ? pushToken(context, options.onToken) : options.onToken;
     }
+    if (options.attachComments != null) {
+      attachComments = options.attachComments;
+    }
   }
-
   // Initialize parser state
-  const parser = create(source, sourceFile, onComment, onToken);
+  const parser = create(source, sourceFile, onComment, onToken, attachComments);
 
   // See: https://github.com/tc39/proposal-hashbang
   if (context & Context.OptionsNext) skipHashBang(parser);
@@ -805,10 +816,13 @@ export function parseBlock(
   }
   // inner comments code here
   var innerComments = null;
-  if (body.length <= 0 && parser.comments && parser.comments.length > 0) {
-    innerComments = parser.comments;
-    parser.comments = [];
+  if (parser.attachComments) {
+    if (body.length <= 0 && parser.comments && parser.comments.length > 0) {
+      innerComments = parser.comments;
+      parser.comments = [];
+    }
   }
+
   consume(parser, context | Context.AllowRegExp, Token.RightBrace);
 
   var blockNode = <ESTree.BlockStatement>finishNode(parser, context, start, line, column, {
@@ -3822,10 +3836,13 @@ export function parseFunctionBody(
   parser.destructible = (parser.destructible | DestructuringKind.Yield) ^ DestructuringKind.Yield;
 
   let innerComments = null;
-  if (parser.comments && parser.comments.length > 0) {
-    innerComments = parser.comments;
-    parser.comments = [];
+  if (parser.attachComments) {
+    if (parser.comments && parser.comments.length > 0) {
+      innerComments = parser.comments;
+      parser.comments = [];
+    }
   }
+
   while (parser.token !== Token.RightBrace) {
     body.push(parseStatementListItem(parser, context, scope, Origin.TopLevel, {}) as ESTree.Statement);
   }
