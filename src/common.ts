@@ -227,14 +227,18 @@ export interface ParserState {
   exportedBindings: any;
   comments?: Array<Comment>;
   leadingComments?: Array<Array<Comment>>;
+  attachComments: boolean;
 }
 
 export function collectLeadingComments(parser: ParserState): Array<Comment> {
   //can use a global empty array for memory optimisation
   let leadingComments: Array<Comment> = [];
-  parser.comments && 0<parser.comments.length && (leadingComments=parser.comments,parser.comments=[]);
-  !parser.leadingComments && (parser.leadingComments=[]);
-  parser.leadingComments.push(leadingComments)
+  if (parser.attachComments) {
+    parser.comments && 0<parser.comments.length && (leadingComments=parser.comments,parser.comments=[]);
+    !parser.leadingComments && (parser.leadingComments=[]);
+    parser.leadingComments.push(leadingComments)
+  }
+
   return leadingComments;
 }
 
@@ -536,17 +540,20 @@ export function finishNode<T extends Node>(
     }
   }
 
-  // put the leading comments in AST if they are collected in the parser state
-  let leadingComments = parser.leadingComments && parser.leadingComments.pop();
-  if (leadingComments && leadingComments.length>0) {
-    node.leadingComments = leadingComments;
+  if (parser.attachComments) {
+    // put the leading comments in AST if they are collected in the parser state
+    let leadingComments = parser.leadingComments && parser.leadingComments.pop();
+    if (leadingComments && leadingComments.length>0) {
+      node.leadingComments = leadingComments;
+    }
+
+    // put the trailing comments in AST if they are found in the parser state
+    if (parser.comments && parser.comments.length > 0) {
+      node.trailingComments = parser.comments;
+      parser.comments = [];
+    }
   }
 
-  // put the trailing comments in AST if they are found in the parser state
-  if (parser.comments && parser.comments.length > 0) {
-    node.trailingComments = parser.comments;
-    parser.comments = [];
-  }
 
   return node;
 }
