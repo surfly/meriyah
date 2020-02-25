@@ -10,22 +10,36 @@ const project = require('./project');
 bundle();
 
 async function bundle() {
-  if (process.argv.slice(2)[0] === 'bench') {
-    await bunldeCJS();
-  } else {
-    await bundleES6();
-    await bundleES5();
-    await copyFile('./dist/meriyah.esm.js', './dist/meriyah.esm.mjs');
-    await copyFile('./dist/meriyah.esm.min.js', './dist/meriyah.esm.min.mjs');
-    await copyFile('./dist/meriyah.cjs.js', './dist/meriyah.cjs');
-    await copyFile('./dist/meriyah.cjs.min.js', './dist/meriyah.min.cjs');
-    await copyFile('./dist/meriyah.umd.js', './dist/meriyah.umd.cjs');
-    await copyFile('./dist/meriyah.umd.min.js', './dist/meriyah.umd.min.cjs');
+  switch (process.argv.slice(2)[0]) {
+    case 'bench':
+      await bundleCJS();
+      break;
+    case 'es6':
+      await bundleES6();
+      await copyMjs();
+      break;
+    case 'es5':
+      await bundleES5();
+      break;
+    default:
+      await bundleES6();
+      await bundleES5();
+      await copyMjs();
+      break;
   }
 }
 
+async function copyMjs() {
+  await copyFile('./dist/meriyah.esm.js', './dist/meriyah.esm.mjs');
+  await copyFile('./dist/meriyah.esm.min.js', './dist/meriyah.esm.min.mjs');
+  await copyFile('./dist/meriyah.cjs.js', './dist/meriyah.cjs');
+  await copyFile('./dist/meriyah.cjs.min.js', './dist/meriyah.min.cjs');
+  await copyFile('./dist/meriyah.umd.js', './dist/meriyah.umd.cjs');
+  await copyFile('./dist/meriyah.umd.min.js', './dist/meriyah.umd.min.cjs');
+}
+
 // bundle cjs(es6)
-async function bunldeCJS() {
+async function bundleCJS() {
   console.log(`creating cjs bundle`);
 
   const bundle = await rollup.rollup({
