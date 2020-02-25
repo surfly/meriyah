@@ -10,6 +10,23 @@ function isIDStart(code: number) {
 function mustEscape(code: number) {
   return (unicodeLookup[(code >>> 5) + 69632] >>> code & 31 & 1) !== 0;
 }
+function array_fill(a: Uint32Array, x: any, start?: number, end?: number) {
+    if (!a){
+        return;
+    }
+    if (!start) {
+        start = 0;
+    }
+    if (!end) {
+        end = a.length;
+    } else if (end > a.length) {
+        end = a.length;
+    }
+    for (;start < end; start++) {
+        a[start] = x;
+    }
+    return a;
+}
 export const unicodeLookup = ((compressed, lookup) => {
     const result = new Uint32Array(104448);
     let index = 0;
@@ -22,7 +39,11 @@ export const unicodeLookup = ((compressed, lookup) => {
             let code = compressed[index++];
             if (inst & 2) code = lookup[code];
             if (inst & 1) {
-                result.fill(code, subIndex, subIndex += compressed[index++]);
+                if (result.fill) {
+                    result.fill(code, subIndex, subIndex += compressed[index++]);
+                } else {
+                    array_fill(result, code, subIndex, subIndex += compressed[index++]);
+                }
             } else {
                 result[subIndex++] = code;
             }
