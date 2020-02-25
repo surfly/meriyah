@@ -8,16 +8,25 @@ const project = require('./project');
 bundle();
 
 async function bundle() {
-  if (process.argv.slice(2)[0] === 'bench') {
-    await bunldeCJS();
-  } else {
-    await bundleES6();
-    await bundleES5();
+  switch (process.argv.slice(2)[0]) {
+    case 'bench':
+      await bundleCJS();
+      break;
+    case 'es6':
+      await bundleES6();
+      break;
+    case 'es5':
+      await bundleES5();
+      break;
+    default:
+      await bundleES6();
+      await bundleES5();
+      break;
   }
 }
 
 // bundle cjs(es6)
-async function bunldeCJS() {
+async function bundleCJS() {
   console.log(`creating cjs bundle`);
 
   const bundle = await rollup.rollup({

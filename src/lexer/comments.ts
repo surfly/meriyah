@@ -2,14 +2,7 @@ import { advanceChar, CharTypes, CharFlags, LexerState, scanNewLine, consumeLine
 import { Chars } from '../chars';
 import { Context, ParserState } from '../common';
 import { report, Errors } from '../errors';
-
-export const enum CommentType {
-  Single,
-  Multi,
-  HTMLOpen,
-  HTMLClose,
-  HashBang
-}
+import { CommentTypeEnum } from '../estree';
 
 export const CommentTypes = ['SingleLine', 'MultiLine', 'HTMLOpen', 'HTMLClose', 'HashbangComment'];
 
@@ -23,7 +16,7 @@ export function skipHashBang(parser: ParserState): void {
   //   #!  SingleLineCommentChars_opt
   const source = parser.source;
   if (parser.currentChar === Chars.Hash && source.charCodeAt(parser.index + 1) === Chars.Exclamation) {
-    skipSingleLineComment(parser, source, LexerState.None, CommentType.HashBang);
+    skipSingleLineComment(parser, source, LexerState.None, CommentTypeEnum.HashBang);
   }
 }
 
@@ -32,7 +25,7 @@ export function skipSingleHTMLComment(
   source: string,
   state: LexerState,
   context: Context,
-  type: CommentType
+  type: CommentTypeEnum
 ): LexerState {
   if (context & Context.Module) report(parser, Errors.Unexpected);
   return skipSingleLineComment(parser, source, state, type);
@@ -48,7 +41,7 @@ export function skipSingleLineComment(
   parser: ParserState,
   source: string,
   state: LexerState,
-  type: CommentType
+  type: CommentTypeEnum
 ): LexerState {
   const { index } = parser;
   while (parser.index < parser.end) {
@@ -64,8 +57,10 @@ export function skipSingleLineComment(
     }
     advanceChar(parser);
   }
-  if (parser.onComment)
-    parser.onComment(CommentTypes[type & 0xff], source.slice(index, parser.index), index, parser.index);
+  const commentVal = source.slice(index, parser.index);
+  const commentObj = { type: type, value: commentVal, start: index, end: parser.index };
+  parser.comments && parser.comments.push(commentObj);
+  if (parser.onComment) parser.onComment(type, commentVal, index, parser.index);
   return state | LexerState.NewLine;
 }
 
@@ -87,13 +82,10 @@ export function skipMultiLineComment(parser: ParserState, source: string, state:
         }
         if (advanceChar(parser) === Chars.Slash) {
           advanceChar(parser);
-          if (parser.onComment)
-            parser.onComment(
-              CommentTypes[CommentType.Multi & 0xff],
-              source.slice(index, parser.index - 2),
-              index,
-              parser.index
-            );
+          const commentVal = source.slice(index, parser.index - 2);
+          const commentObj = { type: CommentTypeEnum.Multi, value: commentVal, start: index, end: parser.index };
+          parser.comments && parser.comments.push(commentObj);
+          if (parser.onComment) parser.onComment(CommentTypeEnum.Multi, commentVal, index, parser.index);
           return state;
         }
       }

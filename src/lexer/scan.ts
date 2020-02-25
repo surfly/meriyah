@@ -8,7 +8,6 @@ import {
   skipSingleLineComment,
   skipMultiLineComment,
   skipSingleHTMLComment,
-  CommentType,
   LexerState,
   isExoticECMAScriptWhitespace,
   scanRegularExpression,
@@ -25,6 +24,8 @@ import {
   scanNewLine,
   convertTokenType
 } from './';
+
+import { CommentTypeEnum } from '../estree';
 
 /*
  * OneChar:          40,  41,  44,  58,  59,  63,  91,  93,  123, 125, 126:
@@ -196,6 +197,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
     parser.tokenPos = parser.index;
     parser.colPos = parser.column;
     parser.linePos = parser.line;
+    !parser.comments && (parser.comments = []);
 
     let char = parser.currentChar;
 
@@ -242,7 +244,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
               ) {
                 parser.column += 3;
                 parser.currentChar = source.charCodeAt((parser.index += 3));
-                state = skipSingleHTMLComment(parser, source, state, context, CommentType.HTMLOpen);
+                state = skipSingleHTMLComment(parser, source, state, context, CommentTypeEnum.HTMLOpen);
                 continue;
               }
               return Token.LessThan;
@@ -358,7 +360,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
             if ((state & LexerState.NewLine || isStartOfLine) && parser.currentChar === Chars.GreaterThan) {
               if ((context & Context.OptionsWebCompat) === 0) report(parser, Errors.HtmlCommentInWebCompat);
               advanceChar(parser);
-              state = skipSingleHTMLComment(parser, source, state, context, CommentType.HTMLClose);
+              state = skipSingleHTMLComment(parser, source, state, context, CommentTypeEnum.HTMLClose);
               continue;
             }
 
@@ -380,7 +382,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
             const ch = parser.currentChar;
             if (ch === Chars.Slash) {
               advanceChar(parser);
-              state = skipSingleLineComment(parser, source, state, CommentType.Single);
+              state = skipSingleLineComment(parser, source, state, CommentTypeEnum.Single);
               continue;
             }
             if (ch === Chars.Asterisk) {
