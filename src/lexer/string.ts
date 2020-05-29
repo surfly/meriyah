@@ -8,7 +8,7 @@ import { toHex, advanceChar, fromCodePoint, CharTypes, CharFlags } from './';
 export const enum Escape {
   Empty = -1,
   StrictOctal = -2,
-  EightOrNine = -3,
+  // EightOrNine = -3, // disabled
   InvalidHex = -4,
   OutOfRange = -5
 }
@@ -160,11 +160,6 @@ export function parseEscape(parser: ParserState, context: Context, first: number
       return code;
     }
 
-    // `8`, `9` (invalid escapes)
-    case Chars.Eight:
-    case Chars.Nine:
-      return Escape.EightOrNine;
-
     // HexEscapeSequence
     // \x HexDigit HexDigit
     case Chars.LowerX: {
@@ -225,9 +220,6 @@ export function handleStringError(state: ParserState, code: Escape, isTemplate: 
 
     case Escape.StrictOctal:
       report(state, isTemplate ? Errors.TemplateOctalLiteral : Errors.StrictOctalEscape);
-
-    case Escape.EightOrNine:
-      report(state, Errors.InvalidEightAndNine);
 
     case Escape.InvalidHex:
       report(state, Errors.InvalidHexEscapeSequence);
