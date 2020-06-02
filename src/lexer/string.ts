@@ -8,7 +8,6 @@ import { toHex, advanceChar, fromCodePoint, CharTypes, CharFlags } from './';
 export const enum Escape {
   Empty = -1,
   StrictOctal = -2,
-  // EightOrNine = -3, // disabled
   InvalidHex = -4,
   OutOfRange = -5
 }

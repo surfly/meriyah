@@ -14,7 +14,6 @@ export const enum Errors {
   MissingExponent,
   InvalidBigInt,
   IDStartAfterNumber,
-  // InvalidEightAndNine, // disabled
   UnterminatedString,
   UnterminatedTemplate,
   UnterminatedComment,
