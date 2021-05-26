@@ -2052,9 +2052,18 @@ function parseLexicalDeclaration(
   collectLeadingComments(parser);
   nextToken(parser, context);
 
+  // stash comments from this node, so they aren't included in child nodes
+  const comments = parser.comments;
+  parser.comments = [];
+  const leadingComments = parser.leadingComments;
+  parser.leadingComments = [];
+
   const declarations = parseVariableDeclarationList(parser, context, scope, kind, origin);
 
   matchOrInsertSemicolon(parser, context | Context.AllowRegExp);
+
+  parser.comments = comments;
+  parser.leadingComments = leadingComments;
 
   return finishNode(parser, context, start, line, column, {
     //done
