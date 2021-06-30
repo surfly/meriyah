@@ -89,6 +89,8 @@ describe('Lexer - Identifiers', () => {
     [Context.None, Token.YieldKeyword, 'yield', 'yield'],
     [Context.None, Token.LetKeyword, 'let', 'let'],
     [Context.None, Token.PublicKeyword, 'public', 'public'],
+    [Context.None, Token.Identifier, 'as', 'as'],
+    [Context.AllowAsKeyword, Token.AsKeyword, 'as', 'as'],
 
     // Escaped Keywords
     [Context.None, Token.EscapedReserved, '\\u0061sync', 'async'],
@@ -103,6 +105,8 @@ describe('Lexer - Identifiers', () => {
     [Context.Strict, Token.EscapedReserved, '\\u0069\\u0066', 'if'],
     [Context.None, Token.EscapedReserved, '\\u{62}\\u{72}\\u{65}\\u{61}\\u{6b}', 'break'],
     [Context.None, Token.EscapedReserved, '\\u0063atch', 'catch'],
+    [Context.None, Token.Identifier, '\\u0061\\u0073', 'as'],
+    [Context.AllowAsKeyword, Token.EscapedReserved, '\\u0061\\u0073', 'as'],
 
     // Russian letters
     [Context.None, Token.Identifier, 'б', 'б'],
