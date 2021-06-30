@@ -15,9 +15,21 @@ export function scanIdentifier(parser: ParserState, context: Context, isValidAsK
   while (isIdPart[advanceChar(parser)]) {}
   parser.tokenValue = parser.source.slice(parser.tokenPos, parser.index);
 
-  return parser.currentChar !== Chars.Backslash && parser.currentChar < 0x7e
-    ? descKeywordTable[parser.tokenValue] || Token.Identifier
-    : scanIdentifierSlowCase(parser, context, 0, isValidAsKeyword);
+  if (parser.currentChar === Chars.Backslash || parser.currentChar >= 0x7e) {
+    return scanIdentifierSlowCase(parser, context, 0, isValidAsKeyword);
+  }
+
+  const token = descKeywordTable[parser.tokenValue];
+  if (!token) {
+    return Token.Identifier;
+  }
+
+  // 'as' is only a keyword in certain import statements
+  if (token === Token.AsKeyword && ((context & Context.AllowAsKeyword) === 0)) {
+    return Token.Identifier;
+  }
+
+  return token;
 }
 
 /**
@@ -72,8 +84,17 @@ export function scanIdentifierSlowCase(
   const length = parser.tokenValue.length;
 
   if (isValidAsKeyword && (length >= 2 && length <= 11)) {
-    const token: Token | undefined = descKeywordTable[parser.tokenValue];
+    let token: Token | undefined = descKeywordTable[parser.tokenValue];
     if (token === void 0) return Token.Identifier;
+
+    // 'as' is only a keyword in certain import statements
+    if (
+      token === Token.AsKeyword &&
+      (context & Context.AllowAsKeyword) === 0
+    ) {
+      return Token.Identifier;
+    }
+
     if (!hasEscape) return token;
 
     if (context & Context.Strict) {

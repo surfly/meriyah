@@ -44,7 +44,7 @@ describe('Lexer - Comments', () => {
 
   for (const [ctx, token, op] of tokens) {
     it(`scans '${op}' at the end`, () => {
-      const state = create(op, '', undefined);
+      const state = create(op, '', undefined, undefined, false);
       const found = scanSingleToken(state, ctx, 0);
 
       t.deepEqual(
@@ -64,7 +64,7 @@ describe('Lexer - Comments', () => {
 
   function fail(name: string, source: string, context: Context) {
     it(name, () => {
-      const state = create(source, '', undefined);
+      const state = create(source, '', undefined, undefined, false);
       t.throws(() => scanSingleToken(state, context, 0));
     });
   }

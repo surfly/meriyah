@@ -2054,16 +2054,20 @@ function parseLexicalDeclaration(
 
   // stash comments from this node, so they aren't included in child nodes
   const comments = parser.comments;
-  parser.comments = [];
   const leadingComments = parser.leadingComments;
-  parser.leadingComments = [];
+  if (parser.attachComments) {
+    parser.comments = [];
+    parser.leadingComments = [];
+  }
 
   const declarations = parseVariableDeclarationList(parser, context, scope, kind, origin);
 
   matchOrInsertSemicolon(parser, context | Context.AllowRegExp);
 
-  parser.comments = comments;
-  parser.leadingComments = leadingComments;
+  if (parser.attachComments) {
+    parser.comments = comments;
+    parser.leadingComments = leadingComments;
+  }
 
   return finishNode(parser, context, start, line, column, {
     //done
@@ -2622,7 +2626,7 @@ function parseImportNamespaceSpecifier(
   const { tokenPos, linePos, colPos } = parser;
   // TODO: check
   collectLeadingComments(parser);
-  nextToken(parser, context);
+  nextToken(parser, context | Context.AllowAsKeyword);
   consume(parser, context, Token.AsKeyword);
 
   // 'import * as class from "foo":'
@@ -2688,7 +2692,7 @@ function parseImportSpecifierOrNamedImports(
     // TODO: check
     collectLeadingComments(parser);
 
-    const imported = parseIdentifier(parser, context, 0);
+    const imported = parseIdentifier(parser, context | Context.AllowAsKeyword, 0);
     let local: ESTree.Identifier;
 
     if (consumeOpt(parser, context, Token.AsKeyword)) {
@@ -3014,7 +3018,7 @@ function parseExportDeclaration(
       //
       // See: https://github.com/tc39/ecma262/pull/1174
 
-      nextToken(parser, context); // Skips: '*'
+      nextToken(parser, context | Context.AllowAsKeyword); // Skips: '*'
 
       const isNamedDeclaration = consumeOpt(parser, context, Token.AsKeyword);
 
@@ -3076,7 +3080,7 @@ function parseExportDeclaration(
         // TODO: check
         collectLeadingComments(parser);
 
-        const local = parseIdentifier(parser, context, 0);
+        const local = parseIdentifier(parser, context | Context.AllowAsKeyword, 0);
 
         let exported: ESTree.Identifier | null;
 
