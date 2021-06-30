@@ -28,6 +28,7 @@ export const enum Context {
   InIteration = 1 << 17,
   SuperProperty = 1 << 18,
   SuperCall = 1 << 19,
+  AllowAsKeyword = 1 << 20, // 'as' is only a keyword in certain import statements
   InYieldContext = 1 << 21,
   InAwaitContext = 1 << 22,
   InArgumentList = 1 << 23,
