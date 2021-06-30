@@ -57,7 +57,7 @@ export function create(
   sourceFile: string | void,
   onComment: OnComment | void,
   onToken: OnToken | void,
-  attachComments: boolean
+  attachComments: boolean | void
 ): ParserState {
   return {
     /**
@@ -2054,16 +2054,20 @@ function parseLexicalDeclaration(
 
   // stash comments from this node, so they aren't included in child nodes
   const comments = parser.comments;
-  parser.comments = [];
   const leadingComments = parser.leadingComments;
-  parser.leadingComments = [];
+  if (parser.attachComments) {
+    parser.comments = [];
+    parser.leadingComments = [];
+  }
 
   const declarations = parseVariableDeclarationList(parser, context, scope, kind, origin);
 
   matchOrInsertSemicolon(parser, context | Context.AllowRegExp);
 
-  parser.comments = comments;
-  parser.leadingComments = leadingComments;
+  if (parser.attachComments) {
+    parser.comments = comments;
+    parser.leadingComments = leadingComments;
+  }
 
   return finishNode(parser, context, start, line, column, {
     type: 'VariableDeclaration',

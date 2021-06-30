@@ -229,7 +229,7 @@ export interface ParserState {
   exportedBindings: any;
   comments?: Array<Comment>;
   leadingComments?: Array<Array<Comment>>;
-  attachComments: boolean;
+  attachComments: boolean | void;
   leadingDecorators: Decorator[];
 }
 
