@@ -103,8 +103,8 @@ export const enum Token {
   StrictNotEqual     = 58 | IsBinaryOp | 7 << PrecStart, // !==
   LooseEqual         = 59 | IsBinaryOp | 7 << PrecStart, // ==
   LooseNotEqual      = 60 | IsBinaryOp | 7 << PrecStart, // !=
-  LessThanOrEqual    = 61 | IsBinaryOp | 7 << PrecStart, // <=
-  GreaterThanOrEqual = 62 | IsBinaryOp | 7 << PrecStart, // >=
+  LessThanOrEqual    = 61 | IsBinaryOp | 8 << PrecStart, // <=
+  GreaterThanOrEqual = 62 | IsBinaryOp | 8 << PrecStart, // >=
   LessThan           = 63 | IsBinaryOp | IsExpressionStart | 8 << PrecStart, // <
   GreaterThan        = 64 | IsBinaryOp | 8 << PrecStart, // >
   ShiftLeft          = 65 | IsBinaryOp | 9 << PrecStart, // <<
