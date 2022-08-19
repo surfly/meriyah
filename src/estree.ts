@@ -34,7 +34,7 @@ export type ArgumentExpression =
   | LogicalExpression
   | SequenceExpression;
 
-export enum CommentTypeEnum {
+export enum CommentType {
   Single = 'SingleLine',
   Multi = 'MultiLine',
   HTMLOpen = 'HTMLOpen',
@@ -43,7 +43,7 @@ export enum CommentTypeEnum {
 }
 
 export interface Comment extends _Node {
-  type: CommentTypeEnum;
+  type: CommentType;
   value: string;
 }
 

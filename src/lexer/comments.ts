@@ -3,9 +3,7 @@ import { CharTypes, CharFlags } from './charClassifier';
 import { Chars } from '../chars';
 import { Context, ParserState } from '../common';
 import { report, Errors } from '../errors';
-import { CommentTypeEnum } from '../estree';
-
-export const CommentTypes = ['SingleLine', 'MultiLine', 'HTMLOpen', 'HTMLClose', 'HashbangComment'];
+import { CommentType } from '../estree';
 
 /**
  * Skips hasbang (stage 3)
@@ -23,7 +21,7 @@ export function skipHashBang(parser: ParserState): void {
       parser,
       source,
       LexerState.None,
-      CommentTypeEnum.HashBang,
+      CommentType.HashBang,
       parser.tokenPos,
       parser.linePos,
       parser.colPos
@@ -36,7 +34,7 @@ export function skipSingleHTMLComment(
   source: string,
   state: LexerState,
   context: Context,
-  type: CommentTypeEnum,
+  type: CommentType,
   start: number,
   line: number,
   column: number
@@ -55,7 +53,7 @@ export function skipSingleLineComment(
   parser: ParserState,
   source: string,
   state: LexerState,
-  type: CommentTypeEnum,
+  type: CommentType,
   start: number,
   line: number,
   column: number
@@ -121,7 +119,7 @@ export function skipMultiLineComment(parser: ParserState, source: string, state:
         if (advanceChar(parser) === Chars.Slash) {
           advanceChar(parser);
           const commentVal = source.slice(index, parser.index - 2);
-          const commentObj = { type: CommentTypeEnum.Multi, value: commentVal, start: index, end: parser.index };
+          const commentObj = { type: CommentType.Multi, value: commentVal, start: index, end: parser.index };
           parser.comments && parser.comments.push(commentObj);
           if (parser.onComment) {
             const loc = {
@@ -135,7 +133,7 @@ export function skipMultiLineComment(parser: ParserState, source: string, state:
               }
             };
             parser.onComment(
-              CommentTypeEnum.Multi,
+              CommentType.Multi,
               commentVal,
               index - 2, // start before '/*'
               parser.index, // end after '*/'

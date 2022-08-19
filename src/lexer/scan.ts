@@ -20,7 +20,7 @@ import { scanNumber } from './numeric';
 import { scanString } from './string';
 import { scanIdentifier, scanUnicodeIdentifier, scanIdentifierSlowCase, scanPrivateIdentifier } from './identifier';
 
-import { CommentTypeEnum } from '../estree';
+import { CommentType } from '../estree';
 
 /*
  * OneChar:          40,  41,  44,  58,  59,  63,  91,  93,  123, 125, 126:
@@ -302,7 +302,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
                   source,
                   state,
                   context,
-                  CommentTypeEnum.HTMLOpen,
+                  CommentType.HTMLOpen,
                   parser.tokenPos,
                   parser.linePos,
                   parser.colPos
@@ -430,7 +430,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
                 source,
                 state,
                 context,
-                CommentTypeEnum.HTMLClose,
+                CommentType.HTMLClose,
                 startPos,
                 startLine,
                 startColumn
@@ -463,7 +463,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
                 parser,
                 source,
                 state,
-                CommentTypeEnum.Single,
+                CommentType.Single,
                 parser.tokenPos,
                 parser.linePos,
                 parser.colPos
