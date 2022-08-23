@@ -750,7 +750,6 @@ export function parseExpressionOrLabelledStatement(
    *
    */
 
-  // let trailingComments = parser.comments;
   expr = parseMemberOrUpdateExpression(parser, context, expr, 0, 0, start, line, column);
 
   /** AssignmentExpression :
@@ -778,7 +777,6 @@ export function parseExpressionOrLabelledStatement(
    *  [lookahead ∉ { {, function, async [no LineTerminator here] function, class, let [ }]Expression[+In, ?Yield, ?Await]
    */
 
-  // parser.comments = trailingComments;
   return parseExpressionStatement(parser, context, expr, start, line, column);
 }
 
@@ -825,7 +823,7 @@ export function parseBlock(
 
   consume(parser, context | Context.AllowRegExp, Token.RightBrace);
 
-  var blockNode = <ESTree.BlockStatement>finishNode(parser, context, start, line, column, {
+  const blockNode = <ESTree.BlockStatement> finishNode(parser, context, start, line, column, {
     type: 'BlockStatement',
     body
   });
@@ -1292,7 +1290,7 @@ export function parseIfStatement(
   nextToken(parser, context);
   consume(parser, context | Context.AllowRegExp, Token.LeftParen);
   parser.assignable = AssignmentKind.Assignable;
-  let leadingCommentForTest = collectLeadingComments(parser);
+  const leadingCommentForTest = collectLeadingComments(parser);
   const test = parseExpressions(parser, context, 0, 1, parser.tokenPos, parser.line, parser.colPos);
   if (parser.attachComments) {
     test.leadingComments = leadingCommentForTest;
@@ -4391,10 +4389,10 @@ export function parsePrimaryExpression(
       return parseArrayLiteral(parser, context, canAssign ? 0 : 1, inGroup, start, line, column);
     case Token.LeftParen:
       //leading comment here is tricky, as the parenthesis can be stripped out
-      let leadingComment = collectLeadingComments(parser);
+      const leadingComment = collectLeadingComments(parser);
       // pop the collected leading comment so that it does not affect the leadingCommentstack
       parser.leadingComments && parser.leadingComments.pop();
-      let exprNode = parseParenthesizedExpression(
+      const exprNode = parseParenthesizedExpression(
         parser,
         context,
         canAssign,
