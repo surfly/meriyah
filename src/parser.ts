@@ -1294,7 +1294,9 @@ export function parseIfStatement(
   parser.assignable = AssignmentKind.Assignable;
   let leadingCommentForTest = collectLeadingComments(parser);
   const test = parseExpressions(parser, context, 0, 1, parser.tokenPos, parser.line, parser.colPos);
-  test.leadingComments = leadingCommentForTest;
+  if (parser.attachComments) {
+    test.leadingComments = leadingCommentForTest;
+  }
   consume(parser, context | Context.AllowRegExp, Token.RightParen);
   const consequent = parseConsequentOrAlternative(
     parser,
