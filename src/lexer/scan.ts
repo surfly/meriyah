@@ -13,12 +13,14 @@ import {
   scanNewLine,
   convertTokenType
 } from './common';
-import { skipSingleLineComment, skipMultiLineComment, skipSingleHTMLComment, CommentType } from './comments';
+import { skipSingleLineComment, skipMultiLineComment, skipSingleHTMLComment } from './comments';
 import { scanRegularExpression } from './regexp';
 import { scanTemplate } from './template';
 import { scanNumber } from './numeric';
 import { scanString } from './string';
 import { scanIdentifier, scanUnicodeIdentifier, scanIdentifierSlowCase, scanPrivateIdentifier } from './identifier';
+
+import { CommentType } from '../estree';
 
 /*
  * OneChar:          40,  41,  44,  58,  59,  63,  91,  93,  123, 125, 126:
@@ -206,6 +208,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
     parser.tokenPos = parser.index;
     parser.colPos = parser.column;
     parser.linePos = parser.line;
+    !parser.comments && (parser.comments = []);
 
     let char = parser.currentChar;
 

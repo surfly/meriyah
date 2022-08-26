@@ -23,6 +23,7 @@
 * JSX support via option
 * Does **not** support TypeScript or Flow
 * Optionally track syntactic node locations
+* Optionally attach comments to AST
 * Emits an ESTree-compatible abstract syntax tree
 * No backtracking
 * Low memory usage
@@ -84,6 +85,9 @@ This is the available options:
 
   // Allows comment extraction. Accepts either a function or array
   onComment: []
+
+  // Attach comments to AST
+  attachComments: false;
 
   // Allows token extraction. Accepts either a function or array
   onToken: []

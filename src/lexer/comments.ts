@@ -3,16 +3,7 @@ import { CharTypes, CharFlags } from './charClassifier';
 import { Chars } from '../chars';
 import { Context, ParserState } from '../common';
 import { report, Errors } from '../errors';
-
-export const enum CommentType {
-  Single,
-  Multi,
-  HTMLOpen,
-  HTMLClose,
-  HashBang
-}
-
-export const CommentTypes = ['SingleLine', 'MultiLine', 'HTMLOpen', 'HTMLClose', 'HashbangComment'];
+import { CommentType } from '../estree';
 
 /**
  * Skips hasbang (stage 3)
@@ -87,6 +78,9 @@ export function skipSingleLineComment(
     parser.linePos = parser.line;
     parser.colPos = parser.column;
   }
+  const commentVal = source.slice(index, parser.index);
+  const commentObj = { type: type, value: commentVal, start: index, end: parser.index };
+  parser.comments && parser.comments.push(commentObj);
   if (parser.onComment) {
     const loc = {
       start: {
@@ -101,7 +95,7 @@ export function skipSingleLineComment(
     // For Single, start before "//",
     // For HTMLOpen, start before "<!--",
     // For HTMLClose, start before "\n-->"
-    parser.onComment(CommentTypes[type & 0xff], source.slice(index, parser.tokenPos), start, parser.tokenPos, loc);
+    parser.onComment(type, commentVal, start, parser.tokenPos, loc);
   }
   return state | LexerState.NewLine;
 }
@@ -124,6 +118,9 @@ export function skipMultiLineComment(parser: ParserState, source: string, state:
         }
         if (advanceChar(parser) === Chars.Slash) {
           advanceChar(parser);
+          const commentVal = source.slice(index, parser.index - 2);
+          const commentObj = { type: CommentType.Multi, value: commentVal, start: index, end: parser.index };
+          parser.comments && parser.comments.push(commentObj);
           if (parser.onComment) {
             const loc = {
               start: {
@@ -136,8 +133,8 @@ export function skipMultiLineComment(parser: ParserState, source: string, state:
               }
             };
             parser.onComment(
-              CommentTypes[CommentType.Multi & 0xff],
-              source.slice(index, parser.index - 2),
+              CommentType.Multi,
+              commentVal,
               index - 2, // start before '/*'
               parser.index, // end after '*/'
               loc

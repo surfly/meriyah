@@ -3,6 +3,8 @@ export interface _Node {
   end?: number;
   range?: [number, number];
   loc?: SourceLocation | null;
+  leadingComments?: Array<Comment>;
+  trailingComments?: Array<Comment>;
 }
 
 export interface SourceLocation {
@@ -32,14 +34,17 @@ export type ArgumentExpression =
   | LogicalExpression
   | SequenceExpression;
 
-export type CommentType = 'SingleLine' | 'MultiLine' | 'HTMLOpen' | 'HTMLClose' | 'HashbangComment';
+export enum CommentType {
+  Single = 'SingleLine',
+  Multi = 'MultiLine',
+  HTMLOpen = 'HTMLOpen',
+  HTMLClose = 'HTMLClose',
+  HashBang = 'HashbangComment'
+}
 
-export interface Comment {
+export interface Comment extends _Node {
   type: CommentType;
   value: string;
-  start?: number;
-  end?: number;
-  loc?: SourceLocation | null;
 }
 
 export type Node =
@@ -60,6 +65,7 @@ export type Node =
   | ClassBody
   | ClassDeclaration
   | ClassExpression
+  | Comment
   | ConditionalExpression
   | ContinueStatement
   | DebuggerStatement
@@ -328,6 +334,8 @@ export interface BinaryExpression extends _Node {
 
 export interface BlockStatement extends BlockStatementBase {
   type: 'BlockStatement';
+  body: Statement[];
+  innerComments?: Array<Comment>;
 }
 
 export interface BreakStatement extends _Node {
