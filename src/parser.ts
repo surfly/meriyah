@@ -8376,6 +8376,8 @@ export function parseClassBody(
 
   consume(parser, context | Context.AllowRegExp, Token.LeftBrace);
   context = (context | Context.DisallowIn) ^ Context.DisallowIn;
+
+  let hasConstr = parser.flags & Flags.HasConstructor;
   parser.flags = (parser.flags | Flags.HasConstructor) ^ Flags.HasConstructor;
 
   const body: (ESTree.MethodDefinition | ESTree.PropertyDefinition | ESTree.StaticBlock)[] = [];
@@ -8417,6 +8419,7 @@ export function parseClassBody(
     );
   }
   consume(parser, origin & Origin.Declaration ? context | Context.AllowRegExp : context, Token.RightBrace);
+  parser.flags = (parser.flags & ~Flags.HasConstructor) | hasConstr;
 
   return finishNode(parser, context, tokenPos, linePos, colPos, {
     type: 'ClassBody',
