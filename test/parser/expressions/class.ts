@@ -799,7 +799,9 @@ describe('Expressions - Class', () => {
     ['(class A { static prototype() {} })', Context.None],
     ['(class A { static *get [x](){} })', Context.None],
     ['(class A { static *set [x](y){}})', Context.None],
-    ['async function f(foo = class y extends (await f) {}){}', Context.None]
+    ['async function f(foo = class y extends (await f) {}){}', Context.None],
+    ['new class { constructor() {} start() { new class { constructor() {}}} constructor() {}}', Context.None],
+    ['new class { constructor() {} start() { new class { } } constructor() {}}', Context.None]
   ]);
 
   for (const arg of [
@@ -12788,6 +12790,126 @@ describe('Expressions - Class', () => {
         ],
         sourceType: 'module',
         type: 'Program'
+      }
+    ],
+    [
+      `new class {
+        start() {
+          new class {
+            constructor() {}
+          }
+        }
+        constructor() {}
+      }`,
+      Context.None,
+      {
+        body: [
+          {
+            type: "ExpressionStatement",
+            expression: {
+              type: "NewExpression",
+              callee: {
+                type: "ClassExpression",
+                id: null,
+                superClass: null,
+                decorators: [],
+                body: {
+                  type: "ClassBody",
+                  body: [
+                    {
+                      type: "MethodDefinition",
+                      kind: "method",
+                      static: false,
+                      computed: false,
+                      key: {
+                        type: "Identifier",
+                        name: "start"
+                      },
+                      decorators: [],
+                      value: {
+                        type: "FunctionExpression",
+                        params: [],
+                        body: {
+                          type: "BlockStatement",
+                          body: [
+                            {
+                              type: "ExpressionStatement",
+                              expression: {
+                                type: "NewExpression",
+                                callee: {
+                                  type: "ClassExpression",
+                                  id: null,
+                                  superClass: null,
+                                  decorators: [],
+                                  body: {
+                                    type: "ClassBody",
+                                    body: [
+                                      {
+                                        type: "MethodDefinition",
+                                        kind: "constructor",
+                                        static: false,
+                                        computed: false,
+                                        key: {
+                                          type: "Identifier",
+                                          name: "constructor"
+                                        },
+                                        decorators: [],
+                                        value: {
+                                          type: "FunctionExpression",
+                                          params: [],
+                                          body: {
+                                            type: "BlockStatement",
+                                            body: []
+                                          },
+                                          async: false,
+                                          generator: false,
+                                          id: null
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                arguments: []
+                              }
+                            }
+                          ]
+                        },
+                        async: false,
+                        generator: false,
+                        id: null
+                      }
+                    },
+                    {
+                      type: "MethodDefinition",
+                      kind: "constructor",
+                      static: false,
+                      computed: false,
+                      key: {
+                        type: "Identifier",
+                        name: "constructor"
+                      },
+                      decorators: [],
+                      value: {
+                        type: "FunctionExpression",
+                        params: [],
+                        body: {
+                          type: "BlockStatement",
+                          body: []
+                        },
+                        async: false,
+                        generator: false,
+                        id: null
+                      }
+                    }
+                  ]
+                }
+              },
+              arguments: []
+            }
+          }
+        ],
+        type: "Program",
+        sourceType: "script"
       }
     ]
   ]);
