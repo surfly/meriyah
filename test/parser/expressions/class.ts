@@ -801,6 +801,7 @@ describe('Expressions - Class', () => {
     ['(class A { static *set [x](y){}})', Context.None],
     ['async function f(foo = class y extends (await f) {}){}', Context.None],
     ['new class { constructor() {} start() { new class { constructor() {}}} constructor() {}}', Context.None]
+    ['new class { constructor() {} start() { new class { } } constructor() {}}', Context.None]
   ]);
 
   for (const arg of [
