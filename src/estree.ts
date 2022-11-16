@@ -173,7 +173,8 @@ export type Expression =
   | LeftHandSideExpression
   | UnaryExpression
   | UpdateExpression
-  | YieldExpression;
+  | YieldExpression
+  | Identifier;
 export type ForInitialiser = Expression | VariableDeclaration;
 export type ImportClause = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
 export type IterationStatement = DoWhileStatement | ForInStatement | ForOfStatement | ForStatement | WhileStatement;

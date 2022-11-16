@@ -136,7 +136,6 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
  *
  *
  * @param state Parser instance
- * @param context Context masks
  * @param pattern Regexp body
  * @param flags Regexp flags
  */
