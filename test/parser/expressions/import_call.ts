@@ -111,6 +111,8 @@ describe('Next - ImportCall', () => {
     'let Layout = () => import("../foo/bar/zoo.js")',
     '"use strict"; import("test.js");',
     'function loadImport(file) { return import(`test/${file}.js`); }',
+    'function loadImport(file) { return import(file).then(() => {}), console.log("Done."); }',
+    'function loadImport(file) { import(file).then(() => {}), console.log("Done."); }',
     '() => { import(x) }',
     '(import(y=x))',
     '{import(y=x)}',

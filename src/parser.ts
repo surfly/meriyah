@@ -823,7 +823,7 @@ export function parseBlock(
 
   consume(parser, context | Context.AllowRegExp, Token.RightBrace);
 
-  const blockNode = <ESTree.BlockStatement> finishNode(parser, context, start, line, column, {
+  const blockNode = <ESTree.BlockStatement>finishNode(parser, context, start, line, column, {
     type: 'BlockStatement',
     body
   });
@@ -2810,6 +2810,10 @@ function parseImportCallDeclaration(
    */
 
   expr = parseMemberOrUpdateExpression(parser, context, expr, 0, 0, start, line, column);
+
+  if (parser.token === Token.Comma) {
+    parseSequenceExpression(parser, context, 0, start, line, column, expr);
+  }
 
   /**
    * ExpressionStatement[Yield, Await]:
@@ -6252,8 +6256,10 @@ export function parseObjectLiteralOrPattern(
         } else if (parser.token === Token.Multiply) {
           destructible |= DestructuringKind.CannotDestruct;
 
-          if (token === Token.GetKeyword || token === Token.SetKeyword) {
+          if (token === Token.GetKeyword) {
             report(parser, Errors.InvalidGeneratorGetter);
+          } else if (token === Token.SetKeyword) {
+            report(parser, Errors.InvalidGeneratorSetter);
           } else if (token === Token.AnyIdentifier) {
             report(parser, Errors.InvalidEscapedKeyword);
           }
