@@ -258,6 +258,95 @@ describe('Next - ImportCall', () => {
         sourceType: 'script',
         type: 'Program'
       }
+    ],
+    [
+      'function loadImport(file) { import(file).then(() => {}), console.log("Done."); }',
+      Context.OptionsNext,
+      {
+        body: [
+          {
+            async: false,
+            body: {
+              body: [
+                {
+                  expression: {
+                    expressions: [
+                      {
+                        arguments: [
+                          {
+                            async: false,
+                            body: {
+                              body: [],
+                              type: 'BlockStatement'
+                            },
+                            expression: false,
+                            params: [],
+                            type: 'ArrowFunctionExpression'
+                          }
+                        ],
+                        callee: {
+                          computed: false,
+                          object: {
+                            source: {
+                              name: 'file',
+                              type: 'Identifier'
+                            },
+                            type: 'ImportExpression'
+                          },
+                          property: {
+                            name: 'then',
+                            type: 'Identifier'
+                          },
+                          type: 'MemberExpression'
+                        },
+                        type: 'CallExpression'
+                      },
+                      {
+                        arguments: [
+                          {
+                            type: 'Literal',
+                            value: 'Done.'
+                          }
+                        ],
+                        callee: {
+                          computed: false,
+                          object: {
+                            name: 'console',
+                            type: 'Identifier'
+                          },
+                          property: {
+                            name: 'log',
+                            type: 'Identifier'
+                          },
+                          type: 'MemberExpression'
+                        },
+                        type: 'CallExpression'
+                      }
+                    ],
+                    type: 'SequenceExpression'
+                  },
+                  type: 'ExpressionStatement'
+                }
+              ],
+              type: 'BlockStatement'
+            },
+            generator: false,
+            id: {
+              name: 'loadImport',
+              type: 'Identifier'
+            },
+            params: [
+              {
+                name: 'file',
+                type: 'Identifier'
+              }
+            ],
+            type: 'FunctionDeclaration'
+          }
+        ],
+        sourceType: 'script',
+        type: 'Program'
+      }
     ]
   ]);
 });
