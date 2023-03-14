@@ -800,8 +800,9 @@ describe('Expressions - Class', () => {
     ['(class A { static *get [x](){} })', Context.None],
     ['(class A { static *set [x](y){}})', Context.None],
     ['async function f(foo = class y extends (await f) {}){}', Context.None],
-    ['new class { constructor() {} start() { new class { constructor() {}}} constructor() {}}', Context.None]
-    ['new class { constructor() {} start() { new class { } } constructor() {}}', Context.None]
+    ['new class { constructor() {} start() { new class { constructor() {}}} constructor() {}}', Context.None][
+      ('new class { constructor() {} start() { new class { } } constructor() {}}', Context.None)
+    ]
   ]);
 
   for (const arg of [
@@ -12697,60 +12698,60 @@ describe('Expressions - Class', () => {
       {
         body: [
           {
-            type: "ExpressionStatement",
+            type: 'ExpressionStatement',
             expression: {
-              type: "NewExpression",
+              type: 'NewExpression',
               callee: {
-                type: "ClassExpression",
+                type: 'ClassExpression',
                 id: null,
                 superClass: null,
                 decorators: [],
                 body: {
-                  type: "ClassBody",
+                  type: 'ClassBody',
                   body: [
                     {
-                      type: "MethodDefinition",
-                      kind: "method",
+                      type: 'MethodDefinition',
+                      kind: 'method',
                       static: false,
                       computed: false,
                       key: {
-                        type: "Identifier",
-                        name: "start"
+                        type: 'Identifier',
+                        name: 'start'
                       },
                       decorators: [],
                       value: {
-                        type: "FunctionExpression",
+                        type: 'FunctionExpression',
                         params: [],
                         body: {
-                          type: "BlockStatement",
+                          type: 'BlockStatement',
                           body: [
                             {
-                              type: "ExpressionStatement",
+                              type: 'ExpressionStatement',
                               expression: {
-                                type: "NewExpression",
+                                type: 'NewExpression',
                                 callee: {
-                                  type: "ClassExpression",
+                                  type: 'ClassExpression',
                                   id: null,
                                   superClass: null,
                                   decorators: [],
                                   body: {
-                                    type: "ClassBody",
+                                    type: 'ClassBody',
                                     body: [
                                       {
-                                        type: "MethodDefinition",
-                                        kind: "constructor",
+                                        type: 'MethodDefinition',
+                                        kind: 'constructor',
                                         static: false,
                                         computed: false,
                                         key: {
-                                          type: "Identifier",
-                                          name: "constructor"
+                                          type: 'Identifier',
+                                          name: 'constructor'
                                         },
                                         decorators: [],
                                         value: {
-                                          type: "FunctionExpression",
+                                          type: 'FunctionExpression',
                                           params: [],
                                           body: {
-                                            type: "BlockStatement",
+                                            type: 'BlockStatement',
                                             body: []
                                           },
                                           async: false,
@@ -12772,20 +12773,20 @@ describe('Expressions - Class', () => {
                       }
                     },
                     {
-                      type: "MethodDefinition",
-                      kind: "constructor",
+                      type: 'MethodDefinition',
+                      kind: 'constructor',
                       static: false,
                       computed: false,
                       key: {
-                        type: "Identifier",
-                        name: "constructor"
+                        type: 'Identifier',
+                        name: 'constructor'
                       },
                       decorators: [],
                       value: {
-                        type: "FunctionExpression",
+                        type: 'FunctionExpression',
                         params: [],
                         body: {
-                          type: "BlockStatement",
+                          type: 'BlockStatement',
                           body: []
                         },
                         async: false,
@@ -12800,8 +12801,116 @@ describe('Expressions - Class', () => {
             }
           }
         ],
-        type: "Program",
-        sourceType: "script"
+        type: 'Program',
+        sourceType: 'script'
+      }
+    ],
+    [
+      `class A { static }`,
+      Context.OptionsNext | Context.Module,
+      {
+        body: [
+          {
+            body: {
+              body: [
+                {
+                  computed: false,
+                  decorators: [],
+                  key: {
+                    name: 'static',
+                    type: 'Identifier'
+                  },
+                  static: false,
+                  type: 'PropertyDefinition',
+                  value: null
+                }
+              ],
+              type: 'ClassBody'
+            },
+            decorators: [],
+            id: {
+              name: 'A',
+              type: 'Identifier'
+            },
+            superClass: null,
+            type: 'ClassDeclaration'
+          }
+        ],
+        sourceType: 'module',
+        type: 'Program'
+      }
+    ],
+    [
+      `class A { static; }`,
+      Context.OptionsNext | Context.Module,
+      {
+        body: [
+          {
+            body: {
+              body: [
+                {
+                  computed: false,
+                  decorators: [],
+                  key: {
+                    name: 'static',
+                    type: 'Identifier'
+                  },
+                  static: false,
+                  type: 'PropertyDefinition',
+                  value: null
+                }
+              ],
+              type: 'ClassBody'
+            },
+            decorators: [],
+            id: {
+              name: 'A',
+              type: 'Identifier'
+            },
+            superClass: null,
+            type: 'ClassDeclaration'
+          }
+        ],
+        sourceType: 'module',
+        type: 'Program'
+      }
+    ],
+    [
+      `class A { static = 1 }`,
+      Context.OptionsNext | Context.Module,
+      {
+        body: [
+          {
+            body: {
+              body: [
+                {
+                  computed: false,
+                  decorators: [],
+                  key: {
+                    name: 'static',
+                    type: 'Identifier'
+                  },
+                  static: false,
+                  type: 'PropertyDefinition',
+                  value: {
+                    type: 'Literal',
+                    value: 1
+                  }
+                }
+              ],
+              type: 'ClassBody'
+            },
+            decorators: [],
+            id: {
+              name: 'A',
+              type: 'Identifier'
+            },
+            superClass: null,
+            type: 'ClassDeclaration'
+          }
+        ],
+        sourceType: 'module',
+        type: 'Program'
       }
     ]
   ]);

@@ -8466,7 +8466,12 @@ function parseClassElementList(
 
     switch (token) {
       case Token.StaticKeyword:
-        if (!isStatic && parser.token !== Token.LeftParen) {
+        if (
+          !isStatic &&
+          parser.token !== Token.LeftParen &&
+          (parser.token & Token.IsAutoSemicolon) !== Token.IsAutoSemicolon &&
+          parser.token !== Token.Assign
+        ) {
           return parseClassElementList(
             parser,
             context,
@@ -9311,7 +9316,7 @@ function parseJSXExpressionContainer(
 
   nextToken(parser, context | Context.AllowRegExp);
   const { tokenPos, linePos, colPos } = parser;
-  if (parser.token === Token.Ellipsis) return parseJSXSpreadChild(parser, context, tokenPos, linePos, colPos);
+  if (parser.token === Token.Ellipsis) return parseJSXSpreadChild(parser, context, start, line, column);
 
   let expression: ESTree.Expression | ESTree.JSXEmptyExpression | null = null;
 
