@@ -1,3 +1,49 @@
+## [4.3.6](https://github.com/meriyah/meriyah/compare/v4.3.5...v4.3.6) (2023-05-10)
+
+
+
+## [4.3.5](https://github.com/meriyah/meriyah/compare/v4.3.4...v4.3.5) (2023-03-13)
+
+
+
+## [4.3.4](https://github.com/meriyah/meriyah/compare/v4.3.3...v4.3.4) (2023-02-18)
+
+
+### Bug Fixes
+
+* **parser:** "static" can be used as an identifier in ClassElement ([663937a](https://github.com/meriyah/meriyah/commit/663937af80c00978c7aa0b0a5c8a61bf179608af)), closes [#231](https://github.com/meriyah/meriyah/issues/231)
+* **parser:** fix loc info for JSXSpreadChild ([4a99416](https://github.com/meriyah/meriyah/commit/4a994161328dbcafb535eeadc01d81cc8600a1b0)), closes [#235](https://github.com/meriyah/meriyah/issues/235)
+
+
+
+## [4.3.3](https://github.com/meriyah/meriyah/compare/v4.3.2...v4.3.3) (2022-11-12)
+
+
+### Bug Fixes
+
+* **parser:** invalid generator setter should have correct error message ([193b3ef](https://github.com/meriyah/meriyah/commit/193b3efedea56c025f14afce7e34f28dc7080501)), closes [#228](https://github.com/meriyah/meriyah/issues/228)
+
+
+
+## [4.3.2](https://github.com/meriyah/meriyah/compare/v4.3.1...v4.3.2) (2022-10-01)
+
+
+### Bug Fixes
+
+* **parser:** ~ (0x7e) is valid stop for Identifier or Keyword ([d702ebd](https://github.com/meriyah/meriyah/commit/d702ebdb6d5020c9a4f8a0f987cb421e50ae136e)), closes [#226](https://github.com/meriyah/meriyah/issues/226)
+
+
+
+## [4.3.1](https://github.com/meriyah/meriyah/compare/v4.3.0...v4.3.1) (2022-09-11)
+
+
+### Bug Fixes
+
+* async is not reserved word, and some fix on reserved words ([427233e](https://github.com/meriyah/meriyah/commit/427233eef1122ac0dcdeffbc238e933eba6ada04)), closes [#221](https://github.com/meriyah/meriyah/issues/221)
+* dot property should allow escaped keyword in strict mode ([efaa535](https://github.com/meriyah/meriyah/commit/efaa535b8520ecd9be73253518b575413fcabe2a)), closes [#224](https://github.com/meriyah/meriyah/issues/224)
+
+
+
 # [4.3.0](https://github.com/meriyah/meriyah/compare/v4.2.1...v4.3.0) (2022-08-02)
 
 
