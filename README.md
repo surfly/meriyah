@@ -13,6 +13,11 @@
 
 <br>
 
+## Surfly notes
+
+We use meriyah directly from `dist/meriyah.umd.js`.
+Therefore, after each change we need to compile updated version with `npm run bundle` and commit it.
+
 ## [Demo](https://meriyah.github.io/meriyah)
 
 ## Features
