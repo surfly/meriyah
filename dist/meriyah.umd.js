@@ -8691,7 +8691,8 @@
           if (parser.token === 537079928)
               report(parser, 116);
           value = parsePrimaryExpression(parser, context | 16384, 2, 0, 1, 0, 0, 1, tokenPos, linePos, colPos);
-          if ((parser.token & 1073741824) !== 1073741824) {
+          if ((parser.token & 1073741824) !== 1073741824 ||
+              (parser.token & 4194304) === 4194304) {
               value = parseMemberOrUpdateExpression(parser, context | 16384, value, 0, 0, tokenPos, linePos, colPos);
               value = parseAssignmentExpression(parser, context | 16384, 0, 0, tokenPos, linePos, colPos, value);
               if (parser.token === 18) {
