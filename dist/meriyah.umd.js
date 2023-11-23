@@ -5392,7 +5392,7 @@
       consume(parser, context | 32768, 67174411);
       const test = parseExpressions(parser, context, 0, 1, parser.tokenPos, parser.linePos, parser.colPos);
       consume(parser, context | 32768, 16);
-      consumeOpt(parser, context, 1074790417);
+      consumeOpt(parser, context | 32768, 1074790417);
       return finishNode(parser, context, start, line, column, {
           type: 'DoWhileStatement',
           body,
