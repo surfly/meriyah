@@ -1137,7 +1137,9 @@ export function parseAsyncArrowOrAsyncFunctionDeclaration(
    * https://github.com/estree/estree/blob/master/es5.md#sequenceexpression
    *
    */
-  if (parser.token === Token.Comma) expr = parseSequenceExpression(parser, context, 0, start, line, column, expr);
+  if (parser.token === Token.Comma) {
+    expr = parseSequenceExpression(parser, context, 0, start, line, column, expr);
+  }
 
   /**
    * ExpressionStatement[Yield, Await]:
@@ -2765,6 +2767,10 @@ export function parseImportMetaDeclaration(
    */
 
   expr = parseAssignmentExpression(parser, context, 0, 0, start, line, column, expr as ESTree.Expression);
+
+  if (parser.token === Token.Comma) {
+    expr = parseSequenceExpression(parser, context, 0, start, line, column, expr);
+  }
 
   /**
    * ExpressionStatement[Yield, Await]:
