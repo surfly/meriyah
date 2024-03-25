@@ -3671,6 +3671,8 @@ export function parseAsyncExpression(
     if (inNew) report(parser, Errors.InvalidAsyncArrow);
     return parseArrowFromIdentifier(parser, context, parser.tokenValue, expr, inNew, canAssign, 0, start, line, column);
   }
+
+  parser.assignable = AssignmentKind.Assignable;
   return expr;
 }
 
