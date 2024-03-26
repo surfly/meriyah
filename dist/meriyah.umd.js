@@ -5119,10 +5119,11 @@
           parser.assignable = 1;
       }
       expr = parseMemberOrUpdateExpression(parser, context, expr, 0, 0, start, line, column);
-      if (parser.token === 18)
-          expr = parseSequenceExpression(parser, context, 0, start, line, column, expr);
       expr = parseAssignmentExpression(parser, context, 0, 0, start, line, column, expr);
       parser.assignable = 1;
+      if (parser.token === 18) {
+          expr = parseSequenceExpression(parser, context, 0, start, line, column, expr);
+      }
       return parseExpressionStatement(parser, context, expr, start, line, column);
   }
   function parseDirective(parser, context, expression, token, start, line, column) {
@@ -5782,6 +5783,9 @@
       }), start, line, column);
       expr = parseMemberOrUpdateExpression(parser, context, expr, 0, 0, start, line, column);
       expr = parseAssignmentExpression(parser, context, 0, 0, start, line, column, expr);
+      if (parser.token === 18) {
+          expr = parseSequenceExpression(parser, context, 0, start, line, column, expr);
+      }
       return parseExpressionStatement(parser, context, expr, start, line, column);
   }
   function parseImportCallDeclaration(parser, context, start, line, column) {
@@ -6125,6 +6129,7 @@
               report(parser, 49);
           return parseArrowFromIdentifier(parser, context, parser.tokenValue, expr, inNew, canAssign, 0, start, line, column);
       }
+      parser.assignable = 1;
       return expr;
   }
   function parseYieldExpression(parser, context, inGroup, canAssign, start, line, column) {
