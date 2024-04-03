@@ -4043,7 +4043,7 @@ export function parseMemberOrUpdateExpression(
 
         parser.assignable = AssignmentKind.Assignable;
 
-        const property = parsePropertyOrPrivatePropertyName(parser, context);
+        const property = parsePropertyOrPrivatePropertyName(parser, context | Context.TaggedTemplate);
 
         expr = finishNode(parser, context, start, line, column, {
           type: 'MemberExpression',

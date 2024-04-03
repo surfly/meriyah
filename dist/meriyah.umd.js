@@ -6314,7 +6314,7 @@
               case 67108877: {
                   nextToken(parser, (context | 1073741824 | 8192) ^ 8192);
                   parser.assignable = 1;
-                  const property = parsePropertyOrPrivatePropertyName(parser, context);
+                  const property = parsePropertyOrPrivatePropertyName(parser, context | 65536);
                   expr = finishNode(parser, context, start, line, column, {
                       type: 'MemberExpression',
                       object: expr,

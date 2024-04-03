@@ -345,7 +345,8 @@ describe('Expressions - Template', () => {
     "(function tag() { return () => {}; })()`'\\00a0'`",
     "(function() { return () => {}; })()`'\\00a0'`",
     "(function tag() {})`'\\00a0'`",
-    "(function() {})`'\\00a0'`"
+    "(function() {})`'\\00a0'`",
+    'String.raw`{\rtf1adeflang1025ansiansicpg1252\\uc1`;'
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
@@ -4117,6 +4118,48 @@ describe('Expressions - Template', () => {
                   type: 'ArrowFunctionExpression'
                 },
                 type: 'AssignmentExpression'
+              },
+              type: 'TaggedTemplateExpression'
+            },
+            type: 'ExpressionStatement'
+          }
+        ],
+        sourceType: 'script',
+        type: 'Program'
+      }
+    ],
+    [
+      'String.raw`{\rtf1adeflang1025ansiansicpg1252\\uc1`;',
+      Context.None,
+      {
+        body: [
+          {
+            expression: {
+              quasi: {
+                expressions: [],
+                quasis: [
+                  {
+                    tail: true,
+                    type: 'TemplateElement',
+                    value: {
+                      cooked: undefined,
+                      raw: '{\rtf1adeflang1025ansiansicpg1252\\uc1'
+                    }
+                  }
+                ],
+                type: 'TemplateLiteral'
+              },
+              tag: {
+                computed: false,
+                object: {
+                  name: 'String',
+                  type: 'Identifier'
+                },
+                property: {
+                  name: 'raw',
+                  type: 'Identifier'
+                },
+                type: 'MemberExpression'
               },
               type: 'TaggedTemplateExpression'
             },
