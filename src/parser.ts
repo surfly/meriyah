@@ -4407,7 +4407,7 @@ export function parsePrimaryExpression(
       parser.leadingComments && parser.leadingComments.pop();
       const exprNode = parseParenthesizedExpression(
         parser,
-        context,
+        context | Context.TaggedTemplate,
         canAssign,
         BindingKind.ArgumentList,
         Origin.None,
@@ -4802,7 +4802,7 @@ export function parseArguments(
   const args: (ESTree.Expression | ESTree.SpreadElement)[] = [];
 
   if (parser.token === Token.RightParen) {
-    nextToken(parser, context);
+    nextToken(parser, context | Context.TaggedTemplate);
     return args;
   }
 

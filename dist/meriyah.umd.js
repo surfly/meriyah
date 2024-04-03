@@ -6534,7 +6534,7 @@
           case 67174411:
               const leadingComment = collectLeadingComments(parser);
               parser.leadingComments && parser.leadingComments.pop();
-              const exprNode = parseParenthesizedExpression(parser, context, canAssign, 1, 0, start, line, column);
+              const exprNode = parseParenthesizedExpression(parser, context | 65536, canAssign, 1, 0, start, line, column);
               if (exprNode.leadingComment && leadingComment) {
                   exprNode.leadingComments.concat(leadingComment);
               }
@@ -6711,7 +6711,7 @@
       nextToken(parser, context | 32768);
       const args = [];
       if (parser.token === 16) {
-          nextToken(parser, context);
+          nextToken(parser, context | 65536);
           return args;
       }
       while (parser.token !== 16) {
