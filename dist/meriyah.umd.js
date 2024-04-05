@@ -6314,7 +6314,7 @@
               case 67108877: {
                   nextToken(parser, (context | 1073741824 | 8192) ^ 8192);
                   parser.assignable = 1;
-                  const property = parsePropertyOrPrivatePropertyName(parser, context);
+                  const property = parsePropertyOrPrivatePropertyName(parser, context | 65536);
                   expr = finishNode(parser, context, start, line, column, {
                       type: 'MemberExpression',
                       object: expr,
@@ -6534,7 +6534,7 @@
           case 67174411:
               const leadingComment = collectLeadingComments(parser);
               parser.leadingComments && parser.leadingComments.pop();
-              const exprNode = parseParenthesizedExpression(parser, context, canAssign, 1, 0, start, line, column);
+              const exprNode = parseParenthesizedExpression(parser, context | 65536, canAssign, 1, 0, start, line, column);
               if (exprNode.leadingComment && leadingComment) {
                   exprNode.leadingComments.concat(leadingComment);
               }
@@ -6711,7 +6711,7 @@
       nextToken(parser, context | 32768);
       const args = [];
       if (parser.token === 16) {
-          nextToken(parser, context);
+          nextToken(parser, context | 65536);
           return args;
       }
       while (parser.token !== 16) {
