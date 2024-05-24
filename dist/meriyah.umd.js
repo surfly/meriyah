@@ -6315,9 +6315,7 @@
           switch (parser.token) {
               case 67108877: {
                   nextToken(parser, (context | 1073741824 | 8192) ^ 8192);
-                  if (context & 16384 &&
-                      (parser.token & 131) === 131 &&
-                      parser.tokenValue === 'super') {
+                  if (context & 16384 && parser.token === 131 && parser.tokenValue === 'super') {
                       report(parser, 27);
                   }
                   parser.assignable = 1;
