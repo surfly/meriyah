@@ -6266,8 +6266,9 @@
           case 67174411: {
               if ((context & 524288) === 0)
                   report(parser, 26);
-              if (context & 16384)
+              if (context & 16384 && !(context & 33554432)) {
                   report(parser, 27);
+              }
               parser.assignable = 2;
               break;
           }
@@ -6275,8 +6276,9 @@
           case 67108877: {
               if ((context & 262144) === 0)
                   report(parser, 27);
-              if (context & 16384)
+              if (context & 16384 && !(context & 33554432)) {
                   report(parser, 27);
+              }
               parser.assignable = 1;
               break;
           }
@@ -6313,6 +6315,9 @@
           switch (parser.token) {
               case 67108877: {
                   nextToken(parser, (context | 1073741824 | 8192) ^ 8192);
+                  if (context & 16384 && parser.token === 131 && parser.tokenValue === 'super') {
+                      report(parser, 27);
+                  }
                   parser.assignable = 1;
                   const property = parsePropertyOrPrivatePropertyName(parser, context | 65536);
                   expr = finishNode(parser, context, start, line, column, {
@@ -8023,7 +8028,7 @@
           reportScopeError(scope.scopeError);
       }
       if (expression) {
-          body = parseExpression(parser, context, 1, 0, 0, parser.tokenPos, parser.linePos, parser.colPos);
+          body = parseExpression(parser, context & 16384 ? context | 33554432 : context, 1, 0, 0, parser.tokenPos, parser.linePos, parser.colPos);
       }
       else {
           if (scope)
@@ -8695,6 +8700,13 @@
           const { tokenPos, linePos, colPos } = parser;
           if (parser.token === 537079928)
               report(parser, 116);
+          const modifierFlags = (state & 64) === 0
+              ? 31981568
+              : 14680064;
+          context =
+              ((context | modifierFlags) ^ modifierFlags) |
+                  ((state & 88) << 18) |
+                  100925440;
           value = parsePrimaryExpression(parser, context | 16384, 2, 0, 1, 0, 0, 1, tokenPos, linePos, colPos);
           if ((parser.token & 1073741824) !== 1073741824 ||
               (parser.token & 4194304) === 4194304) {
