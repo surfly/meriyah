@@ -1,24 +1,23 @@
 {
   "name": "meriyah",
-  "version": "4.3.6",
+  "version": "6.0.2",
   "description": "A 100% compliant, self-hosted javascript parser with high focus on both performance and stability",
   "main": "dist/meriyah.cjs",
-  "module": "dist/meriyah.esm.js",
-  "jsnext:main": "dist/meriyah.esm.js",
+  "module": "dist/meriyah.min.mjs",
   "browser": "dist/meriyah.umd.min.js",
   "unpkg": "dist/meriyah.umd.min.js",
-  "exports": {
-    "import": "./dist/meriyah.esm.mjs",
-    "require": "./dist/meriyah.cjs",
-    "types": "./dist/src/meriyah.d.ts"
-  },
   "types": "dist/src/meriyah.d.ts",
   "typings": "dist/src/meriyah.d.ts",
+  "exports": {
+    "types": "./dist/src/meriyah.d.ts",
+    "import": "./dist/meriyah.min.mjs",
+    "require": "./dist/meriyah.cjs"
+  },
   "license": "ISC",
   "homepage": "https://github.com/meriyah/meriyah",
   "repository": {
     "type": "git",
-    "url": "https://github.com/meriyah/meriyah"
+    "url": "git+https://github.com/meriyah/meriyah.git"
   },
   "bugs": {
     "url": "https://github.com/meriyah/meriyah/issues"
@@ -38,20 +37,13 @@
     "ecmascript",
     "javascript",
     "parser",
-    "performance",
     "estree",
-    "es2018",
-    "es2019",
-    "es2020",
-    "es2021",
     "esnext",
     "lexer",
-    "ast",
-    "lightweight"
+    "ast"
   ],
   "files": [
     "dist",
-    "src",
     "README.md",
     "CHANGELOG.md",
     "LICENSE.md"
@@ -62,11 +54,14 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "lint": "eslint \"{src,test}/**/*.{ts,js}\"",
-    "prettier": "node ./scripts/prettier.js write-changed",
-    "prettier-all": "node ./scripts/prettier.js write",
-    "bundle": "cross-env rimraf dist && node scripts/bundle.js",
-    "bundle:bench": "cross-env rimraf dist && node scripts/bundle.js bench",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint",
+    "lint:prettier": "prettier . --check",
+    "fix": "npm run fix:eslint && npm run fix:prettier",
+    "fix:eslint": "eslint --fix",
+    "fix:prettier": "prettier . --write",
+    "bundle": "node scripts/bundle.js",
+    "bundle:bench": "node scripts/bundle.js bench",
     "test": "mocha --\"test/**/*.ts\"",
     "test-single": "mocha",
     "test:watch": "npm run test -- --watch --watch-extensions ts",
@@ -79,41 +74,42 @@
     "preversion": "npm test",
     "version": "standard-changelog && git add CHANGELOG.md",
     "postversion": "git push && git push --tags && npm publish",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "generate-test262-whitelist": "node scripts/generate-test262-whitelist.js"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.1.0",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.6.3",
-    "@typescript-eslint/eslint-plugin": "^5.32.0",
-    "@typescript-eslint/parser": "^5.32.0",
-    "chalk": "^4.1.2",
+    "@eslint/js": "^9.9.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^22.5.0",
+    "@unicode/unicode-16.0.0": "^1.0.0",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.21.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "glob": "^8.0.3",
-    "husky": "^8.0.1",
-    "mocha": "^10.0.0",
-    "nyc": "^15.1.0",
-    "path": "^0.12.7",
-    "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.77.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.32.1",
-    "source-map-support": "^0.5.21",
-    "standard-changelog": "^2.0.27",
-    "test262-parser-tests": "0.0.5",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.0.0",
-    "tslib": "^2.4.0",
-    "typescript": "^4.7.4",
-    "unexpected": "^13.0.0",
-    "unicode-13.0.0": "^0.8.0"
+    "eslint": "^9.9.0",
+    "eslint-plugin-import-x": "^3.1.0",
+    "eslint-plugin-n": "^17.10.2",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.9",
+    "mocha": "^10.7.3",
+    "nyc": "^17.0.0",
+    "prettier": "3.3.3",
+    "rollup": "^4.21.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "standard-changelog": "^6.0.0",
+    "test262": "github:tc39/test262#ea11e0e78739b2be9fd2f49787955b9c2bf54bcc",
+    "test262-parser-runner": "^0.5.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.2.0",
+    "unexpected": "^13.2.1"
   },
   "engines": {
-    "node": ">=10.4.0"
+    "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,mts,cts,js,mjs,cjs}": "eslint --fix",
+    "*": "prettier --write --ignore-unknown"
   }
 }

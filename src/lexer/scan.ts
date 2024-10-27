@@ -2,25 +2,22 @@ import { Chars } from '../chars';
 import { Token } from '../token';
 import { ParserState, Context, Flags } from '../common';
 import { report, Errors } from '../errors';
-import { unicodeLookup } from '../unicode';
+import { isIDStart } from '../unicode';
 import {
   advanceChar,
   LexerState,
   isExoticECMAScriptWhitespace,
   NumberKind,
-  fromCodePoint,
   consumeLineFeed,
   scanNewLine,
-  convertTokenType
+  consumePossibleSurrogatePair
 } from './common';
-import { skipSingleLineComment, skipMultiLineComment, skipSingleHTMLComment } from './comments';
+import { skipSingleLineComment, skipMultiLineComment, skipSingleHTMLComment, CommentTypeEnum } from './comments';
 import { scanRegularExpression } from './regexp';
 import { scanTemplate } from './template';
 import { scanNumber } from './numeric';
 import { scanString } from './string';
 import { scanIdentifier, scanUnicodeIdentifier, scanIdentifierSlowCase, scanPrivateIdentifier } from './identifier';
-
-import { CommentType } from '../estree';
 
 /*
  * OneChar:          40,  41,  44,  58,  59,  63,  91,  93,  123, 125, 126:
@@ -129,7 +126,7 @@ export const TokenLookup = [
   /*  89 - Y                  */ Token.Identifier,
   /*  90 - Z                  */ Token.Identifier,
   /*  91 - [                  */ Token.LeftBracket,
-  /*  92 - \                  */ Token.EscapedIdentifier,
+  /*  92 - \                  */ Token.EscapeStart,
   /*  93 - ]                  */ Token.RightBracket,
   /*  94 - ^                  */ Token.BitwiseXor,
   /*  95 - _                  */ Token.Identifier,
@@ -175,39 +172,26 @@ export const TokenLookup = [
  */
 export function nextToken(parser: ParserState, context: Context): void {
   parser.flags = (parser.flags | Flags.NewLine) ^ Flags.NewLine;
-  parser.startPos = parser.index;
+  parser.startIndex = parser.index;
   parser.startColumn = parser.column;
   parser.startLine = parser.line;
-  parser.token = scanSingleToken(parser, context, LexerState.None);
-  if (parser.onToken && parser.token !== Token.EOF) {
-    const loc = {
-      start: {
-        line: parser.linePos,
-        column: parser.colPos
-      },
-      end: {
-        line: parser.line,
-        column: parser.column
-      }
-    };
-    parser.onToken(convertTokenType(parser.token), parser.tokenPos, parser.index, loc);
-  }
+  parser.setToken(scanSingleToken(parser, context, LexerState.None));
 }
 
 export function scanSingleToken(parser: ParserState, context: Context, state: LexerState): Token {
   const isStartOfLine = parser.index === 0;
 
-  const source = parser.source;
+  const { source } = parser;
 
   // These three are only for HTMLClose comment
-  let startPos = parser.index;
+  let startIndex = parser.index;
   let startLine = parser.line;
   let startColumn = parser.column;
 
   while (parser.index < parser.end) {
-    parser.tokenPos = parser.index;
-    parser.colPos = parser.column;
-    parser.linePos = parser.line;
+    parser.tokenIndex = parser.index;
+    parser.tokenColumn = parser.column;
+    parser.tokenLine = parser.line;
     !parser.comments && (parser.comments = []);
 
     let char = parser.currentChar;
@@ -252,7 +236,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
           return scanTemplate(parser, context);
 
         // Look for a escaped identifier
-        case Token.EscapedIdentifier:
+        case Token.EscapeStart:
           return scanUnicodeIdentifier(parser, context);
 
         // `#` (private name)
@@ -273,9 +257,9 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
           state = (state & ~LexerState.LastIsCR) | LexerState.NewLine;
           break;
 
-        // `<`, `<=`, `<<`, `<<=`, `</`, `<!--`
-        case Token.LessThan:
-          let ch = advanceChar(parser);
+        // `<`, `<=`, `<<`, `<<=`, `<!--`
+        case Token.LessThan: {
+          const ch = advanceChar(parser);
           if (parser.index < parser.end) {
             if (ch === Chars.LessThan) {
               if (parser.index < parser.end && advanceChar(parser) === Chars.EqualSign) {
@@ -302,32 +286,21 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
                   source,
                   state,
                   context,
-                  CommentType.HTMLOpen,
-                  parser.tokenPos,
-                  parser.linePos,
-                  parser.colPos
+                  CommentTypeEnum.HTMLOpen,
+                  parser.tokenIndex,
+                  parser.tokenLine,
+                  parser.tokenColumn
                 );
-                startPos = parser.tokenPos;
-                startLine = parser.linePos;
-                startColumn = parser.colPos;
+                startIndex = parser.tokenIndex;
+                startLine = parser.tokenLine;
+                startColumn = parser.tokenColumn;
                 continue;
               }
               return Token.LessThan;
             }
-            if (ch === Chars.Slash) {
-              if ((context & Context.OptionsJSX) === 0) return Token.LessThan;
-              const index = parser.index + 1;
-
-              // Check that it's not a comment start.
-              if (index < parser.end) {
-                ch = source.charCodeAt(index);
-                if (ch === Chars.Asterisk || ch === Chars.Slash) break;
-              }
-              advanceChar(parser);
-              return Token.JSXClose;
-            }
           }
           return Token.LessThan;
+        }
 
         // `=`, `==`, `===`, `=>`
         case Token.Assign: {
@@ -430,14 +403,14 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
                 source,
                 state,
                 context,
-                CommentType.HTMLClose,
-                startPos,
+                CommentTypeEnum.HTMLClose,
+                startIndex,
                 startLine,
                 startColumn
               );
-              startPos = parser.tokenPos;
-              startLine = parser.linePos;
-              startColumn = parser.colPos;
+              startIndex = parser.tokenIndex;
+              startLine = parser.tokenLine;
+              startColumn = parser.tokenColumn;
               continue;
             }
 
@@ -463,22 +436,22 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
                 parser,
                 source,
                 state,
-                CommentType.Single,
-                parser.tokenPos,
-                parser.linePos,
-                parser.colPos
+                CommentTypeEnum.Single,
+                parser.tokenIndex,
+                parser.tokenLine,
+                parser.tokenColumn
               );
-              startPos = parser.tokenPos;
-              startLine = parser.linePos;
-              startColumn = parser.colPos;
+              startIndex = parser.tokenIndex;
+              startLine = parser.tokenLine;
+              startColumn = parser.tokenColumn;
               continue;
             }
             if (ch === Chars.Asterisk) {
               advanceChar(parser);
               state = skipMultiLineComment(parser, source, state) as LexerState;
-              startPos = parser.tokenPos;
-              startLine = parser.linePos;
-              startColumn = parser.colPos;
+              startIndex = parser.tokenIndex;
+              startLine = parser.tokenLine;
+              startColumn = parser.tokenColumn;
               continue;
             }
             if (context & Context.AllowRegExp) {
@@ -494,7 +467,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
         }
 
         // `.`, `...`, `.123` (numeric literal)
-        case Token.Period:
+        case Token.Period: {
           const next = advanceChar(parser);
           if (next >= Chars.Zero && next <= Chars.Nine)
             return scanNumber(parser, context, NumberKind.Float | NumberKind.Decimal);
@@ -507,6 +480,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
             }
           }
           return Token.Period;
+        }
 
         // `|`, `||`, `|=`, `||=`
         case Token.BitwiseOr: {
@@ -630,17 +604,10 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
         continue;
       }
 
-      if ((char & 0xfc00) === 0xd800 || ((unicodeLookup[(char >>> 5) + 34816] >>> char) & 31 & 1) !== 0) {
-        if ((char & 0xfc00) === 0xdc00) {
-          char = ((char & 0x3ff) << 10) | (char & 0x3ff) | 0x10000;
-          if (((unicodeLookup[(char >>> 5) + 0] >>> char) & 31 & 1) === 0) {
-            report(parser, Errors.IllegalCharacter, fromCodePoint(char));
-          }
-          parser.index++;
-          parser.currentChar = char;
-        }
+      const merged = consumePossibleSurrogatePair(parser);
+      if (merged > 0) char = merged;
 
-        parser.column++;
+      if (isIDStart(char)) {
         parser.tokenValue = '';
         return scanIdentifierSlowCase(parser, context, /* hasEscape */ 0, /* canBeKeyword */ 0);
       }
@@ -651,8 +618,9 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
       }
 
       // Invalid ASCII code point/unit
-      report(parser, Errors.IllegalCharacter, fromCodePoint(char));
+      report(parser, Errors.IllegalCharacter, String.fromCodePoint(char));
     }
   }
+
   return Token.EOF;
 }

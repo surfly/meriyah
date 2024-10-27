@@ -243,7 +243,12 @@ describe('Optional chaining', () => {
     'let a = b?.c;',
     'o.x?[y]+z:t',
     '({ x: y?.z })',
-    'var a = b.c("string")?.d.e || 0;'
+    'var a = b.c("string")?.d.e || 0;',
+    'x?.void',
+    'x?.voi\\u0064',
+    'x?.protected',
+    'x?.prot\\u0065cted',
+    'class C { #m = 1; static m(obj) { return obj?.#m; } }'
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {

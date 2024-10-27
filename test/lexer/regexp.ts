@@ -4,10 +4,17 @@ import { Token } from '../../src/token';
 import { create } from '../../src/parser';
 import { scanSingleToken } from '../../src/lexer/scan';
 
+const vFlagSupported = (() => {
+  try {
+    return new RegExp('', 'v').flags === 'v';
+  } catch {
+    return false;
+  }
+})();
+
 describe('Lexer - Regular expressions', () => {
   const tokens: [Context, string, string, string][] = [
     // None unicode regular expression
-    [Context.AllowRegExp, '/\\\n/', '\\\n', ''],
     [Context.AllowRegExp, '/a|b/', 'a|b', ''],
     [Context.AllowRegExp, '/a|b/', 'a|b', ''],
     [Context.AllowRegExp, '/a|b/', 'a|b', ''],
@@ -167,12 +174,47 @@ describe('Lexer - Regular expressions', () => {
     });
   }
 
+  if (vFlagSupported) {
+    const vTokens: [Context, string, string, string][] = [
+      [Context.AllowRegExp, '/[\\u{FDD0}-\\u{FDEF}]/v', '[\\u{FDD0}-\\u{FDEF}]', 'v'],
+      [
+        Context.AllowRegExp,
+        '/[\\p{Script_Extensions=Greek}&&\\p{Letter}]/v',
+        '[\\p{Script_Extensions=Greek}&&\\p{Letter}]',
+        'v'
+      ]
+    ];
+
+    for (const [ctx, op, value, flags] of vTokens) {
+      it(`scans '${op}' at the end`, () => {
+        const state = create(op, '', undefined);
+        const found = scanSingleToken(state, ctx, 0);
+
+        t.deepEqual(
+          {
+            token: found,
+            hasNext: state.index < state.source.length,
+            value: (state.tokenRegExp as any).pattern,
+            flags: (state.tokenRegExp as any).flags
+          },
+          {
+            token: Token.RegularExpression,
+            hasNext: false,
+            value,
+            flags
+          }
+        );
+      });
+    }
+  }
+
   function fail(name: string, source: string, context: Context) {
     it(name, () => {
       const state = create(source, '', undefined);
       t.throws(() => scanSingleToken(state, context, 0));
     });
   }
+  fail('fails on "/\\\n/"', '/\\\n/', Context.AllowRegExp);
   fail('fails on /', '/ ', Context.AllowRegExp);
   fail('fails on /\n$/\n', '/\n$/\n', Context.AllowRegExp);
   fail('fails on /\r$/\n', '/\r$/\n', Context.AllowRegExp);
@@ -202,6 +244,9 @@ describe('Lexer - Regular expressions', () => {
   fail('fails on /i/ii', '/i/ii', Context.AllowRegExp);
   fail('fails on /i/mm', '/i/mm', Context.AllowRegExp);
   fail('fails on /i/uu', '/i/uu', Context.AllowRegExp);
+  fail('fails on /i/uv', '/i/uv', Context.AllowRegExp);
+  fail('fails on /i/uv', '/i/vu', Context.AllowRegExp);
+  fail('fails on /i/vv', '/i/vv', Context.AllowRegExp);
   fail('fails on /i/yy', '/i/yy', Context.AllowRegExp);
   fail('fails on /i/ss', '/i/ss', Context.AllowRegExp);
   fail('fails on /i/dd', '/i/dd', Context.AllowRegExp);

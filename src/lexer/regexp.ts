@@ -5,6 +5,24 @@ import { advanceChar } from './common';
 import { isIdentifierPart } from './charClassifier';
 import { report, Errors } from '../errors';
 
+enum RegexState {
+  Empty = 0,
+  Escape = 0x1,
+  Class = 0x2
+}
+
+enum RegexFlags {
+  Empty = 0b0000_0000,
+  IgnoreCase = 0b0000_0001,
+  Global = 0b0000_0010,
+  Multiline = 0b0000_0100,
+  Unicode = 0b0001_0000,
+  Sticky = 0b0000_1000,
+  DotAll = 0b0010_0000,
+  Indices = 0b0100_0000,
+  UnicodeSets = 0b1000_0000
+}
+
 /**
  * Scans regular expression
  *
@@ -13,11 +31,6 @@ import { report, Errors } from '../errors';
  */
 
 export function scanRegularExpression(parser: ParserState, context: Context): Token {
-  const enum RegexState {
-    Empty = 0,
-    Escape = 0x1,
-    Class = 0x2
-  }
   const bodyStart = parser.index;
   // Scan: ('/' | '/=') RegularExpressionBody '/' RegularExpressionFlags
   let preparseState = RegexState.Empty;
@@ -42,13 +55,17 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
         case Chars.RightBracket:
           preparseState &= RegexState.Escape;
           break;
-        case Chars.CarriageReturn:
-        case Chars.LineFeed:
-        case Chars.LineSeparator:
-        case Chars.ParagraphSeparator:
-          report(parser, Errors.UnterminatedRegExp);
-        default: // ignore
+        // No default
       }
+    }
+
+    if (
+      ch === Chars.CarriageReturn ||
+      ch === Chars.LineFeed ||
+      ch === Chars.LineSeparator ||
+      ch === Chars.ParagraphSeparator
+    ) {
+      report(parser, Errors.UnterminatedRegExp);
     }
 
     if (parser.index >= parser.source.length) {
@@ -57,17 +74,6 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
   }
 
   const bodyEnd = parser.index - 1;
-
-  const enum RegexFlags {
-    Empty = 0b0000000,
-    IgnoreCase = 0b0000001,
-    Global = 0b0000010,
-    Multiline = 0b0000100,
-    Unicode = 0b0010000,
-    Sticky = 0b0001000,
-    DotAll = 0b0100000,
-    Indices = 0b1000000
-  }
 
   let mask = RegexFlags.Empty;
   let char = parser.currentChar;
@@ -93,7 +99,14 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
 
       case Chars.LowerU:
         if (mask & RegexFlags.Unicode) report(parser, Errors.DuplicateRegExpFlag, 'u');
+        if (mask & RegexFlags.UnicodeSets) report(parser, Errors.DuplicateRegExpFlag, 'vu');
         mask |= RegexFlags.Unicode;
+        break;
+
+      case Chars.LowerV:
+        if (mask & RegexFlags.Unicode) report(parser, Errors.DuplicateRegExpFlag, 'uv');
+        if (mask & RegexFlags.UnicodeSets) report(parser, Errors.DuplicateRegExpFlag, 'v');
+        mask |= RegexFlags.UnicodeSets;
         break;
 
       case Chars.LowerY:
@@ -124,7 +137,7 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
 
   parser.tokenRegExp = { pattern, flags };
 
-  if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenPos, parser.index);
+  if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
 
   parser.tokenValue = validate(parser, pattern, flags);
 
@@ -142,13 +155,13 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
 function validate(parser: ParserState, pattern: string, flags: string): RegExp | null | Token {
   try {
     return new RegExp(pattern, flags);
-  } catch (e) {
+  } catch {
     try {
-      // Some JavaScript engine has not supported flag "d".
-      new RegExp(pattern, flags.replace('d', ''));
+      // Some JavaScript engine has not supported flag "v". They will fail.
+      new RegExp(pattern, flags);
       // Use null as tokenValue according to ESTree spec
       return null;
-    } catch (e) {
+    } catch {
       report(parser, Errors.UnterminatedRegExp);
     }
   }

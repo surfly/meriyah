@@ -4,11 +4,8 @@
 
 <p align="center">
     <a href="https://www.npmjs.com/package/meriyah"><img src="https://img.shields.io/npm/v/meriyah.svg?style=flat-square" alt="Meriyah NPM"/></a>
-    <a href="https://lgtm.com/projects/g/meriyah/meriyah/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/meriyah/meriyah.svg?logo=lgtm&logoWidth=18" alt="GitHub license" /></a>
-    <a href="https://lgtm.com/projects/g/meriyah/meriyah/alerts"><img src="https://img.shields.io/lgtm/alerts/g/meriyah/meriyah.svg?logo=lgtm&logoWidth=18" alt="Total alerts" /></a>
-    <a href="https://circleci.com/gh/meriyah/meriyah"><img src="https://circleci.com/gh/meriyah/meriyah.svg?style=svg" alt="Circle" /></a>
+    <a href="https://github.com/meriyah/meriyah/actions/workflows/node.js.yml"><img src="https://github.com/meriyah/meriyah/actions/workflows/node.js.yml/badge.svg" alt="Node.js CI"/></a>
     <a href="https://github.com/meriyah/meriyah/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/meriyah/meriyah.svg" alt="License" /></a>
-
 </p>
 
 <br>
@@ -18,32 +15,51 @@
 We use meriyah directly from `dist/meriyah.umd.js`.
 Therefore, after each change we need to compile updated version with `npm run bundle` and commit it.
 
-## [Demo](https://meriyah.github.io/meriyah)
+[Interactive Playground](https://meriyah.github.io/meriyah)
+[Benchmark](https://meriyah.github.io/meriyah/performance)
 
 ## Features
 
-* Conforms to the standard ECMAScript® 2021 (ECMA-262 11th Edition) language specification
-* Support TC39 proposals via option
-* Support for additional ECMAScript features for Web Browsers
-* JSX support via option
-* Does **not** support TypeScript or Flow
-* Optionally track syntactic node locations
-* Optionally attach comments to AST
-* Emits an ESTree-compatible abstract syntax tree
-* No backtracking
-* Low memory usage
-* Very well tested (~99 000 unit tests with full code coverage)
-* Lightweight - ~90 KB minified
+- Conforms to the standard ECMAScript® 2024 (ECMA-262 15th Edition) language specification
+  - Except RegExp duplicate named groups (See [RegExp support](#regexp-support))
+- Support some TC39 stage 3 proposals via option "next"
+- Support for additional ECMAScript features for Web Browsers (Annex B)
+- JSX support via option "jsx"
+- Does **NOT** support TypeScript or Flow syntax
+- Track syntactic node locations with option "ranges" or "loc"
+- Emits an ESTree-compatible abstract syntax tree
+- No backtracking
+- Low memory usage
 
-## ESNext features
+## ESNext Stage 3 features
 
-* [Decorators](https://github.com/tc39/proposal-decorators)
-* [Class Public Instance Fields & Private Instance Fields](https://github.com/tc39/proposal-class-fields)
-* [Hashbang grammar](https://github.com/tc39/proposal-hashbang)
-* [Private methods](https://github.com/tc39/proposal-private-methods)
-* [Static class fields and private static methods](https://github.com/tc39/proposal-static-class-features/)
+### Supported stage 3 features:
 
-**Note:** These features need to be enabled with the `next` option.
+These features need to be enabled with the `next` option.
+
+- [Decorators](https://github.com/tc39/proposal-decorators)
+- [Import Attributes](https://github.com/tc39/proposal-import-attributes)
+- [JSON Modules](https://github.com/tc39/proposal-json-modules)
+
+### Not yet supported stage 3 features:
+
+- [Explicit resource management](https://github.com/tc39/proposal-explicit-resource-management)
+- [Source phase import](https://github.com/tc39/proposal-source-phase-imports)
+- [RegExp modifiers](https://github.com/tc39/proposal-regexp-modifiers) (See [RegExp support](#regexp-support))
+
+## RegExp support
+
+Meriyah doesn't parse RegExp internal syntax, ESTree spec didn't require internal structure of RegExp. Meriyah
+does use JavaScript runtime to validate the RegExp literal. That means Meriyah's RegExp support is only as good
+as JavaScript runtime's RegExp support.
+
+As of Auguest 2024, some latest RegExp features are not supported due to missing implementation in general
+JavaScript runtime.
+
+- [RegExp modifiers](https://github.com/tc39/proposal-regexp-modifiers) (stage 3) is not supported
+- [RegExp duplicate named groups](https://github.com/tc39/proposal-duplicate-named-capturing-groups) is not supported
+
+In addition, RegExp v flag (unicodeSets) only works on Nodejs v20+ and latest browsers.
 
 ## Installation
 
@@ -57,7 +73,13 @@ Meriyah generates `AST` according to [ESTree AST format](https://github.com/estr
 
 The `parse` method exposed by meriyah takes an optional `options` object which allows you to specify whether to parse in [`script`](https://tc39.github.io/ecma262/#sec-parse-script) mode (the default) or in [`module`](https://tc39.github.io/ecma262/#sec-parsemodule) mode.
 
-This is the available options:
+```js
+// There are also "parseScript" and "parseModule" exported.
+import { parse } from 'meriyah';
+const result = parse('let some = "code";', { ranges: true });
+```
+
+The available options:
 
 ```js
 {
@@ -79,9 +101,6 @@ This is the available options:
   // The flag to attach raw property to each literal and identifier node
   raw: false;
 
-  // Enabled directives
-  directives: false;
-
   // The flag to allow return in the global scope
   globalReturn: false;
 
@@ -89,13 +108,16 @@ This is the available options:
   impliedStrict: false;
 
   // Allows comment extraction. Accepts either a function or array
-  onComment: []
+  onComment: [];
+
+  // Allows detection of automatic semicolon insertion. Accepts a callback function that will be passed the charater offset where the semicolon was inserted
+  onInsertedSemicolon: (pos) => {};
 
   // Attach comments to AST
   attachComments: false;
 
   // Allows token extraction. Accepts either a function or array
-  onToken: []
+  onToken: [];
 
   // Enable non-standard parenthesized expression node
   preserveParens: false;
@@ -104,41 +126,41 @@ This is the available options:
   lexical: false;
 
   // Adds a source attribute in every node’s loc object when the locations option is `true`
-  source: false;
+  source: undefined; // Set to source: 'source-file.js'
 
-  // Distinguish Identifier from IdentifierPattern
-  identifierPattern: false;
-
-   // Enable React JSX parsing
-  jsx: false
-
-  // Allow edge cases that deviate from the spec
-  specDeviation: false
+  // Enable React JSX parsing
+  jsx: false;
 }
-
 ```
 
 ### onComment and onToken
+
 If an array is supplied, comments/tokens will be pushed to the array, the item in the array contains `start/end/range` information when ranges flag is true, it will also contain `loc` information when loc flag is true.
 
 If a function callback is supplied, the signature must be
 
 ```ts
-function onComment(type: string, value: string, start: number, end: number, loc: SourceLocation): void {}
+declare function onComment(type: string, value: string, start: number, end: number, loc: SourceLocation): void;
 
-function onToken(token: string, start: number, end: number, loc: SourceLocation): void {}
+declare function onToken(token: string, start: number, end: number, loc: SourceLocation): void;
 ```
 
 Note the `start/end/loc` information are provided to the function callback regardless of the settings on ranges and loc flags. onComment callback has one extra argument `value: string` for the body string of the comment.
 
+### onInsertedSemicolon
+
+If a function callback is supplied, the signature must be
+
+```ts
+declare function onInsertedSemicolon(position: number): void;
+```
+
 ## Example usage
 
 ```js
-
 import { parseScript } from './meriyah';
 
 parseScript('({x: [y] = 0} = 1)');
-
 ```
 
 This will return when serialized in json:

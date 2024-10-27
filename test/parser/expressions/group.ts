@@ -408,7 +408,6 @@ describe('Expressions - Group', () => {
     ['(...x = y) => x', Context.None],
     ['([...x.y]) => z', Context.None],
     ['([a + b] = x) => a;', Context.None],
-    ['async(a = await x);', Context.None],
     ['([...a.b]) => c', Context.None],
     ['({ident: [foo, bar].join("")}) => x', Context.None],
     ['({ident: [foo, bar]/x}) => x', Context.None],
@@ -957,7 +956,8 @@ describe('Expressions - Group', () => {
             expression: {
               type: 'Literal',
               value: 'use strict'
-            }
+            },
+            directive: 'use strict'
           },
           {
             type: 'ExpressionStatement',
@@ -1676,7 +1676,8 @@ describe('Expressions - Group', () => {
             expression: {
               type: 'Literal',
               value: 'use strict'
-            }
+            },
+            directive: 'use strict'
           },
           {
             type: 'ExpressionStatement',
@@ -1979,7 +1980,8 @@ describe('Expressions - Group', () => {
             expression: {
               type: 'Literal',
               value: 'use strict'
-            }
+            },
+            directive: 'use strict'
           },
           {
             type: 'ExpressionStatement',
@@ -8870,6 +8872,7 @@ describe('Expressions - Group', () => {
                 type: 'MemberExpression',
                 object: {
                   type: 'Literal',
+                  // eslint-disable-next-line no-control-regex
                   value: /[^\x0f+-\x6d+$-)-]/giuy,
                   regex: {
                     pattern: '[^\\x0f+-\\x6d+$-)-]',

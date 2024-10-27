@@ -169,18 +169,15 @@ describe('Miscellaneous - Pass', () => {
     'x = {__proto__, __proto__: 2}',
     'x = {async __proto__(){}, *__proto__(){}}',
     'class x {static __proto__(){}; get __proto__(){}}',
-    '({__proto__: a, __proto__: b});',
     'x = {__proto__: a, __proto__: b} = y',
     '({__proto__: a, __proto__: b} = x)',
     '({__proto__: a, __proto__: b}) => x;',
     '(a, [b, [c, {__proto__: d, __proto__: e}]], f) => x;',
     'function f({__proto__: a, __proto__: b}) {}',
     'function f(a, [b, [c, {__proto__: d, __proto__: e}]], f) {}',
-    'async ({__proto__: a, __proto__: b});',
     'async ({__proto__: a, __proto__: b}) => x;',
     '({ __proto__: x, __proto__: y}) => x;',
     'function f(a, [b, [c, {__proto__: d, __proto__: e}]], f) {}',
-    'async ({__proto__: a, __proto__: b});',
     'for (/x/g + b;;);',
     'for ("abc" + b;;);',
     'for (2 + b;;);',
@@ -453,7 +450,7 @@ describe('Miscellaneous - Pass', () => {
     }
     typeof (a >= ((h, k = (+("string")), b) => (null)));
     `,
-    `function* a(b) {
+    String.raw`function* a(b) {
       switch (((-((class {}))))) {
             case (yield* /\,+?/iy):
           }
@@ -2824,14 +2821,11 @@ after = err;
     'class await {}',
     `function await(yield) {}`,
     'var await = 1',
-    'async(await)',
     '({ await: async })',
     'await => {}',
     'await => async',
     'class X { await(){} }',
-    'f(x, await(y, z))',
     'class X { static await(){} }',
-    'x = await(y);',
     'class X { await() {} }',
     'let async = await;',
     'async = 1, b = 2;',
@@ -4576,7 +4570,7 @@ function continueWithinLoop() {
       "SyntaxError: Invalid regular expression flags",
       e.toString());
 }`,
-    `for (function({} = ((2e308)) in false, {
+    String.raw`for (function({} = ((2e308)) in false, {
 
 }, [] = /q*?/i, laeksllun, i = []) {}.prototype[null[((this[((("foo")))]--)(((''))))](...(class k {
     [.92]() {
@@ -4770,7 +4764,7 @@ for (var j = 0; j < i; j++) { var o = {}; o.x = 42; delete o.x; a[j] = o; }`,
 
 foo(0);
 foo(0);`,
-    `testEscapes("\\/\\/\\/\\/", new RegExp("\\//\\//"));
+    String.raw`testEscapes("\\/\\/\\/\\/", new RegExp("\\//\\//"));
 testEscapes("(?:)", new RegExp(""));
 
 // Read-only property.
@@ -6052,7 +6046,6 @@ for (var i = 0; i < 10000; i++){
     'abc\nfunction foo() {}',
     'async\nfunction\nfoo() {}',
     "'foo\\'bar'",
-    'await +123',
     `if (x) {
       foo();
   }
@@ -8601,7 +8594,6 @@ f(w, ...[x, y,], z);
     '(a) = b;',
     '((a)) = b;',
     'a = ((b)) = c;',
-    '(await())',
     '(x);',
     '(a) = 1;',
     '(a.b) = 1;',
@@ -10615,7 +10607,7 @@ for ({[2e308]: {"_"() {}, get [""]() {
     "use strict";
   }
 }));`,
-    `var GiantPrintArray = [];
+    String.raw`var GiantPrintArray = [];
 __counter++;;
 function makeArrayLength(x) { if(x < 1 || x > 4294967295 || x != x || isNaN(x) || !isFinite(x)) return 100; else return Math.floor(x) & 0xffff; };;
 function leaf() { return 100; };
@@ -11208,7 +11200,7 @@ var func3 = function(argMath115,argMath116 = (new func2()).prop1 ){
   }
   return protoObj1.prop1;
 };`,
-    `var func1 = function(argMath89 = (b <<= func0.call(obj0 , ary.length, -3)),argMath90,argMath91){
+    String.raw`var func1 = function(argMath89 = (b <<= func0.call(obj0 , ary.length, -3)),argMath90,argMath91){
   class class12 extends module1BaseClass {
     constructor (){
       super();
@@ -11311,7 +11303,7 @@ for (new ((dieqffaqtlfrca = ((((true))).yield **= ((eval)))))(((new (((++(/M^\u4
   "use strict"
 }, eval, [/\u1312+?/mu]: (2e308), set [(2e308)] ([]) {
 }}));`,
-    `var func3 = function(argMath113,argMath114,argMath115,argMath116 = (argMath115 + argMath113)){
+    String.raw`var func3 = function(argMath113,argMath114,argMath115,argMath116 = (argMath115 + argMath113)){
   if((func2.call(arrObj0 , strvar1, ary) && (~ -2147483648))) {
   }
   else {
@@ -14730,7 +14722,7 @@ let kTrapMsgs = [
         return n.toFixed(8);
      return n;
     };`,
-    `function formatOutput(n) {{
+    String.raw`function formatOutput(n) {{
       return n.replace(/[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/g, function(match) {{return getRoundValue(parseFloat(match));}} );
      }};
 
@@ -14781,7 +14773,7 @@ let kTrapMsgs = [
     IntArr0[1] = -187077332;
     IntArr0[2] = 235;
     VarArr0[4] = 65537;`,
-    `     class class4 {
+    String.raw`     class class4 {
       constructor (argMath61 = obj0.prop1,argMath62,argMath63,...argArr64){
       }
       func41 (argMath65,argMath66 = ary5[(((((shouldBailout ? (ary5[((((arrObj0.prop1 += (-8.70014119023327E+18 + (((new BaseClass()) >>> (new BaseClass())) * (ui8[(90) & 255] * 'caller' - ((protoObj0.prop1 ? obj1.prop0 : 4294967295) instanceof ((typeof obj0.method1 == 'function' && !(obj0.method1[Symbol.toStringTag] == 'AsyncFunction')) ? obj0.method1 : Object))) - (new class2()))))) >= 0 ? ( (arrObj0.prop1 += (-8.70014119023327E+18 + (((new BaseClass()) >>> (new BaseClass())) * (ui8[(90) & 255] * 'caller' - ((protoObj0.prop1 ? obj1.prop0 : 4294967295) instanceof ((typeof obj0.method1 == 'function' && !(obj0.method1[Symbol.toStringTag] == 'AsyncFunction')) ? obj0.method1 : Object))) - (new class2()))))) : 0) & 0xF)] = 'x') : undefined ), (arrObj0.prop1 += (-8.70014119023327E+18 + (((new BaseClass()) >>> (new BaseClass())) * (ui8[(90) & 255] * 'caller' - ((protoObj0.prop1 ? obj1.prop0 : 4294967295) instanceof ((typeof obj0.method1 == 'function' && !(obj0.method1[Symbol.toStringTag] == 'AsyncFunction')) ? obj0.method1 : Object))) - (new class2()))))) >= 0 ? (arrObj0.prop1 += (-8.70014119023327E+18 + (((new BaseClass()) >>> (new BaseClass())) * (ui8[(90) & 255] * 'caller' - ((protoObj0.prop1 ? obj1.prop0 : 4294967295) instanceof ((typeof obj0.method1 == 'function' && !(obj0.method1[Symbol.toStringTag] == 'AsyncFunction')) ? obj0.method1 : Object))) - (new class2())))) : 0)) & 0XF)]){
@@ -14812,7 +14804,7 @@ let kTrapMsgs = [
         return 5.68222678171986E+18;
       }
     }`,
-    `class class7 extends BaseClass {
+    String.raw`class class7 extends BaseClass {
       constructor (){
         super();
         strvar7 = strvar1[3%strvar1.length];
@@ -14845,7 +14837,7 @@ let kTrapMsgs = [
       return 200421084;
     }`,
     `strvar6 = strvar4.concat(VarArr0[(((((shouldBailout ? (VarArr0[(((721241264) >= 0 ? ( 721241264) : 0) & 0xF)] = 'x') : undefined ), 721241264) >= 0 ? 721241264 : 0)) & 0XF)]).concat(arguments[(((((b !== argMath90)||(b === h)) >= 0 ? ((b !== argMath90)||(b === h)) : 0)) & 0XF)]);`,
-    ` class class14 {
+    String.raw` class class14 {
       set func99 (argMath130 = (new class12())){
         WScript.Echo(strvar5 !=(-- argMath130));
         argMath130 &=(([1, 2, 3] instanceof ((typeof Error == 'function' && !(Error[Symbol.toStringTag] == 'AsyncFunction')) ? Error : Object)) - obj1.method1(VarArr0,protoObj1.method0.call(class2 , ((shouldBailout ? protoObj0.method0 = arrObj0.method0 : 1), protoObj0.method0(((-2147483647 | argMath92) * 'caller' + (arrObj0.prop0 -= h)),(((new Object()) instanceof ((typeof Object == 'function' && !(Object[Symbol.toStringTag] == 'AsyncFunction')) ? Object : Object)) && 'caller'),-528442914)), (typeof d), (argMath130 != argMath90)),leaf,/([郳7]){0,8}/gimy));

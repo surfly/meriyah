@@ -12,6 +12,7 @@ node_modules
 /packages/*/.rpt2_cache
 package-lock.json
 yarn.lock
+bun.lockb
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -19,3 +20,4 @@ yarn-error.log*
 .rollupcache
 .fuzz-output
 .DS_Store
+/test.ts

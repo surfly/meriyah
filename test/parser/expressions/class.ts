@@ -160,8 +160,6 @@ describe('Expressions - Class', () => {
     'class name extends',
     'class extends',
     'class name {',
-    'class name { m }',
-    'class name { m; n }',
     'class name { m: 1 }',
     'class name { m(); n() }',
     'class name { get x }',
@@ -200,8 +198,6 @@ describe('Expressions - Class', () => {
     'class name extends',
     'class extends',
     'class {',
-    'class { m }',
-    'class { m; n }',
     'class { m: 1 }',
     'class { m(); n() }',
     'class { get m }',
@@ -310,7 +306,20 @@ describe('Expressions - Class', () => {
     'static constructor() {}',
     'static get constructor() {}',
     'static set constructor(_) {}',
-    'static *constructor() {}'
+    'static *constructor() {}',
+    `method() {
+       new class { constructor() {} }
+     }
+     constructor() {}`,
+    `method() {
+       new class {
+         method() {
+           new class { constructor() {} }
+         }
+         constructor() {}
+       }
+     }
+     constructor() {}`
   ]) {
     it(`class C {${arg}}`, () => {
       t.doesNotThrow(() => {
@@ -326,7 +335,6 @@ describe('Expressions - Class', () => {
   }
 
   for (const arg of [
-    'a',
     '3:0',
     '[3]:0',
     '[a,b](){}',
@@ -421,7 +429,14 @@ describe('Expressions - Class', () => {
     'class extends class {} {}',
     'class name extends class {} {}',
     'class extends class base {} {}',
-    'class name extends class base {} {}'
+    'class name extends class base {} {}',
+    '(class A {get prototype(){}})',
+    '(class A {set prototype(x){}})',
+    '(class A {*prototype(){}})',
+    'class x { get prototype(){} }',
+    '(class x { async prototype(){} })',
+    '(class A {async prototype(){}})',
+    '(class A {async *prototype(){}})'
   ]) {
     it(`(${arg})`, () => {
       t.doesNotThrow(() => {
@@ -627,16 +642,12 @@ describe('Expressions - Class', () => {
     ['(class x extends a = b {})', Context.None],
     ['(class x {[x]z){}})', Context.None],
     ['(class x {foo, bar(){}})', Context.None],
-    ['(class x {foo})', Context.None],
     ['(class x {foo: x})', Context.None],
     ['(class x { async [x]s){}})', Context.None],
-    ['(class x { y })', Context.None],
-    ['(class x { y; })', Context.None],
     ['(class x { `constructor`(){} })', Context.None],
     ['class x extends a = b {}', Context.None],
     ['class x {[x]z){}}', Context.None],
     ['class x {foo, bar(){}}', Context.None],
-    ['class x {foo}', Context.None],
     ['class x {foo: x}', Context.None],
     ['class x { async [x]s){}}', Context.None],
     ['class x { [yield y](){} }', Context.None],
@@ -662,11 +673,7 @@ describe('Expressions - Class', () => {
     ['(class A {* set 12(x){}})', Context.None],
     ['var C = class { static async *gen() { yield: ; }}', Context.None],
     ['(class A {* set 12(x){}})', Context.None],
-    ['(class A {get prototype(){}})', Context.None],
-    ['(class A {set prototype(x){}})', Context.None],
-    ['(class A {*prototype(){}})', Context.None],
-    ['class x { get prototype(){} }', Context.None],
-    ['(class x { async prototype(){} })', Context.None],
+
     ['class x { static set prototype(x){} }', Context.None],
     ['class x { static *prototype(){} }', Context.None],
     ['class x { static prototype(){} }', Context.None],
@@ -706,16 +713,12 @@ describe('Expressions - Class', () => {
     ['let c = class x { get \n /foo/ }', Context.None],
     ['class A {"x"){}}', Context.None],
     ['class A {"x"{}}', Context.None],
-    ['(class A {async prototype(){}})', Context.None],
     ['(class A {constructor(){}; constructor(){}})', Context.None],
     ['(class A {a(){}; constructor(){}; constructor(){}})', Context.None],
     ['(class A {a(){}; constructor(){}; a(){}; a(){}; a(){}; constructor(){}; a(){}})', Context.None],
     ['(class A {static constructor(){}; constructor(){}; constructor(){}})', Context.None],
     ['(class A {foo, bar(){}})', Context.None],
-    ['(class A {foo})', Context.None],
     ['class A {async get foo(){}}', Context.None],
-    ['(class A {foo = x})', Context.None],
-    ['(class A {async *prototype(){}})', Context.None],
     ['(class A {set constructor(x){}})', Context.None],
     ['(class A {async constructor(){}})', Context.None],
     ['class a {**=f(){}', Context.None],
@@ -9225,7 +9228,8 @@ describe('Expressions - Class', () => {
                             end: 42,
                             range: [30, 42],
                             value: 'use strict'
-                          }
+                          },
+                          directive: 'use strict'
                         }
                       ]
                     }
@@ -9279,7 +9283,8 @@ describe('Expressions - Class', () => {
                             end: 75,
                             range: [63, 75],
                             value: 'use strict'
-                          }
+                          },
+                          directive: 'use strict'
                         }
                       ]
                     }
@@ -9334,7 +9339,8 @@ describe('Expressions - Class', () => {
                             end: 108,
                             range: [96, 108],
                             value: 'use strict'
-                          }
+                          },
+                          directive: 'use strict'
                         }
                       ]
                     }
@@ -12805,60 +12811,56 @@ describe('Expressions - Class', () => {
       {
         body: [
           {
-            type: "ExpressionStatement",
+            type: 'ExpressionStatement',
             expression: {
-              type: "NewExpression",
+              type: 'NewExpression',
               callee: {
-                type: "ClassExpression",
+                type: 'ClassExpression',
                 id: null,
                 superClass: null,
-                decorators: [],
                 body: {
-                  type: "ClassBody",
+                  type: 'ClassBody',
                   body: [
                     {
-                      type: "MethodDefinition",
-                      kind: "method",
+                      type: 'MethodDefinition',
+                      kind: 'method',
                       static: false,
                       computed: false,
                       key: {
-                        type: "Identifier",
-                        name: "start"
+                        type: 'Identifier',
+                        name: 'start'
                       },
-                      decorators: [],
                       value: {
-                        type: "FunctionExpression",
+                        type: 'FunctionExpression',
                         params: [],
                         body: {
-                          type: "BlockStatement",
+                          type: 'BlockStatement',
                           body: [
                             {
-                              type: "ExpressionStatement",
+                              type: 'ExpressionStatement',
                               expression: {
-                                type: "NewExpression",
+                                type: 'NewExpression',
                                 callee: {
-                                  type: "ClassExpression",
+                                  type: 'ClassExpression',
                                   id: null,
                                   superClass: null,
-                                  decorators: [],
                                   body: {
-                                    type: "ClassBody",
+                                    type: 'ClassBody',
                                     body: [
                                       {
-                                        type: "MethodDefinition",
-                                        kind: "constructor",
+                                        type: 'MethodDefinition',
+                                        kind: 'constructor',
                                         static: false,
                                         computed: false,
                                         key: {
-                                          type: "Identifier",
-                                          name: "constructor"
+                                          type: 'Identifier',
+                                          name: 'constructor'
                                         },
-                                        decorators: [],
                                         value: {
-                                          type: "FunctionExpression",
+                                          type: 'FunctionExpression',
                                           params: [],
                                           body: {
-                                            type: "BlockStatement",
+                                            type: 'BlockStatement',
                                             body: []
                                           },
                                           async: false,
@@ -12880,20 +12882,19 @@ describe('Expressions - Class', () => {
                       }
                     },
                     {
-                      type: "MethodDefinition",
-                      kind: "constructor",
+                      type: 'MethodDefinition',
+                      kind: 'constructor',
                       static: false,
                       computed: false,
                       key: {
-                        type: "Identifier",
-                        name: "constructor"
+                        type: 'Identifier',
+                        name: 'constructor'
                       },
-                      decorators: [],
                       value: {
-                        type: "FunctionExpression",
+                        type: 'FunctionExpression',
                         params: [],
                         body: {
-                          type: "BlockStatement",
+                          type: 'BlockStatement',
                           body: []
                         },
                         async: false,
@@ -12908,8 +12909,8 @@ describe('Expressions - Class', () => {
             }
           }
         ],
-        type: "Program",
-        sourceType: "script"
+        type: 'Program',
+        sourceType: 'script'
       }
     ]
   ]);

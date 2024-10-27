@@ -567,7 +567,6 @@ yield b;
 yield c;
 yield d;
 }`,
-    ,
     'function* gf() { var fe = function yield() { } }',
     'function* gf() { var o = { yield: 10 } }',
     'function* gf() { var o = { *yield() { } } }',
@@ -628,7 +627,7 @@ yield d;
     ['function *f(){ ([x] = yield x) => {} }', Context.None],
     ['function *g(a, b, c, ...yield){}', Context.None],
     ['(function *(x, ...yield){})', Context.None],
-    //['function *a(){yield\n*a}', Context.None],
+    ['function *a(){yield\n*a}', Context.None],
     ['function* gf() { var yield; }', Context.None],
     ['function* gf() { let yield; }', Context.None],
     ['function* gf() { +yield; }', Context.None],
@@ -2903,7 +2902,8 @@ yield d;
                   expression: {
                     type: 'Literal',
                     value: 'use strict'
-                  }
+                  },
+                  directive: 'use strict'
                 },
                 {
                   type: 'IfStatement',

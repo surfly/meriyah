@@ -1,47 +1,13 @@
 const { join } = require('path');
-const { copyFile } = require('fs').promises;
+const fs = require('fs').promises;
 const rollup = require('rollup');
 const typescript2 = require('rollup-plugin-typescript2');
-const { terser } = require('rollup-plugin-terser');
+const terser = require('@rollup/plugin-terser');
 const json = require('@rollup/plugin-json');
 const ts = require('typescript');
 const project = require('./project');
 
-bundle();
-
-async function bundle() {
-  switch (process.argv.slice(2)[0]) {
-    case 'bench':
-      await bundleCJS();
-      break;
-    case 'es6':
-      await bundleES6();
-      await copyMjs();
-      break;
-    case 'es5':
-      await bundleES5();
-      break;
-    default:
-      await bundleES6();
-      await bundleES5();
-      await copyMjs();
-      break;
-  }
-}
-
-async function copyMjs() {
-  await copyFile('./dist/meriyah.esm.js', './dist/meriyah.esm.mjs');
-  await copyFile('./dist/meriyah.esm.min.js', './dist/meriyah.esm.min.mjs');
-  await copyFile('./dist/meriyah.cjs.js', './dist/meriyah.cjs');
-  await copyFile('./dist/meriyah.cjs.min.js', './dist/meriyah.min.cjs');
-  await copyFile('./dist/meriyah.umd.js', './dist/meriyah.umd.cjs');
-  await copyFile('./dist/meriyah.umd.min.js', './dist/meriyah.umd.min.cjs');
-}
-
-// bundle cjs(es6)
-async function bundleCJS() {
-  console.log(`creating cjs bundle`);
-
+async function bundleDist(format, minified) {
   const bundle = await rollup.rollup({
     input: project.entry.path,
     plugins: [
@@ -50,103 +16,44 @@ async function bundleCJS() {
         typescript: ts,
         clean: true
       }),
-      json()
+      json(),
+      ...(minified ? [terser()] : [])
     ]
   });
 
-  const fileName = join(project.dist.path, `meriyah.cjs.js`);
+  let suffix = format === 'umd' ? '.umd' : '';
+  suffix += minified ? '.min' : '';
+  suffix += format === 'esm' ? '.mjs' : format === 'cjs' ? '.cjs' : '.js';
 
+  const fileName = join(project.dist.path, `meriyah${suffix}`);
   console.log(`writing ${fileName}`);
-
-  await bundle.write({
-    file: fileName,
-    name: 'meriyah',
-    format: 'cjs'
-  });
-  console.log(`done`);
-}
-
-// bundle es6()
-async function bundleES6() {
-  for (const type of ['normal', 'minified']) {
-    console.log(`creating ${type} bundle`);
-
-    const bundle = await rollup.rollup({
-      input: project.entry.path,
-      plugins: [
-        typescript2({
-          tsconfig: project['tsconfig.json'].path,
-          typescript: ts,
-          clean: true
-        }),
-        json(),
-        ...(type === 'minified' ? [terser()] : [])
-      ]
-    });
-
-    const suffix = type === 'minified' ? '.min' : '';
-
-    //'amd' | 'cjs' | 'system' | 'es' | 'esm' | 'iife' | 'umd'
-
-    for (const format of ['esm', 'system', 'cjs']) {
-      const fileName = join(project.dist.path, `meriyah.${format}${suffix}.js`);
-
-      console.log(`writing ${fileName}`);
-
-      await bundle.write({
-        file: fileName,
-        name: 'meriyah',
-        format
-      });
-    }
-
-    for (const format of ['umd', 'amd', 'iife']) {
-      const fileName = join(project.dist.path, `meriyah.${format}${suffix}.js`);
-
-      console.log(`writing ${fileName}`);
-
-      await bundle.write({
-        file: fileName,
-        exports: 'named',
-        name: 'meriyah',
-        format
-      });
-    }
+  const options = { file: fileName, name: 'meriyah', format };
+  if (format === 'umd') {
+    // For IIFE
+    options.exports = 'named';
   }
+  await bundle.write(options);
 }
 
-// bundle es5(umd)
-async function bundleES5() {
-  for (const type of ['normal', 'minified']) {
-    console.log(`creating ${type} es5 bundle`);
+async function bundleAll(cjsOnly) {
+  // CommonJS
+  await bundleDist('cjs', false);
+  if (cjsOnly) return;
 
-    const bundle = await rollup.rollup({
-      input: project.entry.path,
-      plugins: [
-        typescript2({
-          tsconfig: project['tsconfig.json'].path,
-          tsconfigOverride: { compilerOptions: { target: 'es5' } },
-          typescript: ts,
-          clean: true
-        }),
-        json(),
-        ...(type === 'minified' ? [terser()] : [])
-      ]
-    });
+  // ESM
+  await bundleDist('esm', true);
+  await bundleDist('esm', false);
 
-    const suffix = type === 'minified' ? '.min' : '';
-
-    for (const format of ['umd']) {
-      const fileName = join(project.dist.path, `meriyah.${format}.es5${suffix}.js`);
-
-      console.log(`writing ${fileName}`);
-
-      await bundle.write({
-        file: fileName,
-        exports: 'named',
-        name: 'meriyah',
-        format
-      });
-    }
-  }
+  // UMD supports AMD, CommonJS, and IIFE
+  await bundleDist('umd', true);
+  await bundleDist('umd', false);
 }
+
+async function bundle() {
+  await fs.rm(project.dist.path, { force: true, recursive: true });
+
+  const cjsOnly = process.argv.slice(2)[0] === 'bench';
+  await bundleAll(cjsOnly);
+}
+
+bundle();
