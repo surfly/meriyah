@@ -282,7 +282,6 @@ export function collectLeadingComments(parser: ParserState): Array<Comment> {
   //can use a global empty array for memory optimisation
   let leadingComments: Array<Comment> = [];
   if (parser.attachComments) {
-
     if (parser.comments && parser.comments.length) {
       leadingComments = parser.comments;
       parser.comments = [];
@@ -291,7 +290,7 @@ export function collectLeadingComments(parser: ParserState): Array<Comment> {
     if (!parser.leadingComments) {
       parser.leadingComments = [];
     }
-    parser.leadingComments.push(leadingComments)
+    parser.leadingComments.push(leadingComments);
   }
 
   return leadingComments;
@@ -602,7 +601,6 @@ export function finishNode<T extends Node>(
       parser.comments = [];
     }
   }
-
 
   return node;
 }

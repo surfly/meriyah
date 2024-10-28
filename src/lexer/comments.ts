@@ -5,6 +5,7 @@ import { Context, ParserState } from '../common';
 import { report, Errors } from '../errors';
 import { CommentType } from '../estree';
 
+// `CommentType` in upstream
 export const enum CommentTypeEnum {
   Single,
   Multi,
@@ -89,8 +90,13 @@ export function skipSingleLineComment(
     parser.tokenColumn = parser.column;
   }
   const commentVal = source.slice(index, parser.index);
-  const commentObj = { type: CommentTypes[type & 0xff] as CommentType, value: commentVal, start: index, end: parser.index };
-  parser.comments && parser.comments.push(commentObj);
+  const commentObj = {
+    type: CommentTypes[type & 0xff] as CommentType,
+    value: commentVal,
+    start: index,
+    end: parser.index
+  };
+  if (parser.comments) parser.comments.push(commentObj);
   if (parser.onComment) {
     const loc = {
       start: {
@@ -129,8 +135,13 @@ export function skipMultiLineComment(parser: ParserState, source: string, state:
         if (advanceChar(parser) === Chars.Slash) {
           advanceChar(parser);
           const commentVal = source.slice(index, parser.index - 2);
-          const commentObj = { type: CommentTypes[CommentTypeEnum.Multi & 0xff] as CommentType, value: commentVal, start: index, end: parser.index };
-          parser.comments && parser.comments.push(commentObj);
+          const commentObj = {
+            type: CommentTypes[CommentTypeEnum.Multi & 0xff] as CommentType,
+            value: commentVal,
+            start: index,
+            end: parser.index
+          };
+          if (parser.comments) parser.comments.push(commentObj);
           if (parser.onComment) {
             const loc = {
               start: {
