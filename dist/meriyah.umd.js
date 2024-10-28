@@ -755,8 +755,14 @@
           parser.tokenColumn = parser.column;
       }
       const commentVal = source.slice(index, parser.index);
-      const commentObj = { type: CommentTypes[type & 0xff], value: commentVal, start: index, end: parser.index };
-      parser.comments && parser.comments.push(commentObj);
+      const commentObj = {
+          type: CommentTypes[type & 0xff],
+          value: commentVal,
+          start: index,
+          end: parser.index
+      };
+      if (parser.comments)
+          parser.comments.push(commentObj);
       if (parser.onComment) {
           const loc = {
               start: {
@@ -785,8 +791,14 @@
                   if (advanceChar(parser) === 47) {
                       advanceChar(parser);
                       const commentVal = source.slice(index, parser.index - 2);
-                      const commentObj = { type: CommentTypes[1 & 0xff], value: commentVal, start: index, end: parser.index };
-                      parser.comments && parser.comments.push(commentObj);
+                      const commentObj = {
+                          type: CommentTypes[1 & 0xff],
+                          value: commentVal,
+                          start: index,
+                          end: parser.index
+                      };
+                      if (parser.comments)
+                          parser.comments.push(commentObj);
                       if (parser.onComment) {
                           const loc = {
                               start: {
