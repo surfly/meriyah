@@ -1,9 +1,11 @@
-import { ParserState } from './common';
+import { _Node, SourceLocation } from './estree';
+import { ParserState, ScopeError } from './common';
 
 export const enum Errors {
   Unexpected,
   StrictOctalEscape,
   TemplateOctalLiteral,
+  TemplateEightAndNine,
   InvalidPrivateIdentifier,
   InvalidUnicodeEscapeSequence,
   InvalidCodePoint,
@@ -15,6 +17,7 @@ export const enum Errors {
   InvalidBigInt,
   IDStartAfterNumber,
   InvalidEightAndNine,
+  StrictEightAndNine,
   UnterminatedString,
   UnterminatedTemplate,
   UnterminatedComment,
@@ -109,7 +112,8 @@ export const enum Errors {
   InvalidDefaultImport,
   TrailingDecorators,
   GeneratorConstructor,
-  AwaitOrYieldIdentInModule,
+  AwaitIdentInModuleOrAsyncFunc,
+  YieldIdentInModule,
   HtmlCommentInWebCompat,
   StrictInvalidLetInExprPos,
   NotAssignableLetArgs,
@@ -138,11 +142,13 @@ export const enum Errors {
   InvalidNestedStatement,
   UnknownLabel,
   InvalidImportTail,
+  InvalidJSONImportBinding,
   ImportNotOneArg,
   InvalidImportNew,
   InvalidSpreadInImport,
   UncompleteArrow,
   DuplicateBinding,
+  DuplicatePrivateIdentifier,
   DuplicateExportBinding,
   UndeclaredExportedBinding,
   UnexpectedPrivateField,
@@ -166,7 +172,14 @@ export const enum Errors {
   OptionalChainingNoSuper,
   OptionalChainingNoNew,
   ImportMetaOutsideModule,
-  InvalidLeadingDecorator
+  InvalidLeadingDecorator,
+  InvalidExportName,
+  InvalidExportReference,
+  InvalidSuperPrivate,
+  InvalidImportMeta,
+  InvalidEscapedImportMeta,
+  InvalidAwaitAsIdentifier,
+  InvalidAwaitInStaticBlock
 }
 
 export const errorMessages: {
@@ -176,7 +189,8 @@ export const errorMessages: {
   [Errors.UnexpectedToken]: "Unexpected token: '%0'",
   [Errors.StrictOctalEscape]: 'Octal escape sequences are not allowed in strict mode',
   [Errors.TemplateOctalLiteral]: 'Octal escape sequences are not allowed in template strings',
-  [Errors.InvalidPrivateIdentifier]: 'Unexpected token `#`',
+  [Errors.TemplateEightAndNine]: '\\8 and \\9 are not allowed in template strings',
+  [Errors.InvalidPrivateIdentifier]: 'Private identifier #%0 is not defined',
   [Errors.InvalidUnicodeEscapeSequence]: 'Illegal Unicode escape sequence',
   [Errors.InvalidCodePoint]: 'Invalid code point %0',
   [Errors.InvalidHexEscapeSequence]: 'Invalid hexadecimal escape sequence',
@@ -188,6 +202,7 @@ export const errorMessages: {
   [Errors.InvalidBigInt]: 'Invalid BigIntLiteral',
   [Errors.IDStartAfterNumber]: 'No identifiers allowed directly after numeric literal',
   [Errors.InvalidEightAndNine]: 'Escapes \\8 or \\9 are not syntactically valid escapes',
+  [Errors.StrictEightAndNine]: 'Escapes \\8 or \\9 are not allowed in strict mode',
   [Errors.UnterminatedString]: 'Unterminated string literal',
   [Errors.UnterminatedTemplate]: 'Unterminated template literal',
   [Errors.UnterminatedComment]: 'Multiline comment was not closed properly',
@@ -275,7 +290,7 @@ export const errorMessages: {
   [Errors.StrictWith]: 'Strict mode code may not include a with statement',
   [Errors.IllegalReturn]: 'Illegal return statement',
   [Errors.InvalidForLHSBinding]: 'The left hand side of the for-header binding declaration is not destructible',
-  [Errors.InvalidNewTarget]: 'new.target only allowed within functions',
+  [Errors.InvalidNewTarget]: 'new.target only allowed within functions or static blocks',
   [Errors.MissingPrivateIdentifier]: "'#' not followed by identifier",
   [Errors.KeywordNotId]: 'Invalid keyword',
   [Errors.InvalidLetClassName]: "Can not use 'let' as a class name",
@@ -286,10 +301,12 @@ export const errorMessages: {
   [Errors.InvalidImportExportSloppy]: 'The %0 keyword can only be used with the module goal',
   [Errors.UnicodeOverflow]: 'Unicode codepoint must not be greater than 0x10FFFF',
   [Errors.InvalidExportImportSource]: '%0 source must be string',
-  [Errors.InvalidKeywordAsAlias]: 'Only a identifier can be used to indicate alias',
+  [Errors.InvalidKeywordAsAlias]: 'Only a identifier or string can be used to indicate alias',
   [Errors.InvalidDefaultImport]: "Only '*' or '{...}' can be imported after default",
   [Errors.TrailingDecorators]: 'Trailing decorator may be followed by method',
   [Errors.GeneratorConstructor]: "Decorators can't be used with a constructor",
+  [Errors.AwaitIdentInModuleOrAsyncFunc]: 'Can not use `await` as identifier in module or async func',
+  [Errors.YieldIdentInModule]: 'Can not use `await` as identifier in module',
   [Errors.HtmlCommentInWebCompat]: 'HTML comments are only allowed with web compatibility (Annex B)',
   [Errors.StrictInvalidLetInExprPos]: "The identifier 'let' must not be in expression position in strict mode",
   [Errors.NotAssignableLetArgs]: 'Cannot assign to `eval` and `arguments` in strict mode',
@@ -307,7 +324,7 @@ export const errorMessages: {
   [Errors.DeletePrivateField]: 'Private fields can not be deleted',
   [Errors.InvalidClassFieldConstructor]: 'Classes may not have a field called constructor',
   [Errors.InvalidStaticClassFieldConstructor]: 'Classes may not have a private element named constructor',
-  [Errors.InvalidClassFieldArgEval]: 'A class field initializer may not contain arguments',
+  [Errors.InvalidClassFieldArgEval]: 'A class field initializer or static block may not contain arguments',
   [Errors.InvalidGeneratorFunction]: 'Generators can only be declared at the top level or inside a block',
   [Errors.AsyncRestrictedProd]: 'Async methods are a restricted production and cannot have a newline following it',
   [Errors.UnexpectedCharAfterObjLit]: 'Unexpected character after object literal property name',
@@ -316,11 +333,13 @@ export const errorMessages: {
   [Errors.InvalidNestedStatement]: 'continue statement must be nested within an iteration statement',
   [Errors.UnknownLabel]: "Undefined label '%0'",
   [Errors.InvalidImportTail]: 'Trailing comma is disallowed inside import(...) arguments',
+  [Errors.InvalidJSONImportBinding]: 'Invalid binding in JSON import',
   [Errors.ImportNotOneArg]: 'import() requires exactly one argument',
   [Errors.InvalidImportNew]: 'Cannot use new with import(...)',
   [Errors.InvalidSpreadInImport]: '... is not allowed in import()',
   [Errors.UncompleteArrow]: "Expected '=>'",
   [Errors.DuplicateBinding]: "Duplicate binding '%0'",
+  [Errors.DuplicatePrivateIdentifier]: 'Duplicate private identifier #%0',
   [Errors.DuplicateExportBinding]: "Cannot export a duplicate name '%0'",
   [Errors.DuplicateLetConstBinding]: 'Duplicate %0 for-binding',
   [Errors.UndeclaredExportedBinding]: "Exported binding '%0' needs to refer to a top-level declared variable",
@@ -344,32 +363,54 @@ export const errorMessages: {
   [Errors.OptionalChainingNoSuper]: 'Invalid optional chain from super property',
   [Errors.OptionalChainingNoNew]: 'Invalid optional chain from new expression',
   [Errors.ImportMetaOutsideModule]: 'Cannot use "import.meta" outside a module',
-  [Errors.InvalidLeadingDecorator]: 'Leading decorators must be attached to a class declaration'
+  [Errors.InvalidLeadingDecorator]: 'Leading decorators must be attached to a class declaration',
+  [Errors.InvalidExportName]: 'An export name cannot include a lone surrogate, found %0',
+  [Errors.InvalidExportReference]: 'A string literal cannot be used as an exported binding without `from`',
+  [Errors.InvalidSuperPrivate]: "Private fields can't be accessed on super",
+  [Errors.InvalidImportMeta]: "The only valid meta property for import is 'import.meta'",
+  [Errors.InvalidEscapedImportMeta]: "'import.meta' must not contain escaped characters",
+  [Errors.InvalidAwaitAsIdentifier]: 'cannot use "await" as identifier inside an async function',
+  [Errors.InvalidAwaitInStaticBlock]: 'cannot use "await" in static blocks'
 };
 
-export class ParseError extends SyntaxError {
-  public loc: {
-    line: ParseError['line'];
-    column: ParseError['column'];
-  };
-  public index: number;
-  public line: number;
-  public column: number;
+export class ParseError extends SyntaxError implements _Node {
+  public start: number;
+  public end: number;
+  public range: [number, number];
+  public loc: SourceLocation;
+
   public description: string;
-  /*eslint-disable*/
-  constructor(startindex: number, line: number, column: number, type: Errors, ...params: string[]) {
+
+  constructor(
+    start: number,
+    startLine: number,
+    startColumn: number,
+    end: number,
+    endLine: number,
+    endColumn: number,
+    type: Errors,
+    ...params: string[]
+  ) {
     const message =
-      '[' + line + ':' + column + ']: ' + errorMessages[type].replace(/%(\d+)/g, (_: string, i: number) => params[i]);
+      '[' +
+      startLine +
+      ':' +
+      startColumn +
+      '-' +
+      endLine +
+      ':' +
+      endColumn +
+      ']: ' +
+      errorMessages[type].replace(/%(\d+)/g, (_: string, i: number) => params[i]);
     super(`${message}`);
-    this.index = startindex;
-    this.line = line;
-    this.column = column;
-    this.description = message;
-    /* Acorn compat */
+    this.start = start;
+    this.end = end;
+    this.range = [start, end];
     this.loc = {
-      line,
-      column
-    } as any;
+      start: { line: startLine, column: startColumn },
+      end: { line: endLine, column: endColumn }
+    };
+    this.description = message;
   }
 }
 /**
@@ -382,11 +423,29 @@ export class ParseError extends SyntaxError {
  * @returns {never}
  */
 export function report(parser: ParserState, type: Errors, ...params: string[]): never {
-  throw new ParseError(parser.index, parser.line, parser.column, type, ...params);
+  throw new ParseError(
+    parser.tokenIndex,
+    parser.tokenLine,
+    parser.tokenColumn,
+    parser.index,
+    parser.line,
+    parser.column,
+    type,
+    ...params
+  );
 }
 
-export function reportScopeError(scope: any): never {
-  throw new ParseError(scope.index, scope.line, scope.column, scope.type, scope.params);
+export function reportScopeError(scope: ScopeError): never {
+  throw new ParseError(
+    scope.tokenIndex,
+    scope.tokenLine,
+    scope.tokenColumn,
+    scope.index,
+    scope.line,
+    scope.column,
+    scope.type,
+    ...scope.params
+  );
 }
 
 /**
@@ -400,8 +459,17 @@ export function reportScopeError(scope: any): never {
  * @param {Errors} type
  * @param {...string[]} params
  */
-export function reportMessageAt(index: number, line: number, column: number, type: Errors, ...params: string[]): never {
-  throw new ParseError(index, line, column, type, ...params);
+export function reportMessageAt(
+  tokenIndex: number,
+  tokenLine: number,
+  tokenColumn: number,
+  index: number,
+  line: number,
+  column: number,
+  type: Errors,
+  ...params: string[]
+): never {
+  throw new ParseError(tokenIndex, tokenLine, tokenColumn, index, line, column, type, ...params);
 }
 
 /**
@@ -414,6 +482,14 @@ export function reportMessageAt(index: number, line: number, column: number, typ
  * @param {number} column
  * @param {Errors} type
  */
-export function reportScannerError(index: number, line: number, column: number, type: Errors): never {
-  throw new ParseError(index, line, column, type);
+export function reportScannerError(
+  tokenIndex: number,
+  tokenLine: number,
+  tokenColumn: number,
+  index: number,
+  line: number,
+  column: number,
+  type: Errors
+): never {
+  throw new ParseError(tokenIndex, tokenLine, tokenColumn, index, line, column, type);
 }

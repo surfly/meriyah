@@ -424,7 +424,21 @@ describe('Module - Export', () => {
     ['export { foo as foo4, bar as bar2, foobar }', Context.Strict | Context.Module | Context.OptionsLexical],
     ['export { x as default };', Context.Strict | Context.Module | Context.OptionsLexical],
     ['export {aa as bb, x};', Context.Strict | Context.Module | Context.OptionsLexical],
-    ['export {foob};', Context.Strict | Context.Module | Context.OptionsLexical]
+    ['export {foob};', Context.Strict | Context.Module | Context.OptionsLexical],
+    ['export { "a" as b };', Context.Strict | Context.Module | Context.OptionsLexical],
+    ['export { "\\uD83C" as b } from "./foo";', Context.Strict | Context.Module | Context.OptionsLexical],
+    ['export { a as "\\uD83C" } from "./foo";', Context.Strict | Context.Module | Context.OptionsLexical],
+    ['export * as "foo" from "./f"; export { foo };', Context.Strict | Context.Module | Context.OptionsLexical],
+    ['export * as foo from "./f"; export { foo };', Context.Strict | Context.Module | Context.OptionsLexical],
+    [
+      'export * as foo from "./f"; export { "foo" } from "./m";',
+      Context.Strict | Context.Module | Context.OptionsLexical
+    ],
+    [
+      'export * as foo from "./f"; export { "a" as "foo" } from "./m";',
+      Context.Strict | Context.Module | Context.OptionsLexical
+    ],
+    ['export { a }; export { "\\u0061" } from "./m";', Context.Strict | Context.Module | Context.OptionsLexical]
   ]);
 
   for (const arg of [
@@ -689,7 +703,13 @@ describe('Module - Export', () => {
       import dflt3, * as ns2 from 'h';`,
     'var a; export { a as b };',
     'export default 1',
-    'export default () => {}'
+    'export default () => {}',
+    'export * as "foo" from "./foo";',
+    'export { "a" as "b" } from "./foo";',
+    'export { a as "b" } from "./foo";',
+    'let a = 1; export { a as "b" };',
+    'export { "a" as b } from "./foo";',
+    'export { "\\uD83C\\uDF19" as b } from "./foo";'
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
@@ -908,6 +928,7 @@ describe('Module - Export', () => {
               type: 'Literal',
               value: 'source'
             },
+            attributes: [],
             exported: {
               name: 'class',
               type: 'Identifier'
@@ -929,6 +950,7 @@ describe('Module - Export', () => {
               type: 'Literal',
               value: 'source'
             },
+            attributes: [],
             exported: {
               name: 'ns',
               type: 'Identifier'
@@ -953,6 +975,7 @@ describe('Module - Export', () => {
               type: 'Literal',
               value: 'a'
             },
+            attributes: [],
             exported: null,
             start: 0,
             end: 17,
@@ -977,6 +1000,7 @@ describe('Module - Export', () => {
               type: 'Literal',
               value: './foo'
             },
+            attributes: [],
             exported: {
               name: 'foo',
               type: 'Identifier'
@@ -2499,6 +2523,7 @@ describe('Module - Export', () => {
             range: [0, 18],
             declaration: null,
             specifiers: [],
+            attributes: [],
             source: {
               type: 'Literal',
               start: 15,
@@ -4331,7 +4356,6 @@ describe('Module - Export', () => {
         sourceType: 'module'
       }
     ],
-
     [
       'export let a = 1;',
       Context.Strict | Context.Module,
@@ -4362,6 +4386,118 @@ describe('Module - Export', () => {
             }
           }
         ]
+      }
+    ],
+    [
+      'export * as "foo" from "./foo";',
+      Context.Strict | Context.Module,
+      {
+        type: 'Program',
+        sourceType: 'module',
+        body: [
+          {
+            type: 'ExportAllDeclaration',
+            source: {
+              type: 'Literal',
+              value: './foo'
+            },
+            exported: {
+              type: 'Literal',
+              value: 'foo'
+            }
+          }
+        ]
+      }
+    ],
+    [
+      'export { "\\uD83C\\uDF19" as "a"} from "./foo";',
+      Context.Strict | Context.Module | Context.OptionsLoc,
+      {
+        type: 'Program',
+        sourceType: 'module',
+        body: [
+          {
+            type: 'ExportNamedDeclaration',
+            declaration: null,
+            specifiers: [
+              {
+                type: 'ExportSpecifier',
+                local: {
+                  type: 'Literal',
+                  value: '🌙',
+                  loc: {
+                    start: {
+                      line: 1,
+                      column: 9
+                    },
+                    end: {
+                      line: 1,
+                      column: 23
+                    }
+                  }
+                },
+                exported: {
+                  type: 'Literal',
+                  value: 'a',
+                  loc: {
+                    start: {
+                      line: 1,
+                      column: 27
+                    },
+                    end: {
+                      line: 1,
+                      column: 30
+                    }
+                  }
+                },
+                loc: {
+                  start: {
+                    line: 1,
+                    column: 9
+                  },
+                  end: {
+                    line: 1,
+                    column: 30
+                  }
+                }
+              }
+            ],
+            source: {
+              type: 'Literal',
+              value: './foo',
+              loc: {
+                start: {
+                  line: 1,
+                  column: 37
+                },
+                end: {
+                  line: 1,
+                  column: 44
+                }
+              }
+            },
+            loc: {
+              start: {
+                line: 1,
+                column: 0
+              },
+              end: {
+                line: 1,
+                column: 45
+              }
+            }
+          }
+        ],
+        loc: {
+          start: {
+            line: 1,
+            column: 0
+          },
+          end: {
+            line: 1,
+            column: 45
+          }
+        }
       }
     ]
   ]);

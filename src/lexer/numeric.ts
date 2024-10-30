@@ -125,7 +125,10 @@ export function scanNumber(parser: ParserState, context: Context, kind: NumberKi
               reportScannerError(
                 parser.index,
                 parser.line,
-                parser.index + 1 /* skips `_` */,
+                parser.column,
+                parser.index + 1,
+                parser.line,
+                parser.column,
                 Errors.ContinuousNumericSeparator
               );
             }
@@ -142,7 +145,10 @@ export function scanNumber(parser: ParserState, context: Context, kind: NumberKi
           reportScannerError(
             parser.index,
             parser.line,
-            parser.index + 1 /* skips `_` */,
+            parser.column,
+            parser.index + 1,
+            parser.line,
+            parser.column,
             Errors.TrailingNumericSeparator
           );
         }
@@ -151,7 +157,7 @@ export function scanNumber(parser: ParserState, context: Context, kind: NumberKi
           // Most numbers are pure decimal integers without fractional component
           // or exponential notation.  Handle that with optimized code.
           parser.tokenValue = value;
-          if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenPos, parser.index);
+          if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
           return Token.NumericLiteral;
         }
       }
@@ -203,8 +209,8 @@ export function scanNumber(parser: ParserState, context: Context, kind: NumberKi
   }
 
   if (isBigInt) {
-    parser.tokenRaw = parser.source.slice(parser.tokenPos, parser.index);
-    parser.tokenValue = BigInt(value);
+    parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
+    parser.tokenValue = BigInt(parser.tokenRaw.slice(0, -1).replaceAll('_', ''));
     return Token.BigIntLiteral;
   }
 
@@ -212,10 +218,10 @@ export function scanNumber(parser: ParserState, context: Context, kind: NumberKi
     kind & (NumberKind.ImplicitOctal | NumberKind.Binary | NumberKind.Hex | NumberKind.Octal)
       ? value
       : kind & NumberKind.NonOctalDecimal
-      ? parseFloat(parser.source.substring(parser.tokenPos, parser.index))
-      : +value;
+        ? parseFloat(parser.source.substring(parser.tokenIndex, parser.index))
+        : +value;
 
-  if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenPos, parser.index);
+  if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
 
   return Token.NumericLiteral;
 }
@@ -238,7 +244,10 @@ export function scanDecimalDigitsOrSeparator(parser: ParserState, char: number):
         reportScannerError(
           parser.index,
           parser.line,
-          parser.index + 1 /* skips `_` */,
+          parser.column,
+          parser.index + 1,
+          parser.line,
+          parser.column,
           Errors.ContinuousNumericSeparator
         );
       }
@@ -252,7 +261,15 @@ export function scanDecimalDigitsOrSeparator(parser: ParserState, char: number):
   }
 
   if (allowSeparator) {
-    reportScannerError(parser.index, parser.line, parser.index + 1 /* skips `_` */, Errors.TrailingNumericSeparator);
+    reportScannerError(
+      parser.index,
+      parser.line,
+      parser.column,
+      parser.index + 1,
+      parser.line,
+      parser.column,
+      Errors.TrailingNumericSeparator
+    );
   }
 
   return ret + parser.source.substring(start, parser.index);

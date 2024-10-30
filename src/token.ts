@@ -18,7 +18,7 @@ export const enum Token {
   IsAutoSemicolon          = 1 << 20,
   IsPatternStart           = 1 << 21, // Start of pattern, '[' or '{'
   IsAssignOp               = 1 << 22,
-  IsBinaryOp               = 1 << 23 | IsExpressionStart,
+  IsBinaryOp               = 1 << 23,
   IsUnaryOp                = 1 << 24 | IsExpressionStart,
   IsUpdateOp               = 1 << 25 | IsExpressionStart,
   IsMemberOrCallExpression = 1 << 26,
@@ -26,6 +26,7 @@ export const enum Token {
   IsCoalesc                = 1 << 28,
   IsEvalOrArguments        = 1 << 29 | IsExpressionStart | IsIdentifier,
   IsClassField             = 1 << 30,
+  IsEscaped                = 1 << 31, // Note 1 << 31 is negative integer
 
   // Note: 1 << 31... turns to negative
 
@@ -61,142 +62,140 @@ export const enum Token {
   QuestionMark = 22, // ?
   SingleQuote  = 23, // '
   DoubleQuote  = 24, // "
-  JSXClose     = 25, // </
-  JSXAutoClose = 26, // />
 
   /* Update operators */
-  Increment = 27 | IsUpdateOp, // ++
-  Decrement = 28 | IsUpdateOp, // --
+  Increment = 25 | IsUpdateOp, // ++
+  Decrement = 26 | IsUpdateOp, // --
 
   /* Assign operators */
-  Assign                  = 29 | IsAssignOp | IsClassField, // =
-  ShiftLeftAssign         = 30 | IsAssignOp, // <<=
-  ShiftRightAssign        = 31 | IsAssignOp, // >>=
-  LogicalShiftRightAssign = 32 | IsAssignOp, // >>>=
-  ExponentiateAssign      = 33 | IsAssignOp, // **=
-  AddAssign               = 34 | IsAssignOp, // +=
-  SubtractAssign          = 35 | IsAssignOp, // -=
-  MultiplyAssign          = 36 | IsAssignOp, // *=
-  DivideAssign            = 37 | IsAssignOp | IsExpressionStart, // /=
-  ModuloAssign            = 38 | IsAssignOp, // %=
-  BitwiseXorAssign        = 39 | IsAssignOp, // ^=
-  BitwiseOrAssign         = 40 | IsAssignOp, // |=
-  BitwiseAndAssign        = 41 | IsAssignOp, // &=
-  LogicalOrAssign         = 42 | IsAssignOp, // ||=
-  LogicalAndAssign        = 43 | IsAssignOp, // &&=
-  CoalesceAssign          = 44 | IsAssignOp, // ??=
+  Assign                  = 27 | IsAssignOp | IsClassField, // =
+  ShiftLeftAssign         = 28 | IsAssignOp, // <<=
+  ShiftRightAssign        = 29 | IsAssignOp, // >>=
+  LogicalShiftRightAssign = 30 | IsAssignOp, // >>>=
+  ExponentiateAssign      = 31 | IsAssignOp, // **=
+  AddAssign               = 32 | IsAssignOp, // +=
+  SubtractAssign          = 33 | IsAssignOp, // -=
+  MultiplyAssign          = 34 | IsAssignOp, // *=
+  DivideAssign            = 35 | IsAssignOp | IsExpressionStart, // /=
+  ModuloAssign            = 36 | IsAssignOp, // %=
+  BitwiseXorAssign        = 37 | IsAssignOp, // ^=
+  BitwiseOrAssign         = 38 | IsAssignOp, // |=
+  BitwiseAndAssign        = 39 | IsAssignOp, // &=
+  LogicalOrAssign         = 40 | IsAssignOp, // ||=
+  LogicalAndAssign        = 41 | IsAssignOp, // &&=
+  CoalesceAssign          = 42 | IsAssignOp, // ??=
 
   /* Unary/binary operators */
-  TypeofKeyword      = 45 | IsUnaryOp | Reserved,
-  DeleteKeyword      = 46 | IsUnaryOp | Reserved,
-  VoidKeyword        = 47 | IsUnaryOp | Reserved,
-  Negate             = 48 | IsUnaryOp, // !
-  Complement         = 49 | IsUnaryOp, // ~
-  Add                = 50 | IsUnaryOp | IsBinaryOp | 10 << PrecStart, // +
-  Subtract           = 51 | IsUnaryOp | IsBinaryOp | 10 << PrecStart, // -
-  InKeyword          = 52 | IsBinaryOp | 8 << PrecStart | Reserved | IsInOrOf,
-  InstanceofKeyword  = 53 | IsBinaryOp | 8 << PrecStart | Reserved,
-  Multiply           = 54 | IsBinaryOp | 11 << PrecStart, // *
-  Modulo             = 55 | IsBinaryOp | 11 << PrecStart, // %
-  Divide             = 56 | IsBinaryOp | IsExpressionStart | 11 << PrecStart, // /
-  Exponentiate       = 57 | IsBinaryOp | 12 << PrecStart, // **
-  LogicalAnd         = 58 | IsBinaryOp | IsLogical | 3 << PrecStart, // &&
-  LogicalOr          = 59 | IsBinaryOp | IsLogical | 2 << PrecStart, // ||
-  StrictEqual        = 60 | IsBinaryOp | 7 << PrecStart, // ===
-  StrictNotEqual     = 61 | IsBinaryOp | 7 << PrecStart, // !==
-  LooseEqual         = 62 | IsBinaryOp | 7 << PrecStart, // ==
-  LooseNotEqual      = 63 | IsBinaryOp | 7 << PrecStart, // !=
-  LessThanOrEqual    = 64 | IsBinaryOp | 8 << PrecStart, // <=
-  GreaterThanOrEqual = 65 | IsBinaryOp | 8 << PrecStart, // >=
-  LessThan           = 66 | IsBinaryOp | IsExpressionStart | 8 << PrecStart, // <
-  GreaterThan        = 67 | IsBinaryOp | 8 << PrecStart, // >
-  ShiftLeft          = 68 | IsBinaryOp | 9 << PrecStart, // <<
-  ShiftRight         = 69 | IsBinaryOp | 9 << PrecStart, // >>
-  LogicalShiftRight  = 70 | IsBinaryOp | 9 << PrecStart, // >>>
-  BitwiseAnd         = 71 | IsBinaryOp | 6 << PrecStart, // &
-  BitwiseOr          = 72 | IsBinaryOp | 4 << PrecStart, // |
-  BitwiseXor         = 73 | IsBinaryOp | 5 << PrecStart, // ^
+  TypeofKeyword      = 43 | IsUnaryOp | Reserved,
+  DeleteKeyword      = 44 | IsUnaryOp | Reserved,
+  VoidKeyword        = 45 | IsUnaryOp | Reserved,
+  Negate             = 46 | IsUnaryOp, // !
+  Complement         = 47 | IsUnaryOp, // ~
+  Add                = 48 | IsUnaryOp | IsBinaryOp | IsExpressionStart | 10 << PrecStart, // +
+  Subtract           = 49 | IsUnaryOp | IsBinaryOp | IsExpressionStart | 10 << PrecStart, // -
+  InKeyword          = 50 | IsBinaryOp | 8 << PrecStart | Reserved | IsInOrOf,
+  InstanceofKeyword  = 51 | IsBinaryOp | 8 << PrecStart | Reserved,
+  Multiply           = 52 | IsBinaryOp | 11 << PrecStart, // *
+  Modulo             = 53 | IsBinaryOp | 11 << PrecStart, // %
+  Divide             = 54 | IsBinaryOp | IsExpressionStart | 11 << PrecStart, // /
+  Exponentiate       = 55 | IsBinaryOp | 12 << PrecStart, // **
+  LogicalAnd         = 56 | IsBinaryOp | IsLogical | 3 << PrecStart, // &&
+  LogicalOr          = 57 | IsBinaryOp | IsLogical | 2 << PrecStart, // ||
+  StrictEqual        = 58 | IsBinaryOp | 7 << PrecStart, // ===
+  StrictNotEqual     = 59 | IsBinaryOp | 7 << PrecStart, // !==
+  LooseEqual         = 60 | IsBinaryOp | 7 << PrecStart, // ==
+  LooseNotEqual      = 61 | IsBinaryOp | 7 << PrecStart, // !=
+  LessThanOrEqual    = 62 | IsBinaryOp | 8 << PrecStart, // <=
+  GreaterThanOrEqual = 63 | IsBinaryOp | 8 << PrecStart, // >=
+  LessThan           = 64 | IsBinaryOp | IsExpressionStart | 8 << PrecStart, // <
+  GreaterThan        = 65 | IsBinaryOp | 8 << PrecStart, // >
+  ShiftLeft          = 66 | IsBinaryOp | 9 << PrecStart, // <<
+  ShiftRight         = 67 | IsBinaryOp | 9 << PrecStart, // >>
+  LogicalShiftRight  = 68 | IsBinaryOp | 9 << PrecStart, // >>>
+  BitwiseAnd         = 69 | IsBinaryOp | 6 << PrecStart, // &
+  BitwiseOr          = 70 | IsBinaryOp | 4 << PrecStart, // |
+  BitwiseXor         = 71 | IsBinaryOp | 5 << PrecStart, // ^
 
   /* Variable declaration kinds */
-  VarKeyword   = 74 | IsExpressionStart | Reserved,
-  LetKeyword   = 75 | IsExpressionStart | FutureReserved | IsIdentifier,
-  ConstKeyword = 76 | IsExpressionStart | Reserved,
+  VarKeyword   = 72 | IsExpressionStart | Reserved,
+  LetKeyword   = 73 | IsExpressionStart | FutureReserved | IsIdentifier,
+  ConstKeyword = 74 | IsExpressionStart | Reserved,
 
   /* Other reserved words */
-  BreakKeyword    = 77 | Reserved,
-  CaseKeyword     = 78 | Reserved,
-  CatchKeyword    = 79 | Reserved,
-  ClassKeyword    = 80 | IsExpressionStart | Reserved,
-  ContinueKeyword = 81 | Reserved,
-  DebuggerKeyword = 82 | Reserved,
-  DefaultKeyword  = 83 | Reserved,
-  DoKeyword       = 84 | Reserved,
-  ElseKeyword     = 85 | Reserved,
-  ExportKeyword   = 86 | Reserved,
-  ExtendsKeyword  = 87 | Reserved,
-  FinallyKeyword  = 88 | Reserved,
-  ForKeyword      = 89 | Reserved,
-  FunctionKeyword = 90 | IsExpressionStart | Reserved,
-  IfKeyword       = 91 | Reserved,
-  ImportKeyword   = 92 | IsExpressionStart | Reserved,
-  NewKeyword      = 93 | IsExpressionStart | Reserved,
-  ReturnKeyword   = 94 | Reserved,
-  SuperKeyword    = 95 | IsExpressionStart | Reserved,
-  SwitchKeyword   = 96 | IsExpressionStart | Reserved,
-  ThisKeyword     = 97 | IsExpressionStart | Reserved,
-  ThrowKeyword    = 98 | IsExpressionStart | Reserved,
-  TryKeyword      = 99 | Reserved,
-  WhileKeyword    = 100 | Reserved,
-  WithKeyword     = 101 | Reserved,
+  BreakKeyword    = 75 | Reserved,
+  CaseKeyword     = 76 | Reserved,
+  CatchKeyword    = 77 | Reserved,
+  ClassKeyword    = 78 | IsExpressionStart | Reserved,
+  ContinueKeyword = 79 | Reserved,
+  DebuggerKeyword = 80 | Reserved,
+  DefaultKeyword  = 81 | Reserved,
+  DoKeyword       = 82 | Reserved,
+  ElseKeyword     = 83 | Reserved,
+  ExportKeyword   = 84 | Reserved,
+  ExtendsKeyword  = 85 | Reserved,
+  FinallyKeyword  = 86 | Reserved,
+  ForKeyword      = 87 | Reserved,
+  FunctionKeyword = 88 | IsExpressionStart | Reserved,
+  IfKeyword       = 89 | Reserved,
+  ImportKeyword   = 90 | IsExpressionStart | Reserved,
+  NewKeyword      = 91 | IsExpressionStart | Reserved,
+  ReturnKeyword   = 92 | Reserved,
+  SuperKeyword    = 93 | IsExpressionStart | Reserved,
+  SwitchKeyword   = 94 | IsExpressionStart | Reserved,
+  ThisKeyword     = 95 | IsExpressionStart | Reserved,
+  ThrowKeyword    = 96 | IsExpressionStart | Reserved,
+  TryKeyword      = 97 | Reserved,
+  WhileKeyword    = 98 | Reserved,
+  WithKeyword     = 99 | Reserved,
 
   /* Strict mode reserved words */
-  ImplementsKeyword = 102 | FutureReserved,
-  InterfaceKeyword  = 103 | FutureReserved,
-  PackageKeyword    = 104 | FutureReserved,
-  PrivateKeyword    = 105 | FutureReserved,
-  ProtectedKeyword  = 106 | FutureReserved,
-  PublicKeyword     = 107 | FutureReserved,
-  StaticKeyword     = 108 | FutureReserved,
-  YieldKeyword      = 109 | FutureReserved | IsExpressionStart | IsIdentifier,
+  ImplementsKeyword = 100 | FutureReserved,
+  InterfaceKeyword  = 101 | FutureReserved,
+  PackageKeyword    = 102 | FutureReserved,
+  PrivateKeyword    = 103 | FutureReserved,
+  ProtectedKeyword  = 104 | FutureReserved,
+  PublicKeyword     = 105 | FutureReserved,
+  StaticKeyword     = 106 | FutureReserved,
+  YieldKeyword      = 107 | FutureReserved | IsExpressionStart | IsIdentifier,
 
   /* Contextual keywords */
-  AsKeyword          = 110 | Contextual | IsExpressionStart,
-  AsyncKeyword       = 111 | Contextual | IsIdentifier | IsExpressionStart,
-  AwaitKeyword       = 112 | Contextual | IsExpressionStart | IsIdentifier, // await is only reserved word in async functions or modules
-  ConstructorKeyword = 113 | Contextual,
-  GetKeyword         = 114 | Contextual,
-  SetKeyword         = 115 | Contextual,
-  FromKeyword        = 116 | Contextual,
-  OfKeyword          = 117 | Contextual | IsInOrOf,
-  EnumKeyword        = 118 | Reserved | IsExpressionStart,
+  AsKeyword          = 108 | Contextual | IsExpressionStart,
+  AsyncKeyword       = 109 | Contextual | IsExpressionStart | IsIdentifier,
+  AwaitKeyword       = 110 | Contextual | IsExpressionStart | IsIdentifier, // await is only reserved word in async functions or modules
+  ConstructorKeyword = 111 | Contextual,
+  GetKeyword         = 112 | Contextual,
+  SetKeyword         = 113 | Contextual,
+  AccessorKeyword    = 114 | Contextual,
+  FromKeyword        = 115 | Contextual,
+  OfKeyword          = 116 | Contextual | IsInOrOf,
+  EnumKeyword        = 117 | Reserved | IsExpressionStart,
 
-  Eval               = 119 | IsEvalOrArguments,
-  Arguments          = 120 | IsEvalOrArguments,
+  Eval               = 118 | IsEvalOrArguments,
+  Arguments          = 119 | IsEvalOrArguments,
 
-  EscapedReserved       = 121,
-  EscapedFutureReserved = 122,
-  AnyIdentifier      = 123 | IsIdentifier,
+  EscapedReserved       = 120 | IsEscaped,
+  EscapedFutureReserved = 121 | IsEscaped,
+  AnyIdentifier      = 122 | IsExpressionStart | IsIdentifier,
 
-  // Stage #3 proposals
-  PrivateIdentifier  = 124,
-  BigIntLiteral      = 125 | IsExpressionStart | IsStringOrNumber,
-  Coalesce           = 126 | IsBinaryOp | IsCoalesc | 1 << PrecStart, // ??
-  QuestionMarkPeriod = 127 | IsMemberOrCallExpression, // ?.
+  PrivateIdentifier  = 123,
+  BigIntLiteral      = 124 | IsExpressionStart | IsStringOrNumber,
+  Coalesce           = 125 | IsBinaryOp | IsCoalesc | 1 << PrecStart, // ??
+  QuestionMarkPeriod = 126 | IsMemberOrCallExpression, // ?.
 
   // Others
-  WhiteSpace        = 128,
-  Illegal           = 129,
-  CarriageReturn    = 130,
-  PrivateField      = 131,
-  Template          = 132,
-  Decorator         = 133,
-  Target            = 134 | IsIdentifier,
-  Meta              = 135 | IsIdentifier,
-  LineFeed          = 136,
-  EscapedIdentifier = 137,
+  WhiteSpace        = 127,
+  Illegal           = 128,
+  CarriageReturn    = 129,
+  PrivateField      = 130,
+  Template          = 131,
+  Decorator         = 132,
+  Target            = 133 | IsExpressionStart | IsIdentifier,
+  Meta              = 134 | IsExpressionStart | IsIdentifier,
+  LineFeed          = 135,
+  EscapeStart       = 136,
 
   // JSX
-  JSXText           = 138,
+  JSXText           = 137,
 }
 
 export const KeywordDescTable = [
@@ -210,7 +209,7 @@ export const KeywordDescTable = [
   'template continuation', 'template tail',
 
   /* Punctuators */
-  '=>', '(', '{', '.', '...', '}', ')', ';', ',', '[', ']', ':', '?', '\'', '"', '</', '/>',
+  '=>', '(', '{', '.', '...', '}', ')', ';', ',', '[', ']', ':', '?', '\'', '"',
 
   /* Update operators */
   '++', '--',
@@ -235,7 +234,7 @@ export const KeywordDescTable = [
   'implements', 'interface', 'package', 'private', 'protected', 'public', 'static', 'yield',
 
   /* Contextual keywords */
-  'as', 'async', 'await', 'constructor', 'get', 'set', 'from', 'of',
+  'as', 'async', 'await', 'constructor', 'get', 'set', 'accessor', 'from', 'of',
 
   /* Others */
   'enum', 'eval', 'arguments', 'escaped keyword', 'escaped future reserved keyword', 'reserved if strict', '#',
@@ -304,4 +303,5 @@ export const descKeywordTable: { [key: string]: Token } = Object.create(null, {
   arguments: { value: Token.Arguments },
   target: { value: Token.Target },
   meta: { value: Token.Meta },
+  accessor: { value: Token.AccessorKeyword },
 });

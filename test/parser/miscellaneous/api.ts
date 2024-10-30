@@ -9,11 +9,9 @@ describe('Expressions - API', () => {
         globalReturn: true,
         ranges: true,
         webcompat: true,
-        specDeviation: true,
         module: true,
         preserveParens: true,
         jsx: true,
-        identifierPattern: true,
         lexical: true,
         source: 'bullshit'
       }),
@@ -39,7 +37,6 @@ describe('Expressions - API', () => {
               start: 0,
               end: 3,
               range: [0, 3],
-              pattern: false,
               type: 'Identifier'
             },
             loc: {
@@ -92,11 +89,10 @@ describe('Expressions - API', () => {
     });
   });
   it('should parse module code with directive node', () => {
-    t.deepEqual(parseModule('1', { directives: true }), {
+    t.deepEqual(parseModule('1'), {
       body: [
         {
           expression: {
-            raw: '1',
             type: 'Literal',
             value: 1
           },
@@ -109,7 +105,7 @@ describe('Expressions - API', () => {
   });
 
   it('should parse module code with directive node and strict directive', () => {
-    t.deepEqual(parseModule('"use strict"; 1', { directives: true }), {
+    t.deepEqual(parseModule('"use strict"; 1', { raw: true }), {
       type: 'Program',
       sourceType: 'module',
       body: [
@@ -206,6 +202,7 @@ describe('Expressions - API', () => {
               raw: '"a"',
               value: 'a'
             },
+            directive: 'a',
             type: 'ExpressionStatement'
           }
         ],
@@ -237,7 +234,7 @@ describe('Expressions - API', () => {
   it('should parse with directive option', () => {
     t.deepEqual(
       parseModule('"abc"', {
-        directives: true,
+        raw: true,
         next: true
       }) as any,
       {
@@ -261,7 +258,6 @@ describe('Expressions - API', () => {
   it('should parse binary expr correctly', () => {
     t.deepEqual(
       parseModule('a ?? (x || dd && aa) / y - foo', {
-        directives: true,
         next: true,
         ranges: true,
         loc: true

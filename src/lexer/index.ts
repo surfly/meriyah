@@ -2,9 +2,8 @@ export { scanSingleToken, nextToken, TokenLookup } from './scan';
 export { skipMultiLineComment, skipSingleLineComment, skipHashBang, skipSingleHTMLComment } from './comments';
 export {
   advanceChar,
-  consumeMultiUnitCodePoint,
+  consumePossibleSurrogatePair,
   isExoticECMAScriptWhitespace,
-  fromCodePoint,
   toHex,
   consumeLineFeed,
   scanNewLine,

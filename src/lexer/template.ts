@@ -1,7 +1,7 @@
 import { ParserState, Context } from '../common';
 import { Token } from '../token';
 import { Chars } from '../chars';
-import { advanceChar, fromCodePoint } from './common';
+import { advanceChar } from './common';
 import { parseEscape, Escape, handleStringError } from './string';
 import { report, Errors } from '../errors';
 
@@ -11,25 +11,30 @@ import { report, Errors } from '../errors';
 export function scanTemplate(parser: ParserState, context: Context): Token {
   const { index: start } = parser;
   let token: Token = Token.TemplateSpan;
-  let ret: string | void = '';
+  let ret: string | null = '';
 
   let char = advanceChar(parser);
 
   while (char !== Chars.Backtick) {
     if (char === Chars.Dollar && parser.source.charCodeAt(parser.index + 1) === Chars.LeftBrace) {
-      advanceChar(parser); // Skip: '}'
+      advanceChar(parser); // Skip: '$'
       token = Token.TemplateContinuation;
       break;
-    } else if ((char & 8) === 8 && char === Chars.Backslash) {
+    } else if (char === Chars.Backslash) {
       char = advanceChar(parser);
       if (char > 0x7e) {
-        ret += fromCodePoint(char);
+        ret += String.fromCodePoint(char);
       } else {
-        const code = parseEscape(parser, context | Context.Strict, char);
+        const { index, line, column } = parser;
+        const code = parseEscape(parser, context | Context.Strict, char, /* isTemplate */ 1);
         if (code >= 0) {
-          ret += fromCodePoint(code);
+          ret += String.fromCodePoint(code);
         } else if (code !== Escape.Empty && context & Context.TaggedTemplate) {
-          ret = undefined;
+          // Restore before the error in parseEscape
+          parser.index = index;
+          parser.line = line;
+          parser.column = column;
+          ret = null;
           char = scanBadTemplate(parser, char);
           if (char < 0) token = Token.TemplateContinuation;
           break;
@@ -37,13 +42,9 @@ export function scanTemplate(parser: ParserState, context: Context): Token {
           handleStringError(parser, code as Escape, /* isTemplate */ 1);
         }
       }
-    } else {
-      if (
-        parser.index < parser.end &&
-        char === Chars.CarriageReturn &&
-        parser.source.charCodeAt(parser.index) === Chars.LineFeed
-      ) {
-        ret += fromCodePoint(char);
+    } else if (parser.index < parser.end) {
+      if (char === Chars.CarriageReturn && parser.source.charCodeAt(parser.index) === Chars.LineFeed) {
+        ret += String.fromCodePoint(char);
         parser.currentChar = parser.source.charCodeAt(++parser.index);
       }
 
@@ -51,7 +52,7 @@ export function scanTemplate(parser: ParserState, context: Context): Token {
         parser.column = -1;
         parser.line++;
       }
-      ret += fromCodePoint(char);
+      ret += String.fromCodePoint(char);
     }
     if (parser.index >= parser.end) report(parser, Errors.UnterminatedTemplate);
     char = advanceChar(parser);

@@ -104,6 +104,8 @@ describe('Next - Import Meta', () => {
     '1, import.meta;',
     'import.meta, a = 1;',
     'a = 1, import.meta;',
+    'import.meta.url = 1, import.meta.url = 2;',
+    'import.meta, import.meta.url = 1;',
     'import.meta;'
   ]) {
     it(`${arg}`, () => {
@@ -186,7 +188,10 @@ describe('Next - Import Meta', () => {
     ['([import.meta] = [1])', Context.OptionsNext],
     ['var import.meta', Context.OptionsNext],
     ['for (var import.meta of [1]) {}', Context.OptionsWebCompat],
-    ['var import.meta', Context.OptionsNext | Context.Module | Context.Strict]
+    ['var import.meta', Context.OptionsNext | Context.Module | Context.Strict],
+    ['import.m\\u0065ta;', Context.OptionsNext | Context.Module | Context.Strict],
+    ['import.\\u006deta;', Context.OptionsNext | Context.Module | Context.Strict],
+    ['import.meta2;', Context.OptionsNext | Context.Module | Context.Strict]
   ]);
 
   pass('Next - Import Meta (pass)', [
@@ -503,7 +508,8 @@ describe('Next - Import Meta', () => {
             expression: {
               type: 'Literal',
               value: 'use strict'
-            }
+            },
+            directive: 'use strict'
           },
           {
             type: 'ExpressionStatement',

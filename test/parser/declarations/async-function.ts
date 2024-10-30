@@ -10,7 +10,9 @@ describe('Declarations - Async Function', () => {
     'async function f() { for await ((x) in y) {} }',
     'async function f() { for await (var x in y) {} }',
     'async function f() { for await (let x in y) {} }',
-    'async function f() { for await (const x in y) {} }'
+    'async function f() { for await (const x in y) {} }',
+    'async function foo(p\\u0061ckage) { "use strict" }',
+    'async function foo(package) { "use strict" }'
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
@@ -47,7 +49,6 @@ describe('Declarations - Async Function', () => {
     'async function x(a, b, c) { await a; }',
     'async function a({x}) { var x = 2; return x }',
     'async function a() { await 4; } var await = 5',
-    'async function a() { function b() { return await; } }',
     'async function a() { var k = { async: 4 } }',
     'async function a() { await 4; }',
     'async function a() { var t = !await 1 }',
@@ -190,7 +191,7 @@ describe('Declarations - Async Function', () => {
     'async function f() { for await (x[a in b] of y); }',
     'async function a() { await a.b[c](d).e; }',
     'await.b[c](d).e;',
-    `function *a(){yield\n*a}`,
+    `function *a(){yield*a}`,
     'async function * fn() { import(yield * ["Mr. X", "Mr. Y", "Mr. Z"]); }',
     'async function* f(a = async function*() { await 1; }) {}',
     'function f() { return await; }',
@@ -226,7 +227,9 @@ describe('Declarations - Async Function', () => {
     `async function f() {
       (((x = await y)));
             async (b) => {};
-    }`
+    }`,
+    'async function foo(package) { }',
+    'async function foo(p\\u0061ckage) { }'
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
@@ -460,9 +463,9 @@ describe('Declarations - Async Function', () => {
     ['{ async function f() {} async function f() {} }', Context.OptionsLexical],
     ['switch (0) { case 1: async function f() {} default: function f() {} }', Context.OptionsLexical],
     ['{ function* f() {} async function f() {} }', Context.OptionsLexical | Context.Strict],
+    ['{ function* f() {} async function f() {} }', Context.OptionsLexical | Context.OptionsWebCompat],
     ['async function* f() { a = async function*(a = await) {}; }', Context.None],
     ['function f(a = async function(a = await) {}) {}', Context.None],
-    ['({async\nfoo() { }})', Context.None],
     [
       `async function x(a=class b{
       [a = class b{
@@ -506,8 +509,6 @@ describe('Declarations - Async Function', () => {
     ['({async foo() { return {await} }})', Context.None],
     ['async function f(a = await) {}', Context.None],
     ['({async foo: 1})', Context.None],
-    ['class A {async\nfoo() { }}', Context.None],
-    ['class A {static async\nfoo() { }}', Context.None],
     ['async function* g(){ ({[await]: a}) => 0; }', Context.None],
     ['class A {async constructor() { }}', Context.None],
     ['await', Context.Module],
@@ -643,7 +644,7 @@ describe('Declarations - Async Function', () => {
     ],
     [
       '"use strict"; async function foo() { function bar() { await = 1; } bar(); }',
-      Context.Strict | Context.OptionsRanges | Context.OptionsDirectives | Context.OptionsRaw,
+      Context.Strict | Context.OptionsRanges | Context.OptionsRaw,
       {
         type: 'Program',
         start: 0,

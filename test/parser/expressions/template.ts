@@ -336,17 +336,34 @@ describe('Expressions - Template', () => {
     'test`\\uG`;',
     'test`\\xG`;',
     'test`\\18`;',
+    'test`\\u{0`',
     '(`\n`)',
     '(`\r`)',
     'new nestedNewOperatorFunction`1``2``3``array`',
     "tag()`'\\00a0'`;",
+    "tag('a')`'\\00a0'`",
+    "tag()('a')`'\\00a0'`",
+    "tag('a')('b')`'\\00a0'`",
+    "tag()(...a)`'\\00a0'`",
+    "tag('a')(b)(c, ...d)`'\\00a0'`;",
     "(tag = () => {})`'\\00a0'`",
     "(() => {})`'\\00a0'`",
     "(function tag() { return () => {}; })()`'\\00a0'`",
     "(function() { return () => {}; })()`'\\00a0'`",
     "(function tag() {})`'\\00a0'`",
     "(function() {})`'\\00a0'`",
-    'String.raw`{\rtf1adeflang1025ansiansicpg1252\\uc1`;'
+    'String.raw`{\rtf1adeflang1025ansiansicpg1252\\uc1`;',
+    'x`\\u{0${x`\\8`}`',
+    'x`\\0`',
+    'x`\\1`',
+    'x`\\2`',
+    'x`\\3`',
+    'x`\\4`',
+    'x`\\5`',
+    'x`\\6`',
+    'x`\\7`',
+    'x`\\8`',
+    'x`\\9`'
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
@@ -427,7 +444,18 @@ describe('Expressions - Template', () => {
     ['`\\u11${', Context.None],
     ['`\\u{g}`', Context.None],
     ['`\\u{110000}${', Context.None],
-    ['`\\u{11ffff}${', Context.None]
+    ['`\\u{11ffff}${', Context.None],
+    ['x`\\u{0${`\\8`}`', Context.None],
+    ['`\\01`', Context.None],
+    ['`\\1`', Context.None],
+    ['`\\2`', Context.None],
+    ['`\\3`', Context.None],
+    ['`\\4`', Context.None],
+    ['`\\5`', Context.None],
+    ['`\\6`', Context.None],
+    ['`\\7`', Context.None],
+    ['`\\8`', Context.None],
+    ['`\\9`', Context.None]
   ]);
   pass('Expressions - Template (pass)', [
     [
@@ -4056,7 +4084,7 @@ describe('Expressions - Template', () => {
                     tail: true,
                     type: 'TemplateElement',
                     value: {
-                      cooked: undefined,
+                      cooked: null,
                       raw: "'\\00a0'"
                     }
                   }
@@ -4068,6 +4096,219 @@ describe('Expressions - Template', () => {
                 callee: {
                   name: 'tag',
                   type: 'Identifier'
+                },
+                type: 'CallExpression'
+              },
+              type: 'TaggedTemplateExpression'
+            },
+            type: 'ExpressionStatement'
+          }
+        ],
+        sourceType: 'script',
+        type: 'Program'
+      }
+    ],
+    [
+      "tag('a')`'\\00a0'`;",
+      Context.None,
+      {
+        body: [
+          {
+            expression: {
+              quasi: {
+                expressions: [],
+                quasis: [
+                  {
+                    tail: true,
+                    type: 'TemplateElement',
+                    value: {
+                      cooked: null,
+                      raw: "'\\00a0'"
+                    }
+                  }
+                ],
+                type: 'TemplateLiteral'
+              },
+              tag: {
+                arguments: [
+                  {
+                    type: 'Literal',
+                    value: 'a'
+                  }
+                ],
+                callee: {
+                  name: 'tag',
+                  type: 'Identifier'
+                },
+                type: 'CallExpression'
+              },
+              type: 'TaggedTemplateExpression'
+            },
+            type: 'ExpressionStatement'
+          }
+        ],
+        sourceType: 'script',
+        type: 'Program'
+      }
+    ],
+    [
+      "tag('a')('b')`'\\00a0'`;",
+      Context.None,
+      {
+        body: [
+          {
+            expression: {
+              quasi: {
+                expressions: [],
+                quasis: [
+                  {
+                    tail: true,
+                    type: 'TemplateElement',
+                    value: {
+                      cooked: null,
+                      raw: "'\\00a0'"
+                    }
+                  }
+                ],
+                type: 'TemplateLiteral'
+              },
+              tag: {
+                arguments: [
+                  {
+                    type: 'Literal',
+                    value: 'b'
+                  }
+                ],
+                callee: {
+                  arguments: [
+                    {
+                      type: 'Literal',
+                      value: 'a'
+                    }
+                  ],
+                  callee: {
+                    name: 'tag',
+                    type: 'Identifier'
+                  },
+                  type: 'CallExpression'
+                },
+                type: 'CallExpression'
+              },
+              type: 'TaggedTemplateExpression'
+            },
+            type: 'ExpressionStatement'
+          }
+        ],
+        sourceType: 'script',
+        type: 'Program'
+      }
+    ],
+    [
+      "tag()(...a)`'\\00a0'`;",
+      Context.None,
+      {
+        body: [
+          {
+            expression: {
+              quasi: {
+                expressions: [],
+                quasis: [
+                  {
+                    tail: true,
+                    type: 'TemplateElement',
+                    value: {
+                      cooked: null,
+                      raw: "'\\00a0'"
+                    }
+                  }
+                ],
+                type: 'TemplateLiteral'
+              },
+              tag: {
+                arguments: [
+                  {
+                    argument: {
+                      name: 'a',
+                      type: 'Identifier'
+                    },
+                    type: 'SpreadElement'
+                  }
+                ],
+                callee: {
+                  arguments: [],
+                  callee: {
+                    name: 'tag',
+                    type: 'Identifier'
+                  },
+                  type: 'CallExpression'
+                },
+                type: 'CallExpression'
+              },
+              type: 'TaggedTemplateExpression'
+            },
+            type: 'ExpressionStatement'
+          }
+        ],
+        sourceType: 'script',
+        type: 'Program'
+      }
+    ],
+    [
+      "tag('a')(b)(c, ...d)`'\\00a0'`;",
+      Context.None,
+      {
+        body: [
+          {
+            expression: {
+              quasi: {
+                expressions: [],
+                quasis: [
+                  {
+                    tail: true,
+                    type: 'TemplateElement',
+                    value: {
+                      cooked: null,
+                      raw: "'\\00a0'"
+                    }
+                  }
+                ],
+                type: 'TemplateLiteral'
+              },
+              tag: {
+                arguments: [
+                  {
+                    name: 'c',
+                    type: 'Identifier'
+                  },
+                  {
+                    argument: {
+                      name: 'd',
+                      type: 'Identifier'
+                    },
+                    type: 'SpreadElement'
+                  }
+                ],
+                callee: {
+                  arguments: [
+                    {
+                      name: 'b',
+                      type: 'Identifier'
+                    }
+                  ],
+                  callee: {
+                    arguments: [
+                      {
+                        type: 'Literal',
+                        value: 'a'
+                      }
+                    ],
+                    callee: {
+                      name: 'tag',
+                      type: 'Identifier'
+                    },
+                    type: 'CallExpression'
+                  },
+                  type: 'CallExpression'
                 },
                 type: 'CallExpression'
               },
@@ -4094,7 +4335,7 @@ describe('Expressions - Template', () => {
                     tail: true,
                     type: 'TemplateElement',
                     value: {
-                      cooked: undefined,
+                      cooked: null,
                       raw: "'\\00a0'"
                     }
                   }
@@ -4142,7 +4383,7 @@ describe('Expressions - Template', () => {
                     tail: true,
                     type: 'TemplateElement',
                     value: {
-                      cooked: undefined,
+                      cooked: null,
                       raw: '{\rtf1adeflang1025ansiansicpg1252\\uc1'
                     }
                   }
@@ -4168,6 +4409,40 @@ describe('Expressions - Template', () => {
         ],
         sourceType: 'script',
         type: 'Program'
+      }
+    ],
+    [
+      'test`\\u{0`',
+      Context.None,
+      {
+        type: 'Program',
+        sourceType: 'script',
+        body: [
+          {
+            type: 'ExpressionStatement',
+            expression: {
+              type: 'TaggedTemplateExpression',
+              tag: {
+                type: 'Identifier',
+                name: 'test'
+              },
+              quasi: {
+                type: 'TemplateLiteral',
+                expressions: [],
+                quasis: [
+                  {
+                    type: 'TemplateElement',
+                    value: {
+                      raw: '\\u{0',
+                      cooked: null
+                    },
+                    tail: true
+                  }
+                ]
+              }
+            }
+          }
+        ]
       }
     ]
   ]);

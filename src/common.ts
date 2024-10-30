@@ -1,6 +1,6 @@
 import { Token, KeywordDescTable } from './token';
-import { Errors, report } from './errors';
-import { Node, Comment, Decorator, SourceLocation } from './estree';
+import { Errors, ParseError, report } from './errors';
+import { Node, Decorator, SourceLocation, Comment } from './estree';
 import { nextToken } from './lexer/scan';
 
 /**
@@ -11,34 +11,32 @@ export const enum Context {
   OptionsNext = 1 << 0,
   OptionsRanges = 1 << 1,
   OptionsLoc = 1 << 2,
-  OptionsDirectives = 1 << 3,
-  OptionsJSX = 1 << 4,
-  OptionsGlobalReturn = 1 << 5,
-  OptionsLexical = 1 << 6,
-  OptionsPreserveParens = 1 << 7,
-  OptionsWebCompat = 1 << 8,
-  OptionsRaw = 1 << 9,
-  Strict = 1 << 10,
-  Module = 1 << 11, // Current code should be parsed as a module body
-  InSwitch = 1 << 12,
-  InGlobal = 1 << 13,
-  InClass = 1 << 14,
-  AllowRegExp = 1 << 15,
-  TaggedTemplate = 1 << 16,
-  InIteration = 1 << 17,
-  SuperProperty = 1 << 18,
-  SuperCall = 1 << 19,
-  InYieldContext = 1 << 21,
-  InAwaitContext = 1 << 22,
-  InArgumentList = 1 << 23,
-  InConstructor = 1 << 24,
-  InMethod = 1 << 25,
-  AllowNewTarget = 1 << 26,
-  DisallowIn = 1 << 27,
-  OptionsIdentifierPattern = 1 << 28,
-  OptionsSpecDeviation = 1 << 29,
-  AllowEscapedKeyword = 1 << 30,
-  OptionsUniqueKeyInPattern = 1 << 31,
+  OptionsJSX = 1 << 3,
+  OptionsLexical = 1 << 4,
+  OptionsPreserveParens = 1 << 5,
+  OptionsWebCompat = 1 << 6,
+  OptionsRaw = 1 << 7,
+  Strict = 1 << 8,
+  Module = 1 << 9, // Current code should be parsed as a module body
+  InSwitch = 1 << 10,
+  InGlobal = 1 << 11,
+  InClass = 1 << 12,
+  AllowRegExp = 1 << 13,
+  TaggedTemplate = 1 << 14,
+  InIteration = 1 << 15,
+  SuperProperty = 1 << 16,
+  SuperCall = 1 << 17,
+  InYieldContext = 1 << 18,
+  InAwaitContext = 1 << 19,
+  InReturnContext = 1 << 20,
+  InArgumentList = 1 << 21,
+  InConstructor = 1 << 22,
+  InMethodOrFunction = 1 << 23,
+  AllowNewTarget = 1 << 24,
+  DisallowIn = 1 << 25,
+  AllowEscapedKeyword = 1 << 26,
+  OptionsUniqueKeyInPattern = 1 << 27,
+  InStaticBlock = 1 << 28
 }
 
 /**
@@ -56,9 +54,10 @@ export const enum PropertyKind {
   ClassField = 1 << 7,
   Getter = 1 << 8,
   Setter = 1 << 9,
-  Extends = 1 << 10,
-  Literal = 1 << 11,
-  PrivateField = 1 << 12,
+  Accessor = 1 << 10,
+  Extends = 1 << 11,
+  Literal = 1 << 12,
+  PrivateField = 1 << 13,
   GetSet = Getter | Setter
 }
 
@@ -77,6 +76,11 @@ export const enum BindingKind {
   FunctionStatement = 1 << 7,
   CatchPattern = 1 << 8,
   CatchIdentifier = 1 << 9,
+  Async = 1 << 10,
+  Generator = 1 << 10,
+  AsyncFunctionLexical = Async | FunctionLexical,
+  GeneratorFunctionLexical = Generator | FunctionLexical,
+  AsyncGeneratorFunctionLexical = Async | Generator | FunctionLexical,
   CatchIdentifierOrPattern = CatchIdentifier | CatchPattern,
   LexicalOrFunction = Variable | FunctionLexical,
   LexicalBinding = Let | Const | FunctionLexical | FunctionStatement | Class
@@ -93,7 +97,7 @@ export const enum Origin {
   Declaration = 1 << 3,
   Arrow = 1 << 4,
   ForStatement = 1 << 5,
-  Export = 1 << 6,
+  Export = 1 << 6
 }
 
 /**
@@ -130,11 +134,12 @@ export const enum Flags {
   NewLine = 1 << 0,
   HasConstructor = 1 << 5,
   Octals = 1 << 6,
-  SimpleParameterList = 1 << 7,
+  NonSimpleParameterList = 1 << 7,
   HasStrictReserved = 1 << 8,
   StrictEvalArguments = 1 << 9,
-  DisallowCall   = 1 << 10,
-  HasOptionalChaining = 1 << 11
+  DisallowCall = 1 << 10,
+  HasOptionalChaining = 1 << 11,
+  EightAndNine = 1 << 12
 }
 
 export const enum HoistedClassFlags {
@@ -165,18 +170,23 @@ export const enum ScopeKind {
   FunctionRoot = 1 << 8,
   FunctionParams = 1 << 9,
   ArrowParams = 1 << 10,
-  CatchIdentifier = 1 << 11,
+  CatchIdentifier = 1 << 11
 }
 
 /**
- * The type of the `onComment` option.
+ * Comment process function.
  */
-export type OnComment = void | Comment[] | ((type: string, value: string, start: number, end: number, loc: SourceLocation) => any);
+export type OnComment = (type: string, value: string, start: number, end: number, loc: SourceLocation) => any;
 
 /**
- * The type of the `onToken` option.
+ * Function calls when semicolon inserted.
  */
-export type OnToken = void | Token[] | ((token: string, start: number, end: number, loc: SourceLocation) => any);
+export type OnInsertedSemicolon = (pos: number) => any;
+
+/**
+ * Token process function.
+ */
+export type OnToken = (token: string, start: number, end: number, loc: SourceLocation) => any;
 
 /**
  * Lexical scope interface
@@ -184,7 +194,28 @@ export type OnToken = void | Token[] | ((token: string, start: number, end: numb
 export interface ScopeState {
   parent: ScopeState | undefined;
   type: ScopeKind;
+  // Some scopeError doesn't necessarily fail parsing.
+  // For example function a(dup, dup) {} is fine,
+  // But duplicated params is not allowed in strict mode,
+  // So function a(dup, dup) { "use strict" } would fail.
+  // Retain the scopeError on scope for later decision.
   scopeError?: ScopeError | null;
+}
+
+/**
+ * Lexical scope interface for private identifiers
+ */
+export interface PrivateScopeState {
+  parent: PrivateScopeState | undefined;
+  refs: {
+    [name: string]: { index: number; line: number; column: number }[];
+  };
+  // Note PrivateScopeState doesn't retain a scopeError
+  // like ScopeState, because it doesn't need to.
+  // Private identifier is new in ecma, the spec for it
+  // is much more strict than other older parts of JavaScript
+  // For example class A { dup; dup; } is allowed,
+  // But class A { #dup; #dup; } is not allowed.
 }
 
 /** Scope error interface */
@@ -194,6 +225,9 @@ export interface ScopeError {
   index: number;
   line: number;
   column: number;
+  tokenIndex: number;
+  tokenLine: number;
+  tokenColumn: number;
 }
 
 /**
@@ -201,20 +235,31 @@ export interface ScopeError {
  */
 export interface ParserState {
   source: string;
+  // End position of source, same as source.length.
+  end: number;
+
   flags: Flags;
+
+  // Current pointer, end of current token
   index: number;
   line: number;
   column: number;
-  tokenPos: number;
-  startPos: number;
+
+  // Start position of current token
+  tokenIndex: number;
+  tokenColumn: number;
+  tokenLine: number;
+
+  // Start position of whitespace/comment before current token,
+  startIndex: number;
   startColumn: number;
   startLine: number;
-  colPos: number;
-  linePos: number;
-  end: number;
-  token: Token;
-  onComment: any;
-  onToken: any;
+
+  getToken(): Token;
+  setToken(token: Token, replaceLast?: boolean): Token;
+  onComment: OnComment | void;
+  onInsertedSemicolon: OnInsertedSemicolon | void;
+  onToken: OnToken | void;
   tokenValue: any;
   tokenRaw: string;
   tokenRegExp: void | {
@@ -237,7 +282,6 @@ export function collectLeadingComments(parser: ParserState): Array<Comment> {
   //can use a global empty array for memory optimisation
   let leadingComments: Array<Comment> = [];
   if (parser.attachComments) {
-
     if (parser.comments && parser.comments.length) {
       leadingComments = parser.comments;
       parser.comments = [];
@@ -246,7 +290,7 @@ export function collectLeadingComments(parser: ParserState): Array<Comment> {
     if (!parser.leadingComments) {
       parser.leadingComments = [];
     }
-    parser.leadingComments.push(leadingComments)
+    parser.leadingComments.push(leadingComments);
   }
 
   return leadingComments;
@@ -260,21 +304,20 @@ export function collectLeadingComments(parser: ParserState): Array<Comment> {
  * @param context Context masks
  */
 
-export function matchOrInsertSemicolon(parser: ParserState, context: Context, specDeviation?: number): void {
-
-  if (
-    (parser.flags & Flags.NewLine) === 0 &&
-    (parser.token & Token.IsAutoSemicolon) !== Token.IsAutoSemicolon &&
-    !specDeviation
-  ) {
-    report(parser, Errors.UnexpectedToken, KeywordDescTable[parser.token & Token.Type]);
+export function matchOrInsertSemicolon(parser: ParserState, context: Context): void {
+  if ((parser.flags & Flags.NewLine) === 0 && (parser.getToken() & Token.IsAutoSemicolon) !== Token.IsAutoSemicolon) {
+    report(parser, Errors.UnexpectedToken, KeywordDescTable[parser.getToken() & Token.Type]);
   }
-  consumeOpt(parser, context, Token.Semicolon);
+
+  if (!consumeOpt(parser, context, Token.Semicolon)) {
+    // Automatic semicolon insertion has occurred
+    parser.onInsertedSemicolon?.(parser.startIndex);
+  }
 }
 
-export function isValidStrictMode(parser: ParserState, index: number, tokenPos: number, tokenValue: string): 0 | 1 {
-  if (index - tokenPos < 13 && tokenValue === 'use strict') {
-    if ((parser.token & Token.IsAutoSemicolon) === Token.IsAutoSemicolon || parser.flags & Flags.NewLine) {
+export function isValidStrictMode(parser: ParserState, index: number, tokenIndex: number, tokenValue: string): 0 | 1 {
+  if (index - tokenIndex < 13 && tokenValue === 'use strict') {
+    if ((parser.getToken() & Token.IsAutoSemicolon) === Token.IsAutoSemicolon || parser.flags & Flags.NewLine) {
       return 1;
     }
   }
@@ -290,7 +333,7 @@ export function isValidStrictMode(parser: ParserState, index: number, tokenPos: 
  * @param token The type of token to consume
  */
 export function optionalBit(parser: ParserState, context: Context, t: Token): 0 | 1 {
-  if (parser.token !== t) return 0;
+  if (parser.getToken() !== t) return 0;
   nextToken(parser, context);
   return 1;
 }
@@ -304,7 +347,7 @@ export function optionalBit(parser: ParserState, context: Context, t: Token): 0 
  * @param token The type of token to consume
  */
 export function consumeOpt(parser: ParserState, context: Context, t: Token): boolean {
-  if (parser.token !== t) return false;
+  if (parser.getToken() !== t) return false;
   nextToken(parser, context);
   return true;
 }
@@ -318,7 +361,7 @@ export function consumeOpt(parser: ParserState, context: Context, t: Token): boo
  * @param t The type of token to consume
  */
 export function consume(parser: ParserState, context: Context, t: Token): void {
-  if (parser.token !== t) report(parser, Errors.ExpectedToken, KeywordDescTable[t & Token.Type]);
+  if (parser.getToken() !== t) report(parser, Errors.ExpectedToken, KeywordDescTable[t & Token.Type]);
   nextToken(parser, context);
 }
 
@@ -331,21 +374,23 @@ export function consume(parser: ParserState, context: Context, t: Token): void {
  */
 export function reinterpretToPattern(state: ParserState, node: any): void {
   switch (node.type) {
-    case 'ArrayExpression':
+    case 'ArrayExpression': {
       node.type = 'ArrayPattern';
-      const elements = node.elements;
+      const { elements } = node;
       for (let i = 0, n = elements.length; i < n; ++i) {
         const element = elements[i];
         if (element) reinterpretToPattern(state, element);
       }
       return;
-    case 'ObjectExpression':
+    }
+    case 'ObjectExpression': {
       node.type = 'ObjectPattern';
-      const properties = node.properties;
+      const { properties } = node;
       for (let i = 0, n = properties.length; i < n; ++i) {
         reinterpretToPattern(state, properties[i]);
       }
       return;
+    }
     case 'AssignmentExpression':
       node.type = 'AssignmentPattern';
       if (node.operator !== '=') report(state, Errors.InvalidDestructuringTarget);
@@ -358,7 +403,7 @@ export function reinterpretToPattern(state: ParserState, node: any): void {
     case 'SpreadElement':
       node.type = 'RestElement';
       reinterpretToPattern(state, node.argument);
-    default: // ignore
+    // No default
   }
 }
 
@@ -378,9 +423,7 @@ export function validateBindingIdentifier(
   t: Token,
   skipEvalArgCheck: 0 | 1
 ): void {
-
   if (context & Context.Strict) {
-
     if ((t & Token.FutureReserved) === Token.FutureReserved) {
       report(parser, Errors.UnexpectedStrictReserved);
     }
@@ -390,19 +433,19 @@ export function validateBindingIdentifier(
     }
   }
 
-  if ((t & Token.Reserved) === Token.Reserved) {
+  if ((t & Token.Reserved) === Token.Reserved || t === Token.EscapedReserved) {
     report(parser, Errors.KeywordNotId);
   }
 
   // The BoundNames of LexicalDeclaration and ForDeclaration must not
   // contain 'let'. (CatchParameter is the only lexical binding form
   // without this restriction.)
-  if (kind & (BindingKind.Let | BindingKind.Const) && t === Token.LetKeyword) {
+  if (kind & (BindingKind.Let | BindingKind.Const) && (t & Token.Type) === (Token.LetKeyword & Token.Type)) {
     report(parser, Errors.InvalidLetConstBinding);
   }
 
   if (context & (Context.InAwaitContext | Context.Module) && t === Token.AwaitKeyword) {
-    report(parser, Errors.AwaitOutsideAsync);
+    report(parser, Errors.AwaitIdentInModuleOrAsyncFunc);
   }
 
   if (context & (Context.InYieldContext | Context.Strict) && t === Token.YieldKeyword) {
@@ -410,14 +453,8 @@ export function validateBindingIdentifier(
   }
 }
 
-export function validateFunctionName(
-  parser: ParserState,
-  context: Context,
-  t: Token
-): void {
-
+export function validateFunctionName(parser: ParserState, context: Context, t: Token): void {
   if (context & Context.Strict) {
-
     if ((t & Token.FutureReserved) === Token.FutureReserved) {
       report(parser, Errors.UnexpectedStrictReserved);
     }
@@ -428,11 +465,11 @@ export function validateFunctionName(
 
     if (t === Token.EscapedFutureReserved) {
       report(parser, Errors.InvalidEscapedKeyword);
-     }
+    }
 
     if (t === Token.EscapedReserved) {
       report(parser, Errors.InvalidEscapedKeyword);
-     }
+    }
   }
 
   if ((t & Token.Reserved) === Token.Reserved) {
@@ -440,7 +477,7 @@ export function validateFunctionName(
   }
 
   if (context & (Context.InAwaitContext | Context.Module) && t === Token.AwaitKeyword) {
-    report(parser, Errors.AwaitOutsideAsync);
+    report(parser, Errors.AwaitIdentInModuleOrAsyncFunc);
   }
 
   if (context & (Context.InYieldContext | Context.Strict) && t === Token.YieldKeyword) {
@@ -458,7 +495,7 @@ export function validateFunctionName(
 
 export function isStrictReservedWord(parser: ParserState, context: Context, t: Token): boolean {
   if (t === Token.AwaitKeyword) {
-    if (context & (Context.InAwaitContext | Context.Module)) report(parser, Errors.AwaitOutsideAsync);
+    if (context & (Context.InAwaitContext | Context.Module)) report(parser, Errors.AwaitIdentInModuleOrAsyncFunc);
     parser.destructible |= DestructuringKind.Await;
   }
 
@@ -530,8 +567,8 @@ export function finishNode<T extends Node>(
 ): T {
   if (context & Context.OptionsRanges) {
     node.start = start;
-    node.end = parser.startPos;
-    node.range = [start, parser.startPos];
+    node.end = parser.startIndex;
+    node.range = [start, parser.startIndex];
   }
 
   if (context & Context.OptionsLoc) {
@@ -553,8 +590,8 @@ export function finishNode<T extends Node>(
 
   if (parser.attachComments) {
     // put the leading comments in AST if they are collected in the parser state
-    let leadingComments = parser.leadingComments && parser.leadingComments.pop();
-    if (leadingComments && leadingComments.length>0) {
+    const leadingComments = parser.leadingComments && parser.leadingComments.pop();
+    if (leadingComments && leadingComments.length > 0) {
       node.leadingComments = leadingComments;
     }
 
@@ -564,7 +601,6 @@ export function finishNode<T extends Node>(
       parser.comments = [];
     }
   }
-
 
   return node;
 }
@@ -599,18 +635,21 @@ export function createArrowHeadParsingScope(parser: ParserState, context: Contex
 
 /**
  * Record duplicate binding errors that may occur in a arrow head or function parameters
-*
+ *
  * @param parser Parser state
  * @param type Errors type
  */
 export function recordScopeError(parser: ParserState, type: Errors, ...params: string[]): ScopeError {
-  const { index, line, column } = parser;
+  const { index, line, column, tokenIndex, tokenLine, tokenColumn } = parser;
   return {
     type,
     params,
     index,
     line,
-    column
+    column,
+    tokenIndex,
+    tokenLine,
+    tokenColumn
   };
 }
 
@@ -627,7 +666,7 @@ export function createScope(): ScopeState {
 /**
  * Inherit scope
  *
- * @param scope Parser object
+ * @param parent optional parent ScopeState
  * @param type Scope kind
  */
 export function addChildScope(parent: ScopeState | undefined, type: ScopeKind): ScopeState {
@@ -635,6 +674,20 @@ export function addChildScope(parent: ScopeState | undefined, type: ScopeKind): 
     parent,
     type,
     scopeError: void 0
+  };
+}
+
+/**
+ * Inherit a private scope
+ * private scope is created on class body
+ *
+ * @param parent optional parent PrivateScopeState
+ * @return newly created PrivateScopeState
+ */
+export function addChildPrivateScope(parent: PrivateScopeState | undefined): PrivateScopeState {
+  return {
+    parent,
+    refs: Object.create(null)
   };
 }
 
@@ -691,9 +744,12 @@ export function addBlockName(
       scope.scopeError = recordScopeError(parser, Errors.DuplicateBinding, name);
     } else if (
       context & Context.OptionsWebCompat &&
-      value & BindingKind.FunctionLexical &&
-      origin & Origin.BlockStatement
+      (context & Context.Strict) === 0 &&
+      origin & Origin.BlockStatement &&
+      value === BindingKind.FunctionLexical &&
+      kind === BindingKind.FunctionLexical
     ) {
+      // No op
     } else {
       report(parser, Errors.DuplicateBinding, name);
     }
@@ -701,7 +757,8 @@ export function addBlockName(
 
   if (
     scope.type & ScopeKind.FunctionBody &&
-    ((scope as any).parent['#' + name] && ((scope as any).parent['#' + name] & BindingKind.Empty) === 0)
+    (scope as any).parent['#' + name] &&
+    ((scope as any).parent['#' + name] & BindingKind.Empty) === 0
   ) {
     report(parser, Errors.DuplicateBinding, name);
   }
@@ -748,6 +805,7 @@ export function addVarName(
         ((kind & BindingKind.FunctionStatement && value & BindingKind.LexicalOrFunction) ||
           (value & BindingKind.FunctionStatement && kind & BindingKind.LexicalOrFunction))
       ) {
+        // No op
       } else {
         report(parser, Errors.DuplicateBinding, name);
       }
@@ -757,19 +815,104 @@ export function addVarName(
         currentScope.scopeError = recordScopeError(parser, Errors.DuplicateBinding, name);
       }
     }
-    if (value & (BindingKind.CatchIdentifier | BindingKind.CatchPattern)) {
-      if (
-        (value & BindingKind.CatchIdentifier) === 0 ||
-        (context & Context.OptionsWebCompat) === 0 ||
-        context & Context.Strict
-      ) {
-        report(parser, Errors.DuplicateBinding, name);
-      }
+    if (
+      value & BindingKind.CatchPattern ||
+      (value & BindingKind.CatchIdentifier && (context & Context.OptionsWebCompat) === 0)
+    ) {
+      report(parser, Errors.DuplicateBinding, name);
     }
 
     currentScope['#' + name] = kind;
 
     currentScope = currentScope.parent;
+  }
+}
+
+/**
+ * Adds a private identifier binding
+ *
+ * @param parser Parser state
+ * @param scope PrivateScopeState
+ * @param name Binding name
+ * @param type Property kind
+ */
+export function addPrivateIdentifier(
+  parser: ParserState,
+  scope: PrivateScopeState,
+  name: string,
+  kind: PropertyKind
+): void {
+  let focusKind = kind & (PropertyKind.Static | PropertyKind.GetSet);
+  // if it's not getter or setter, it should take both place in the check
+  if (!(focusKind & PropertyKind.GetSet)) focusKind |= PropertyKind.GetSet;
+  const value = (scope as any)['#' + name];
+
+  // It is a Syntax Error if PrivateBoundIdentifiers of ClassElementList
+  // contains any duplicate entries, unless the name is used once for
+  // a getter and once for a setter and in no other entries, and the getter
+  // and setter are either both static or both non-static.
+  if (
+    value !== undefined &&
+    ((value & PropertyKind.Static) !== (focusKind & PropertyKind.Static) || value & focusKind & PropertyKind.GetSet)
+  ) {
+    // Mix of static and non-static,
+    // or duplicated setter, or duplicated getter
+    report(parser, Errors.DuplicatePrivateIdentifier, name);
+  }
+
+  // Merge possible Getter and Setter
+  (scope as any)['#' + name] = value ? value | focusKind : focusKind;
+}
+
+/**
+ * Adds a private identifier reference
+ *
+ * @param parser Parser state
+ * @param scope PrivateScopeState
+ * @param name Binding name
+ */
+export function addPrivateIdentifierRef(parser: ParserState, scope: PrivateScopeState, name: string): void {
+  scope.refs[name] ??= [];
+  scope.refs[name].push({
+    index: parser.tokenIndex,
+    line: parser.tokenLine,
+    column: parser.tokenColumn
+  });
+}
+
+/**
+ * Checks if a private identifier name is defined in current scope
+ *
+ * @param name private identifier name
+ * @param scope current PrivateScopeState
+ * @returns 0 for false, and 1 for true
+ */
+function isPrivateIdentifierDefined(name: string, scope: PrivateScopeState): 0 | 1 {
+  if ((scope as any)['#' + name]) return 1;
+  if (scope.parent) return isPrivateIdentifierDefined(name, scope.parent);
+  return 0;
+}
+
+/**
+ * Validates all private identifier references in current scope
+ *
+ * @param scope current PrivateScopeState
+ */
+export function validatePrivateIdentifierRefs(scope: PrivateScopeState): void {
+  for (const name in scope.refs) {
+    if (!isPrivateIdentifierDefined(name, scope)) {
+      const { index, line, column } = scope.refs[name][0];
+      throw new ParseError(
+        index,
+        line,
+        column,
+        index + name.length,
+        line,
+        column + name.length,
+        Errors.InvalidPrivateIdentifier,
+        name
+      );
+    }
   }
 }
 
@@ -805,8 +948,8 @@ export function addBindingToExports(parser: ParserState, name: string): void {
   }
 }
 
-export function pushComment(context: Context, array: any[]): any {
-  return function(type: string, value: string, start: number, end: number, loc: SourceLocation) {
+export function pushComment(context: Context, array: any[]): OnComment {
+  return function (type: string, value: string, start: number, end: number, loc: SourceLocation) {
     const comment: any = {
       type,
       value
@@ -824,8 +967,8 @@ export function pushComment(context: Context, array: any[]): any {
   };
 }
 
-export function pushToken(context: Context, array: any[]): any {
-  return function(token: string, start: number, end: number, loc: SourceLocation) {
+export function pushToken(context: Context, array: any[]): OnToken {
+  return function (token: string, start: number, end: number, loc: SourceLocation) {
     const tokens: any = {
       token
     };
@@ -847,25 +990,16 @@ export function isValidIdentifier(context: Context, t: Token): boolean {
     // Module code is also "strict mode code"
     if (context & Context.Module && t === Token.AwaitKeyword) return false;
     if (context & Context.InYieldContext && t === Token.YieldKeyword) return false;
-    return (t & Token.IsIdentifier) === Token.IsIdentifier || (t & Token.Contextual) === Token.Contextual;
+    return (t & Token.Contextual) === Token.Contextual;
   }
 
-  return (
-    (t & Token.IsIdentifier) === Token.IsIdentifier ||
-    (t & Token.Contextual) === Token.Contextual ||
-    (t & Token.FutureReserved) === Token.FutureReserved
-  );
+  return (t & Token.Contextual) === Token.Contextual || (t & Token.FutureReserved) === Token.FutureReserved;
 }
 
-export function classifyIdentifier(
-  parser: ParserState,
-  context: Context,
-  t: Token,
-  isArrow: 0 | 1
-): any {
+export function classifyIdentifier(parser: ParserState, context: Context, t: Token): any {
   if ((t & Token.IsEvalOrArguments) === Token.IsEvalOrArguments) {
     if (context & Context.Strict) report(parser, Errors.StrictEvalArguments);
-    if (isArrow) parser.flags |= Flags.StrictEvalArguments;
+    parser.flags |= Flags.StrictEvalArguments;
   }
 
   if (!isValidIdentifier(context, t)) report(parser, Errors.Unexpected);

@@ -1,19 +1,21 @@
 import { ParserState, Context } from '../common';
 import { Token, descKeywordTable } from '../token';
 import { Chars } from '../chars';
-import { advanceChar, consumeMultiUnitCodePoint, fromCodePoint, toHex } from './common';
+import { advanceChar, consumePossibleSurrogatePair, toHex } from './common';
 import { CharTypes, CharFlags, isIdentifierPart, isIdentifierStart, isIdPart } from './charClassifier';
 import { report, reportScannerError, Errors } from '../errors';
 
 /**
  * Scans identifier
+ * For identifier doesn't start with unicode escape, but might contain
+ * unicode escape after the start.
  *
  * @param parser  Parser object
  * @param context Context masks
  */
 export function scanIdentifier(parser: ParserState, context: Context, isValidAsKeyword: 0 | 1): Token {
-  while (isIdPart[advanceChar(parser)]) {}
-  parser.tokenValue = parser.source.slice(parser.tokenPos, parser.index);
+  while (isIdPart[advanceChar(parser)]);
+  parser.tokenValue = parser.source.slice(parser.tokenIndex, parser.index);
 
   return parser.currentChar !== Chars.Backslash && parser.currentChar <= 0x7e
     ? descKeywordTable[parser.tokenValue] || Token.Identifier
@@ -22,14 +24,15 @@ export function scanIdentifier(parser: ParserState, context: Context, isValidAsK
 
 /**
  * Scans unicode identifier
+ * For identifier starts with unicode escape.
  *
  * @param parser  Parser object
  * @param context Context masks
  */
 export function scanUnicodeIdentifier(parser: ParserState, context: Context): Token {
   const cookedChar = scanIdentifierUnicodeEscape(parser);
-  if (!isIdentifierPart(cookedChar)) report(parser, Errors.InvalidUnicodeEscapeSequence);
-  parser.tokenValue = fromCodePoint(cookedChar);
+  if (!isIdentifierStart(cookedChar)) report(parser, Errors.InvalidUnicodeEscapeSequence);
+  parser.tokenValue = String.fromCodePoint(cookedChar);
   return scanIdentifierSlowCase(parser, context, /* hasEscape */ 1, CharTypes[cookedChar] & CharFlags.KeywordCandidate);
 }
 
@@ -56,12 +59,22 @@ export function scanIdentifierSlowCase(
       const code = scanIdentifierUnicodeEscape(parser);
       if (!isIdentifierPart(code)) report(parser, Errors.InvalidUnicodeEscapeSequence);
       isValidAsKeyword = isValidAsKeyword && CharTypes[code] & CharFlags.KeywordCandidate;
-      parser.tokenValue += fromCodePoint(code);
+      parser.tokenValue += String.fromCodePoint(code);
       start = parser.index;
-    } else if (isIdentifierPart(parser.currentChar) || consumeMultiUnitCodePoint(parser, parser.currentChar)) {
-      advanceChar(parser);
     } else {
-      break;
+      const merged = consumePossibleSurrogatePair(parser);
+      if (merged > 0) {
+        if (!isIdentifierPart(merged)) {
+          report(parser, Errors.IllegalCharacter, String.fromCodePoint(merged));
+        }
+        parser.currentChar = merged;
+        parser.index++;
+        parser.column++;
+      } else if (!isIdentifierPart(parser.currentChar)) {
+        // Stop
+        break;
+      }
+      advanceChar(parser);
     }
   }
 
@@ -69,17 +82,16 @@ export function scanIdentifierSlowCase(
     parser.tokenValue += parser.source.slice(start, parser.index);
   }
 
-  const length = parser.tokenValue.length;
-
+  const { length } = parser.tokenValue;
   if (isValidAsKeyword && length >= 2 && length <= 11) {
     const token: Token | undefined = descKeywordTable[parser.tokenValue];
-    if (token === void 0) return Token.Identifier;
+    if (token === void 0) return Token.Identifier | (hasEscape ? Token.IsEscaped : 0);
     if (!hasEscape) return token;
 
     if (token === Token.AwaitKeyword) {
       // await is only reserved word in async functions or modules
       if ((context & (Context.Module | Context.InAwaitContext)) === 0) {
-        return token;
+        return token | Token.IsEscaped;
       }
       return Token.EscapedReserved;
     }
@@ -93,25 +105,26 @@ export function scanIdentifierSlowCase(
       }
       if ((token & Token.Reserved) === Token.Reserved) {
         if (context & Context.AllowEscapedKeyword && (context & Context.InGlobal) === 0) {
-          return token;
+          return token | Token.IsEscaped;
         } else {
           return Token.EscapedReserved;
         }
       }
-      return Token.AnyIdentifier;
+      return Token.AnyIdentifier | Token.IsEscaped;
     }
     if (
       context & Context.AllowEscapedKeyword &&
       (context & Context.InGlobal) === 0 &&
       (token & Token.Reserved) === Token.Reserved
-    )
-      return token;
+    ) {
+      return token | Token.IsEscaped;
+    }
     if (token === Token.YieldKeyword) {
       return context & Context.AllowEscapedKeyword
-        ? Token.AnyIdentifier
+        ? Token.AnyIdentifier | Token.IsEscaped
         : context & Context.InYieldContext
-        ? Token.EscapedReserved
-        : token;
+          ? Token.EscapedReserved
+          : token | Token.IsEscaped;
     }
 
     // async is not reserved; it can be used as a variable name
@@ -119,14 +132,15 @@ export function scanIdentifierSlowCase(
     if (token === Token.AsyncKeyword) {
       // Escaped "async" such as \u0061sync can only be identifier
       // not as "async" keyword
-      return Token.AnyIdentifier;
+      return Token.AnyIdentifier | Token.IsEscaped;
     }
     if ((token & Token.FutureReserved) === Token.FutureReserved) {
-      return token;
+      // In non-strict mode, future reserved can be identifier.
+      return token | Token.Contextual | Token.IsEscaped;
     }
     return Token.EscapedReserved;
   }
-  return Token.Identifier;
+  return Token.Identifier | (hasEscape ? Token.IsEscaped : 0);
 }
 
 /**
@@ -135,7 +149,16 @@ export function scanIdentifierSlowCase(
  * @param parser  Parser object
  */
 export function scanPrivateIdentifier(parser: ParserState): Token {
-  if (!isIdentifierStart(advanceChar(parser))) report(parser, Errors.MissingPrivateIdentifier);
+  let char = advanceChar(parser);
+  // When nextChar is Backslash "\", it's
+  // #\uXXXX unicode escaped private identifier.
+  // Unicode escape is scanned next.
+  if (char === Chars.Backslash) return Token.PrivateField;
+
+  const merged = consumePossibleSurrogatePair(parser);
+  if (merged) char = merged;
+  if (!isIdentifierStart(char)) report(parser, Errors.MissingPrivateIdentifier);
+
   return Token.PrivateField;
 }
 
@@ -168,12 +191,29 @@ export function scanUnicodeEscape(parser: ParserState): number {
     const begin = parser.index - 2;
     while (CharTypes[advanceChar(parser)] & CharFlags.Hex) {
       codePoint = (codePoint << 4) | toHex(parser.currentChar);
-      if (codePoint > Chars.NonBMPMax) reportScannerError(begin, parser.line, parser.index + 1, Errors.UnicodeOverflow);
+      if (codePoint > Chars.NonBMPMax)
+        reportScannerError(
+          begin,
+          parser.line,
+          parser.column,
+          parser.index,
+          parser.line,
+          parser.column,
+          Errors.UnicodeOverflow
+        );
     }
 
     // At least 4 characters have to be read
     if ((parser.currentChar as number) !== Chars.RightBrace) {
-      reportScannerError(begin, parser.line, parser.index - 1, Errors.InvalidHexEscapeSequence);
+      reportScannerError(
+        begin,
+        parser.line,
+        parser.column,
+        parser.index,
+        parser.line,
+        parser.column,
+        Errors.InvalidHexEscapeSequence
+      );
     }
     advanceChar(parser); // consumes '}'
     return codePoint;

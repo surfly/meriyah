@@ -1,10 +1,18 @@
 'use strict';
 
+const packageJson = require('../package.json');
 const UnicodeCodeCount = 0x110000; /* codes */
 const VectorSize = Uint32Array.BYTES_PER_ELEMENT * 8;
 const VectorMask = VectorSize - 1;
 const VectorBitCount = 32 - Math.clz32(VectorMask);
 const VectorByteSize = UnicodeCodeCount / VectorSize;
+
+const UNICODE_PACKAGE_PREFIX = '@unicode/unicode-';
+const unicodePackageName = Object.keys(packageJson.devDependencies).find((name) =>
+  name.startsWith(UNICODE_PACKAGE_PREFIX)
+);
+
+const UNICODE_VERSION = unicodePackageName.slice(UNICODE_PACKAGE_PREFIX.length);
 
 const DataInst = {
   Empty: 0x0,
@@ -96,12 +104,6 @@ function compressorEnd(state) {
   }
 }
 
-exports.decompress = decompress;
-
-function decompress(compressed) {
-  return new Function(`return ${makeDecompress(compressed)}`)();
-}
-
 const makeDecompress = (compressed) => `((compressed, lookup) => {
     const result = new Uint32Array(${compressed.size})
     let index = 0;
@@ -126,11 +128,14 @@ const makeDecompress = (compressed) => `((compressed, lookup) => {
     [${compressed.lookup}]
 )`;
 
-exports.generate = generate;
+function decompress(compressed) {
+  return new Function(`return ${makeDecompress(compressed)}`)();
+}
+exports.decompress = decompress;
 
 async function generate(opts) {
-  await opts.write(`// Unicode v. 12 support
-// tslint:disable
+  await opts.write(`// Unicode v${UNICODE_VERSION} support
+/*eslint-disable*/
 `);
 
   const exportKeys = Object.keys(opts.exports);
@@ -164,10 +169,12 @@ ${opts.eval ? 'return' : 'export'} {${Object.keys(opts.exports)}};
 `);
 }
 
+exports.generate = generate;
+
 if (require.main === module) {
   const path = require('path');
   const load = (name) => {
-    const mod = require.resolve(`unicode-13.0.0/${name}/code-points`);
+    const mod = require.resolve(`${unicodePackageName}/${name}/code-points`);
     const list = require(mod);
     delete require.cache[mod];
     return list;

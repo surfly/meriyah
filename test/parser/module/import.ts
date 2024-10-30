@@ -169,6 +169,7 @@ describe('Module - Import', () => {
     'import { foo }',
     'import [ foo ] from "foo.js";',
     'import * foo from "foo.js";',
+    'import * as from "foo";',
     'import * as "foo" from "foo.js";',
     'import { , foo } from "foo.js";',
     '() => { import arrow from ""; }',
@@ -184,12 +185,33 @@ describe('Module - Import', () => {
     'while(false) import { default } from "module";',
     `do import { default } from "module"
                                 while (false);`,
-    'function () { import { default } from "module"; }'
+    'function () { import { default } from "module"; }',
+    'import { "foo"',
+    'import { "foo" }',
+    'import { "foo" } from',
+    'import { "foo", } from "./foo";',
+    'import { "foo" as "f" } from "./foo";',
+    'import { foo as "f" } from "./foo";'
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
         parseSource(`${arg}`, undefined, Context.Strict | Context.Module);
       });
+    });
+  }
+
+  for (const arg of [
+    'import from "foo";',
+    'import a "foo";',
+    'import * as a "foo";',
+    'import { a } "foo";',
+    'import b, { a } "foo";',
+    'import { default as a, b } "foo";'
+  ]) {
+    it(`${arg}`, () => {
+      t.throws(() => {
+        parseSource(`${arg}`, undefined, Context.Strict | Context.Module);
+      }, /Expected 'from'$/);
     });
   }
 
@@ -322,7 +344,20 @@ describe('Module - Import', () => {
     ['import foo from "string"; import foo from "string";', Context.Strict | Context.Module | Context.OptionsLexical],
     ['import { foo } from "string', Context.Strict | Context.Module | Context.OptionsLexical],
     ['import { foo as bar, bar } from "string";', Context.Strict | Context.Module | Context.OptionsLexical],
-    ['() => { import arrow from ""; }', Context.Strict | Context.Module | Context.OptionsLexical]
+    ['() => { import arrow from ""; }', Context.Strict | Context.Module | Context.OptionsLexical],
+    [
+      'import * as "foo" from "./f"; import { foo } from "./m";',
+      Context.Strict | Context.Module | Context.OptionsLexical
+    ],
+    [
+      'import * as foo from "./f"; import { foo } from "./m";',
+      Context.Strict | Context.Module | Context.OptionsLexical
+    ],
+    ['import { foo } from "./f"; import { foo } from "./m";', Context.Strict | Context.Module | Context.OptionsLexical],
+    [
+      'import { b as foo } from "./f"; import { "a" as foo } from "./m";',
+      Context.Strict | Context.Module | Context.OptionsLexical
+    ]
   ]);
 
   for (const arg of [
@@ -398,13 +433,21 @@ describe('Module - Import', () => {
     "import { } from 'm.js';",
     "import { a } from 'm.js';",
     "import 'foo';",
+    "import from from 'foo';",
+    "import * as from from 'foo';",
     "import { a } from 'foo';",
     'import { a as of } from "k";',
     // Runtime errors
     'import foo from "foo.js"; try { (() => { foo = 12; })() } catch(e) {}',
     'import { foo } from "foo.js"; try { (() => { foo = 12; })() } catch(e) { assert.areEqual("Assignment to const", e.message); }',
     'import * as foo from "foo.js"; try { (() => { foo = 12; })() } catch(e) { assert.areEqual("Assignment to const", e.message); }',
-    'import { foo as foo22 } from "foo.js"; try { (() => { foo22 = 12; })() } catch(e) { assert.areEqual("Assignment to const", e.message); }'
+    'import { foo as foo22 } from "foo.js"; try { (() => { foo22 = 12; })() } catch(e) { assert.areEqual("Assignment to const", e.message); }',
+    'import { "foo" as foo } from "./foo";',
+    'import { "foo" as foo, } from "./foo";',
+    'import { a, "foo" as foo, } from "./foo";',
+    'import { "foo" as foo, a } from "./foo";',
+    'import { "foo" as foo, a, } from "./foo";',
+    'import { "foo" as foo, "a" as a, default as b } from "./foo";'
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
@@ -792,6 +835,32 @@ describe('Module - Import', () => {
                 local: {
                   type: 'Identifier',
                   name: '$'
+                }
+              }
+            ],
+            source: {
+              type: 'Literal',
+              value: 'foo'
+            }
+          }
+        ]
+      }
+    ],
+    [
+      'import from from "foo"',
+      Context.Strict | Context.Module,
+      {
+        type: 'Program',
+        sourceType: 'module',
+        body: [
+          {
+            type: 'ImportDeclaration',
+            specifiers: [
+              {
+                type: 'ImportDefaultSpecifier',
+                local: {
+                  type: 'Identifier',
+                  name: 'from'
                 }
               }
             ],
@@ -1539,6 +1608,47 @@ describe('Module - Import', () => {
           }
         ],
         sourceType: 'module'
+      }
+    ],
+    [
+      'import { default as f2, "foo" as foo } from "./foo";',
+      Context.Strict | Context.Module,
+      {
+        type: 'Program',
+        sourceType: 'module',
+        body: [
+          {
+            type: 'ImportDeclaration',
+            specifiers: [
+              {
+                type: 'ImportSpecifier',
+                local: {
+                  type: 'Identifier',
+                  name: 'f2'
+                },
+                imported: {
+                  type: 'Identifier',
+                  name: 'default'
+                }
+              },
+              {
+                type: 'ImportSpecifier',
+                local: {
+                  type: 'Identifier',
+                  name: 'foo'
+                },
+                imported: {
+                  type: 'Literal',
+                  value: 'foo'
+                }
+              }
+            ],
+            source: {
+              type: 'Literal',
+              value: './foo'
+            }
+          }
+        ]
       }
     ]
   ]);

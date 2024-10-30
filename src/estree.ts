@@ -34,17 +34,14 @@ export type ArgumentExpression =
   | LogicalExpression
   | SequenceExpression;
 
-export enum CommentType {
-  Single = 'SingleLine',
-  Multi = 'MultiLine',
-  HTMLOpen = 'HTMLOpen',
-  HTMLClose = 'HTMLClose',
-  HashBang = 'HashbangComment'
-}
+export type CommentType = 'SingleLine' | 'MultiLine' | 'HTMLOpen' | 'HTMLClose' | 'HashbangComment';
 
 export interface Comment extends _Node {
   type: CommentType;
   value: string;
+  start?: number;
+  end?: number;
+  loc?: SourceLocation | null;
 }
 
 export type Node =
@@ -88,6 +85,7 @@ export type Node =
   | Import
   | ImportDeclaration
   | ImportDefaultSpecifier
+  | ImportAttribute
   | ImportNamespaceSpecifier
   | ImportSpecifier
   | JSXNamespacedName
@@ -329,7 +327,7 @@ export interface BigIntLiteral extends Literal {
 export interface BinaryExpression extends _Node {
   type: 'BinaryExpression';
   operator: string;
-  left: Expression;
+  left: Expression | PrivateIdentifier;
   right: Expression;
 }
 
@@ -347,6 +345,7 @@ export interface BreakStatement extends _Node {
 export interface ImportExpression extends _Node {
   type: 'ImportExpression';
   source: Expression;
+  options?: Expression | null;
 }
 
 export interface ChainExpression extends _Node {
@@ -373,14 +372,23 @@ export interface StaticBlock extends BlockStatementBase {
 
 export interface ClassBody extends _Node {
   type: 'ClassBody';
-  body: (ClassElement | PropertyDefinition | StaticBlock)[];
+  body: (ClassElement | PropertyDefinition | AccessorProperty | StaticBlock)[];
+}
+
+export interface AccessorProperty extends _Node {
+  type: 'AccessorProperty';
+  key: PrivateIdentifier | Expression;
+  value: any;
+  decorators?: Decorator[];
+  computed: boolean;
+  static: boolean;
 }
 
 export interface PropertyDefinition extends _Node {
   type: 'PropertyDefinition';
   key: PrivateIdentifier | Expression;
   value: any;
-  decorators?: Decorator[] | null;
+  decorators?: Decorator[];
   computed: boolean;
   static: boolean;
 }
@@ -432,7 +440,8 @@ export interface EmptyStatement extends _Node {
 export interface ExportAllDeclaration extends _Node {
   type: 'ExportAllDeclaration';
   source: Literal;
-  exported: Identifier | null;
+  exported: Identifier | Literal | null;
+  attributes?: ImportAttribute[];
 }
 
 export interface ExportDefaultDeclaration extends _Node {
@@ -445,12 +454,13 @@ export interface ExportNamedDeclaration extends _Node {
   declaration: ExportDeclaration | null;
   specifiers: ExportSpecifier[];
   source: Literal | null;
+  attributes?: ImportAttribute[];
 }
 
 export interface ExportSpecifier extends _Node {
   type: 'ExportSpecifier';
-  local: Identifier;
-  exported: Identifier;
+  local: Identifier | Literal;
+  exported: Identifier | Literal;
 }
 
 export interface ExpressionStatement extends _Node {
@@ -509,6 +519,13 @@ export interface ImportDeclaration extends _Node {
   type: 'ImportDeclaration';
   source: Literal;
   specifiers: ImportClause[];
+  attributes?: ImportAttribute[];
+}
+
+export interface ImportAttribute extends _Node {
+  type: 'ImportAttribute';
+  key: Identifier | Literal;
+  value: Literal;
 }
 
 export interface ImportDefaultSpecifier extends _Node {
@@ -524,7 +541,7 @@ export interface ImportNamespaceSpecifier extends _Node {
 export interface ImportSpecifier extends _Node {
   type: 'ImportSpecifier';
   local: Identifier;
-  imported: Identifier;
+  imported: Identifier | Literal;
 }
 
 export interface JSXNamespacedName extends _Node {

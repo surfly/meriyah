@@ -947,6 +947,7 @@ describe('Statements - For in', () => {
                       },
                       right: {
                         type: 'Literal',
+                        // eslint-disable-next-line no-empty-character-class
                         value: /(?:()|[]|(?!))/iuy,
                         regex: {
                           pattern: '(?:()|[]|(?!))',
@@ -5146,7 +5147,8 @@ describe('Statements - For in', () => {
                   expression: {
                     type: 'Literal',
                     value: 'use strict'
-                  }
+                  },
+                  directive: 'use strict'
                 },
                 {
                   type: 'ForInStatement',

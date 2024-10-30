@@ -2,7 +2,7 @@ import { ParserState, Context, Flags } from '../common';
 import { Token } from '../token';
 import { Chars } from '../chars';
 import { report, Errors } from '../errors';
-import { toHex, advanceChar, fromCodePoint } from './common';
+import { toHex, advanceChar } from './common';
 import { CharTypes, CharFlags } from './charClassifier';
 // Intentionally negative
 export const enum Escape {
@@ -38,10 +38,10 @@ export function scanString(parser: ParserState, context: Context, quote: number)
 
       if (char < 0x7f || char === Chars.LineSeparator || char === Chars.ParagraphSeparator) {
         const code = parseEscape(parser, context, char);
-        if (code >= 0) ret += fromCodePoint(code);
+        if (code >= 0) ret += String.fromCodePoint(code);
         else handleStringError(parser, code as Escape, /* isTemplate */ 0);
       } else {
-        ret += fromCodePoint(char);
+        ret += String.fromCodePoint(char);
       }
       marker = parser.index + 1;
     }
@@ -56,7 +56,7 @@ export function scanString(parser: ParserState, context: Context, quote: number)
 
 // TODO! Use table lookup
 
-export function parseEscape(parser: ParserState, context: Context, first: number): number {
+export function parseEscape(parser: ParserState, context: Context, first: number, isTemplate: 0 | 1 = 0): number {
   switch (first) {
     // https://tc39.github.io/ecma262/#prod-SingleEscapeCharacter
     // one of ' " \ b f n r t v
@@ -106,9 +106,11 @@ export function parseEscape(parser: ParserState, context: Context, first: number
 
         if ((CharTypes[next] & CharFlags.Octal) === 0) {
           // Verify that it's `\0` if we're in strict mode.
-          if ((code !== 0 || CharTypes[next] & CharFlags.ImplicitOctalDigits) && context & Context.Strict)
-            return Escape.StrictOctal;
-        } else if (context & Context.Strict) {
+          if (code !== 0 || CharTypes[next] & CharFlags.ImplicitOctalDigits) {
+            if (context & Context.Strict || isTemplate) return Escape.StrictOctal;
+            parser.flags |= Flags.Octals;
+          }
+        } else if (context & Context.Strict || isTemplate) {
           return Escape.StrictOctal;
         } else {
           parser.currentChar = next;
@@ -125,12 +127,11 @@ export function parseEscape(parser: ParserState, context: Context, first: number
               column++;
             }
           }
-
           parser.flags |= Flags.Octals;
-
-          parser.index = index - 1;
-          parser.column = column - 1;
         }
+
+        parser.index = index - 1;
+        parser.column = column - 1;
       }
 
       return code;
@@ -140,7 +141,7 @@ export function parseEscape(parser: ParserState, context: Context, first: number
     case Chars.Five:
     case Chars.Six:
     case Chars.Seven: {
-      if (context & Context.Strict) return Escape.StrictOctal;
+      if (isTemplate || context & Context.Strict) return Escape.StrictOctal;
 
       let code = first - Chars.Zero;
       const index = parser.index + 1;
@@ -213,8 +214,10 @@ export function parseEscape(parser: ParserState, context: Context, first: number
     // `8`, `9` (invalid escapes)
     case Chars.Eight:
     case Chars.Nine:
-      if ((context & Context.OptionsWebCompat) === 0) return Escape.EightOrNine;
-
+      if (isTemplate || (context & Context.OptionsWebCompat) === 0 || context & Context.Strict)
+        return Escape.EightOrNine;
+      parser.flags |= Flags.EightAndNine;
+    // fallthrough
     default:
       return first;
   }
@@ -229,7 +232,7 @@ export function handleStringError(state: ParserState, code: Escape, isTemplate: 
       report(state, isTemplate ? Errors.TemplateOctalLiteral : Errors.StrictOctalEscape);
 
     case Escape.EightOrNine:
-      report(state, Errors.InvalidEightAndNine);
+      report(state, isTemplate ? Errors.TemplateEightAndNine : Errors.InvalidEightAndNine);
 
     case Escape.InvalidHex:
       report(state, Errors.InvalidHexEscapeSequence);
@@ -237,6 +240,6 @@ export function handleStringError(state: ParserState, code: Escape, isTemplate: 
     case Escape.OutOfRange:
       report(state, Errors.UnicodeOverflow);
 
-    default:
+    // No default
   }
 }

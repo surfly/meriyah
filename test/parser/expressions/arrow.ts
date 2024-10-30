@@ -546,14 +546,18 @@ describe('Expressions - Arrow', () => {
     ['a = b\n=> c', Context.None],
     ['a = b\n=>\nc', Context.None],
     ['a\n= b\n=> c', Context.None],
-    //['(p\\u0061ckage) => { }', Context.Strict],
+    ['(p\\u0061ckage) => { }', Context.Strict],
+    ['(p\\u0061ckage, a) => { }', Context.Strict],
+    ['(a, p\\u0061ckage) => { }', Context.Strict],
     ['(p\\u0061ckage) => { "use strict"; }', Context.None],
+    ['(p\\u0061ckage, a) => { "use strict"; }', Context.None],
+    ['(a, p\\u0061ckage) => { "use strict"; }', Context.None],
     ['(p\\x61ckage) => { }', Context.None],
     ['(p\\x61ckage) => { "use strict"; }', Context.None],
     ['(p\\141ckage) => { "use strict"; }', Context.None],
-    // ['package => { "use strict"; }', Context.None],
-    // ['p\\u0061ckage => { }', Context.None],
-    // ['p\\u0061ckage => { "use strict"; }', Context.None],
+    ['package => { "use strict"; }', Context.None],
+    ['p\\u0061ckage => { }', Context.Strict],
+    ['p\\u0061ckage => { "use strict"; }', Context.None],
     ['p\\141ckage => { }', Context.None],
     ['p\\141ckage => { "use strict"; }', Context.None],
     ['()=>{}+a', Context.None],
@@ -1040,8 +1044,8 @@ describe('Expressions - Arrow', () => {
     '() => a + b - yield / 1',
     '(() => { try { Function("0 || () => 2")(); } catch(e) { return true; } })();',
     'var f = (function() { return z => arguments[0]; }(5));',
-    'yield => { "use strict"; 0 }',
-    "interface => { 'use strict'; 0 }",
+    'yield => { }',
+    'interface => { }',
     '({y}) => x;',
     '([x = 10]) => x',
     '([x = 10]) => x = ([x = 10]) => x',
@@ -1139,6 +1143,33 @@ describe('Expressions - Arrow', () => {
     });
   }
 
+  for (const arg of [
+    'yield => { "use strict"; 0 }',
+    'yield => { "lorem"; "use strict"; }',
+    "interface => { 'use strict' }"
+  ]) {
+    it(`${arg};`, () => {
+      t.throws(() => {
+        parseSource(`${arg};`, undefined, Context.None);
+      });
+    });
+    it(`${arg};`, () => {
+      t.throws(() => {
+        parseSource(`${arg};`, undefined, Context.OptionsWebCompat);
+      });
+    });
+    it(`${arg};`, () => {
+      t.throws(() => {
+        parseSource(`${arg};`, undefined, Context.OptionsNext);
+      });
+    });
+
+    it(`function x(){${arg} }`, () => {
+      t.throws(() => {
+        parseSource(`function x(){${arg} }`, undefined, Context.None);
+      });
+    });
+  }
   pass('Expressions - Arrow (pass)', [
     [
       'async let => {}',
@@ -1584,21 +1615,17 @@ describe('Expressions - Arrow', () => {
                                                                                                     {
                                                                                                       type: 'Property',
                                                                                                       key: {
-                                                                                                        type:
-                                                                                                          'Identifier',
+                                                                                                        type: 'Identifier',
                                                                                                         name: 'a'
                                                                                                       },
                                                                                                       value: {
-                                                                                                        type:
-                                                                                                          'AssignmentPattern',
+                                                                                                        type: 'AssignmentPattern',
                                                                                                         left: {
-                                                                                                          type:
-                                                                                                            'Identifier',
+                                                                                                          type: 'Identifier',
                                                                                                           name: 'a'
                                                                                                         },
                                                                                                         right: {
-                                                                                                          type:
-                                                                                                            'Identifier',
+                                                                                                          type: 'Identifier',
                                                                                                           name: 'b'
                                                                                                         }
                                                                                                       },
@@ -1715,58 +1742,6 @@ describe('Expressions - Arrow', () => {
           }
         ],
         sourceType: 'script'
-      }
-    ],
-    [
-      '(a = await/r/g) => {}',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'ArrowFunctionExpression',
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              params: [
-                {
-                  type: 'AssignmentPattern',
-                  left: {
-                    type: 'Identifier',
-                    name: 'a'
-                  },
-                  right: {
-                    type: 'BinaryExpression',
-                    left: {
-                      type: 'BinaryExpression',
-                      left: {
-                        type: 'Identifier',
-                        name: 'await'
-                      },
-                      right: {
-                        type: 'Identifier',
-                        name: 'r'
-                      },
-                      operator: '/'
-                    },
-                    right: {
-                      type: 'Identifier',
-                      name: 'g'
-                    },
-                    operator: '/'
-                  }
-                }
-              ],
-
-              async: false,
-              expression: false
-            }
-          }
-        ]
       }
     ],
     [

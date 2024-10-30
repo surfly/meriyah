@@ -958,7 +958,7 @@ describe('Expressions - Array', () => {
     ],
     [
       '"use strict"; const { [eval]: []} = a;',
-      Context.OptionsRanges | Context.OptionsDirectives | Context.OptionsRaw,
+      Context.OptionsRanges | Context.OptionsRaw,
       {
         type: 'Program',
         start: 0,
@@ -4346,30 +4346,24 @@ describe('Expressions - Array', () => {
                                                                                                   {
                                                                                                     type: 'Property',
                                                                                                     key: {
-                                                                                                      type:
-                                                                                                        'Identifier',
+                                                                                                      type: 'Identifier',
                                                                                                       name: 'a'
                                                                                                     },
                                                                                                     value: {
-                                                                                                      type:
-                                                                                                        'AssignmentPattern',
+                                                                                                      type: 'AssignmentPattern',
                                                                                                       left: {
-                                                                                                        type:
-                                                                                                          'Identifier',
+                                                                                                        type: 'Identifier',
                                                                                                         name: 'a'
                                                                                                       },
                                                                                                       right: {
-                                                                                                        type:
-                                                                                                          'MemberExpression',
+                                                                                                        type: 'MemberExpression',
                                                                                                         object: {
-                                                                                                          type:
-                                                                                                            'Identifier',
+                                                                                                          type: 'Identifier',
                                                                                                           name: 'b'
                                                                                                         },
                                                                                                         computed: true,
                                                                                                         property: {
-                                                                                                          type:
-                                                                                                            'Literal',
+                                                                                                          type: 'Literal',
                                                                                                           value: 0
                                                                                                         }
                                                                                                       }
