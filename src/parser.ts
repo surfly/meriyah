@@ -3309,7 +3309,6 @@ function parseExportDeclaration(
   let declaration: ESTree.ExportDeclaration | ESTree.Expression | null = null;
   let source: ESTree.Literal | null = null;
   let attributes: ESTree.ImportAttribute[] | null = null;
-  let key: string;
 
   if (consumeOpt(parser, context | Context.AllowRegExp, Token.DefaultKeyword)) {
     // export default HoistableDeclaration[Default]
@@ -3676,10 +3675,6 @@ function parseExportDeclaration(
           tokenLine,
           tokenColumn
         );
-        if (scope) {
-          key = declaration.id ? declaration.id.name : '';
-          declareUnboundVariable(parser, key);
-        }
         break;
       }
     }
@@ -11550,6 +11545,9 @@ export function parseJSXIdentifier(
   line: number,
   column: number
 ): ESTree.JSXIdentifier {
+  if (!(parser.getToken() & Token.IsIdentifier)) {
+    report(parser, Errors.UnexpectedToken, KeywordDescTable[parser.getToken() & Token.Type]);
+  }
   const { tokenValue } = parser;
   collectLeadingComments(parser);
   nextToken(parser, context);
