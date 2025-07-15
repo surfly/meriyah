@@ -2131,12 +2131,9 @@
   function collectLeadingComments(parser) {
       let leadingComments = [];
       if (parser.options.attachComments) {
-          if (parser.comments && parser.comments.length) {
+          if (parser.comments.length) {
               leadingComments = parser.comments;
               parser.comments = [];
-          }
-          if (!parser.leadingComments) {
-              parser.leadingComments = [];
           }
           parser.leadingComments.push(leadingComments);
       }
@@ -4843,6 +4840,16 @@
               };
               if (this.options.source) {
                   node.loc.source = this.options.source;
+              }
+          }
+          if (this.options.attachComments) {
+              const leadingComments = this.leadingComments.pop();
+              if (leadingComments && leadingComments.length) {
+                  node.leadingComments = leadingComments;
+              }
+              if (this.comments.length) {
+                  node.trailingComments = this.comments;
+                  this.comments = [];
               }
           }
           return node;

@@ -230,6 +230,20 @@ export class Parser {
       }
     }
 
+    if (this.options.attachComments) {
+      // put the leading comments in AST if they are collected in the parser state
+      const leadingComments = this.leadingComments.pop();
+      if (leadingComments && leadingComments.length) {
+        node.leadingComments = leadingComments;
+      }
+
+      // put the trailing comments in AST if they are found in the parser state
+      if (this.comments.length) {
+        node.trailingComments = this.comments;
+        this.comments = [];
+      }
+    }
+
     return node;
   }
 

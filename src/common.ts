@@ -150,14 +150,11 @@ export function collectLeadingComments(parser: Parser): Array<Comment> {
   //can use a global empty array for memory optimisation
   let leadingComments: Array<Comment> = [];
   if (parser.options.attachComments) {
-    if (parser.comments && parser.comments.length) {
+    if (parser.comments.length) {
       leadingComments = parser.comments;
       parser.comments = [];
     }
 
-    if (!parser.leadingComments) {
-      parser.leadingComments = [];
-    }
     parser.leadingComments.push(leadingComments);
   }
 
