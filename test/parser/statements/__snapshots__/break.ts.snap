@@ -1,0 +1,1294 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Statements - Break > Declarations - Break > () => {    break    } 1`] = `
+"SyntaxError [1:20-1:21]: Illegal break statement
+> 1 | () => {    break    }
+    |                     ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > () => {    if (x) break   } 1`] = `
+"SyntaxError [1:26-1:27]: Illegal break statement
+> 1 | () => {    if (x) break   }
+    |                           ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > (function(){
+    OuterLabel : var x=0, y=0;
+    LABEL_DO_LOOP : do {
+        LABEL_IN : x++;
+        if(x===10)
+            return;
+        break LABEL_ANOTHER_LOOP;
+        LABEL_IN_2 : y++;
+        function IN_DO_FUNC(){}
+    } while(0);
+    LABEL_ANOTHER_LOOP : do {
+        ;
+    } while(0);
+    function OUT_FUNC(){}
+})(); 1`] = `
+"SyntaxError [7:32-7:33]: Undefined label 'LABEL_ANOTHER_LOOP'
+   5 |         if(x===10)
+   6 |             return;
+>  7 |         break LABEL_ANOTHER_LOOP;
+     |                                 ^ Undefined label 'LABEL_ANOTHER_LOOP'
+   8 |         LABEL_IN_2 : y++;
+   9 |         function IN_DO_FUNC(){}
+  10 |     } while(0);"
+`;
+
+exports[`Statements - Break > Declarations - Break > (function(){
+  OuterLabel : var x=0, y=0;
+  LABEL_DO_LOOP : do {
+      LABEL_IN : x++;
+      if(x===10)
+          return;
+      break IN_DO_FUNC;
+      LABEL_IN_2 : y++;
+      function IN_DO_FUNC(){}
+  } while(0);
+  LABEL_ANOTHER_LOOP : do {
+      ;
+  } while(0);
+  function OUT_FUNC(){}
+})(); 1`] = `
+"SyntaxError [7:22-7:23]: Undefined label 'IN_DO_FUNC'
+   5 |       if(x===10)
+   6 |           return;
+>  7 |       break IN_DO_FUNC;
+     |                       ^ Undefined label 'IN_DO_FUNC'
+   8 |       LABEL_IN_2 : y++;
+   9 |       function IN_DO_FUNC(){}
+  10 |   } while(0);"
+`;
+
+exports[`Statements - Break > Declarations - Break > (function(){
+  OuterLabel : var x=0, y=0;
+  LABEL_DO_LOOP : do {
+      LABEL_IN : x++;
+      if(x===10)
+          return;
+      break LABEL_IN;
+      LABEL_IN_2 : y++;
+      function IN_DO_FUNC(){}
+  } while(0);
+  LABEL_ANOTHER_LOOP : do {
+      ;
+  } while(0);
+  function OUT_FUNC(){}
+})(); 1`] = `
+"SyntaxError [7:20-7:21]: Undefined label 'LABEL_IN'
+   5 |       if(x===10)
+   6 |           return;
+>  7 |       break LABEL_IN;
+     |                     ^ Undefined label 'LABEL_IN'
+   8 |       LABEL_IN_2 : y++;
+   9 |       function IN_DO_FUNC(){}
+  10 |   } while(0);"
+`;
+
+exports[`Statements - Break > Declarations - Break > (function(){
+  OuterLabel : var x=0, y=0;
+  LABEL_DO_LOOP : do {
+      LABEL_IN : x++;
+      if(x===10)
+          return;
+      break LABEL_IN;
+      LABEL_IN_2 : y++;
+      function IN_DO_FUNC(){}
+  } while(0);
+  LABEL_ANOTHER_LOOP : do {
+      ;
+  } while(0);
+  function OUT_FUNC(){}
+})(); 2`] = `
+"SyntaxError [7:20-7:21]: Undefined label 'LABEL_IN'
+   5 |       if(x===10)
+   6 |           return;
+>  7 |       break LABEL_IN;
+     |                     ^ Undefined label 'LABEL_IN'
+   8 |       LABEL_IN_2 : y++;
+   9 |       function IN_DO_FUNC(){}
+  10 |   } while(0);"
+`;
+
+exports[`Statements - Break > Declarations - Break > {  break foo; var y=2; } 1`] = `
+"SyntaxError [1:12-1:13]: Undefined label 'foo'
+> 1 | {  break foo; var y=2; }
+    |             ^ Undefined label 'foo'"
+`;
+
+exports[`Statements - Break > Declarations - Break > { break } 1`] = `
+"SyntaxError [1:8-1:9]: Illegal break statement
+> 1 | { break }
+    |         ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > { break } 2`] = `
+"SyntaxError [1:8-1:9]: Illegal break statement
+> 1 | { break }
+    |         ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > LABEL1 : do {
+    x++;
+    (function(){break LABEL1;})();
+    y++;
+} while(0); 1`] = `
+"SyntaxError [3:28-3:29]: Undefined label 'LABEL1'
+  1 | LABEL1 : do {
+  2 |     x++;
+> 3 |     (function(){break LABEL1;})();
+    |                             ^ Undefined label 'LABEL1'
+  4 |     y++;
+  5 | } while(0);"
+`;
+
+exports[`Statements - Break > Declarations - Break > break
+break; 1`] = `
+"SyntaxError [2:0-2:5]: Illegal break statement
+  1 | break
+> 2 | break;
+    | ^^^^^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > break 1`] = `
+"SyntaxError [1:0-1:5]: Illegal break statement
+> 1 | break
+    | ^^^^^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > break; 1`] = `
+"SyntaxError [1:5-1:6]: Illegal break statement
+> 1 | break;
+    |      ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > break; break; 1`] = `
+"SyntaxError [1:5-1:6]: Illegal break statement
+> 1 | break; break;
+    |      ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > do     break y   ; while(true); 1`] = `
+"SyntaxError [1:17-1:18]: Undefined label 'y'
+> 1 | do     break y   ; while(true);
+    |                  ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > do     if (x) break y   ; while(true); 1`] = `
+"SyntaxError [1:24-1:25]: Undefined label 'y'
+> 1 | do     if (x) break y   ; while(true);
+    |                         ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > for (;;)    if (x) break y   } 1`] = `
+"SyntaxError [1:29-1:30]: Undefined label 'y'
+> 1 | for (;;)    if (x) break y   }
+    |                              ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){    break    } 1`] = `
+"SyntaxError [1:26-1:27]: Illegal break statement
+> 1 | function f(){    break    }
+    |                           ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){    break    } 2`] = `
+"SyntaxError [1:26-1:27]: Illegal break statement
+> 1 | function f(){    break    }
+    |                           ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){    break y   } 1`] = `
+"SyntaxError [1:27-1:28]: Undefined label 'y'
+> 1 | function f(){    break y   }
+    |                            ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){    if (x) break   } 1`] = `
+"SyntaxError [1:32-1:33]: Illegal break statement
+> 1 | function f(){    if (x) break   }
+    |                                 ^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){ do        if (x) break y   ; while(true);} 1`] = `
+"SyntaxError [1:41-1:42]: Undefined label 'y'
+> 1 | function f(){ do        if (x) break y   ; while(true);}
+    |                                          ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){ for (;;)       break y   } 1`] = `
+"SyntaxError [1:39-1:40]: Undefined label 'y'
+> 1 | function f(){ for (;;)       break y   }
+    |                                        ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){ switch (x){ case z:       break y   }} 1`] = `
+"SyntaxError [1:50-1:51]: Undefined label 'y'
+> 1 | function f(){ switch (x){ case z:       break y   }}
+    |                                                   ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){ switch (x){ case z:       if (x) break y   }} 1`] = `
+"SyntaxError [1:57-1:58]: Undefined label 'y'
+> 1 | function f(){ switch (x){ case z:       if (x) break y   }}
+    |                                                          ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > function f(){ while (true)       break y   } 1`] = `
+"SyntaxError [1:43-1:44]: Undefined label 'y'
+> 1 | function f(){ while (true)       break y   }
+    |                                            ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > if (x) break 1`] = `
+"SyntaxError [1:7-1:12]: Illegal break statement
+> 1 | if (x) break
+    |        ^^^^^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > if (x) break 2`] = `
+"SyntaxError [1:7-1:12]: Illegal break statement
+> 1 | if (x) break
+    |        ^^^^^ Illegal break statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > loop; while (true) { break loop1; } 1`] = `
+"SyntaxError [1:32-1:33]: Undefined label 'loop1'
+> 1 | loop; while (true) { break loop1; }
+    |                                 ^ Undefined label 'loop1'"
+`;
+
+exports[`Statements - Break > Declarations - Break > loop1: function a() {}  while (true) { continue loop1; } 1`] = `
+"SyntaxError [1:7-1:15]: Without web compatibility enabled functions can not be declared at top level, inside a block, or as the body of an if statement
+> 1 | loop1: function a() {}  while (true) { continue loop1; }
+    |        ^^^^^^^^ Without web compatibility enabled functions can not be declared at top level, inside a block, or as the body of an if statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > loop1: while (true) { loop2: function a() { break loop1; } } 1`] = `
+"SyntaxError [1:29-1:37]: Without web compatibility enabled functions can not be declared at top level, inside a block, or as the body of an if statement
+> 1 | loop1: while (true) { loop2: function a() { break loop1; } }
+    |                              ^^^^^^^^ Without web compatibility enabled functions can not be declared at top level, inside a block, or as the body of an if statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > loop1: while (true) { loop2: function a() { break loop2; } } 1`] = `
+"SyntaxError [1:29-1:37]: Without web compatibility enabled functions can not be declared at top level, inside a block, or as the body of an if statement
+> 1 | loop1: while (true) { loop2: function a() { break loop2; } }
+    |                              ^^^^^^^^ Without web compatibility enabled functions can not be declared at top level, inside a block, or as the body of an if statement"
+`;
+
+exports[`Statements - Break > Declarations - Break > switch (x){ case z:    break y   } 1`] = `
+"SyntaxError [1:33-1:34]: Undefined label 'y'
+> 1 | switch (x){ case z:    break y   }
+    |                                  ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > switch (x){ case z:    if (x) break y   } 1`] = `
+"SyntaxError [1:40-1:41]: Undefined label 'y'
+> 1 | switch (x){ case z:    if (x) break y   }
+    |                                         ^ Undefined label 'y'"
+`;
+
+exports[`Statements - Break > Declarations - Break > var x=0,y=0;
+try{
+  LABEL1 : do {
+    x++;
+    throw "gonna leave it";
+    y++;
+  } while(0);
+  $ERROR('#1: throw "gonna leave it" lead to throwing exception');
+} catch(e){
+  break;
+  LABEL2 : do {
+    x++;
+    y++;
+  } while(0);
+} 1`] = `
+"SyntaxError [10:7-10:8]: Illegal break statement
+   8 |   $ERROR('#1: throw "gonna leave it" lead to throwing exception');
+   9 | } catch(e){
+> 10 |   break;
+     |        ^ Illegal break statement
+  11 |   LABEL2 : do {
+  12 |     x++;
+  13 |     y++;"
+`;
+
+exports[`Statements - Break > Declarations - Break > x: foo; break x; 1`] = `
+"SyntaxError [1:15-1:16]: Undefined label 'x'
+> 1 | x: foo; break x;
+    |                ^ Undefined label 'x'"
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > L: let
+x 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "expression": {
+          "name": "let",
+          "type": "Identifier",
+        },
+        "type": "ExpressionStatement",
+      },
+      "label": {
+        "name": "L",
+        "type": "Identifier",
+      },
+      "type": "LabeledStatement",
+    },
+    {
+      "expression": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > a: if (true) b: { break a; break b; }
+else b: { break a; break b; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "alternate": {
+          "body": {
+            "body": [
+              {
+                "label": {
+                  "name": "a",
+                  "type": "Identifier",
+                },
+                "type": "BreakStatement",
+              },
+              {
+                "label": {
+                  "name": "b",
+                  "type": "Identifier",
+                },
+                "type": "BreakStatement",
+              },
+            ],
+            "type": "BlockStatement",
+          },
+          "label": {
+            "name": "b",
+            "type": "Identifier",
+          },
+          "type": "LabeledStatement",
+        },
+        "consequent": {
+          "body": {
+            "body": [
+              {
+                "label": {
+                  "name": "a",
+                  "type": "Identifier",
+                },
+                "type": "BreakStatement",
+              },
+              {
+                "label": {
+                  "name": "b",
+                  "type": "Identifier",
+                },
+                "type": "BreakStatement",
+              },
+            ],
+            "type": "BlockStatement",
+          },
+          "label": {
+            "name": "b",
+            "type": "Identifier",
+          },
+          "type": "LabeledStatement",
+        },
+        "test": {
+          "type": "Literal",
+          "value": true,
+        },
+        "type": "IfStatement",
+      },
+      "label": {
+        "name": "a",
+        "type": "Identifier",
+      },
+      "type": "LabeledStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > ding: foo: bar: while (true) break foo; 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": {
+          "body": {
+            "body": {
+              "end": 39,
+              "label": {
+                "end": 38,
+                "name": "foo",
+                "range": [
+                  35,
+                  38,
+                ],
+                "start": 35,
+                "type": "Identifier",
+              },
+              "range": [
+                29,
+                39,
+              ],
+              "start": 29,
+              "type": "BreakStatement",
+            },
+            "end": 39,
+            "range": [
+              16,
+              39,
+            ],
+            "start": 16,
+            "test": {
+              "end": 27,
+              "range": [
+                23,
+                27,
+              ],
+              "raw": "true",
+              "start": 23,
+              "type": "Literal",
+              "value": true,
+            },
+            "type": "WhileStatement",
+          },
+          "end": 39,
+          "label": {
+            "end": 14,
+            "name": "bar",
+            "range": [
+              11,
+              14,
+            ],
+            "start": 11,
+            "type": "Identifier",
+          },
+          "range": [
+            11,
+            39,
+          ],
+          "start": 11,
+          "type": "LabeledStatement",
+        },
+        "end": 39,
+        "label": {
+          "end": 9,
+          "name": "foo",
+          "range": [
+            6,
+            9,
+          ],
+          "start": 6,
+          "type": "Identifier",
+        },
+        "range": [
+          6,
+          39,
+        ],
+        "start": 6,
+        "type": "LabeledStatement",
+      },
+      "end": 39,
+      "label": {
+        "end": 4,
+        "name": "ding",
+        "range": [
+          0,
+          4,
+        ],
+        "start": 0,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        39,
+      ],
+      "start": 0,
+      "type": "LabeledStatement",
+    },
+  ],
+  "end": 39,
+  "range": [
+    0,
+    39,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > foo: switch (x) { case x: break foo; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "cases": [
+          {
+            "consequent": [
+              {
+                "end": 36,
+                "label": {
+                  "end": 35,
+                  "name": "foo",
+                  "range": [
+                    32,
+                    35,
+                  ],
+                  "start": 32,
+                  "type": "Identifier",
+                },
+                "range": [
+                  26,
+                  36,
+                ],
+                "start": 26,
+                "type": "BreakStatement",
+              },
+            ],
+            "end": 36,
+            "range": [
+              18,
+              36,
+            ],
+            "start": 18,
+            "test": {
+              "end": 24,
+              "name": "x",
+              "range": [
+                23,
+                24,
+              ],
+              "start": 23,
+              "type": "Identifier",
+            },
+            "type": "SwitchCase",
+          },
+        ],
+        "discriminant": {
+          "end": 14,
+          "name": "x",
+          "range": [
+            13,
+            14,
+          ],
+          "start": 13,
+          "type": "Identifier",
+        },
+        "end": 38,
+        "range": [
+          5,
+          38,
+        ],
+        "start": 5,
+        "type": "SwitchStatement",
+      },
+      "end": 38,
+      "label": {
+        "end": 3,
+        "name": "foo",
+        "range": [
+          0,
+          3,
+        ],
+        "start": 0,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        38,
+      ],
+      "start": 0,
+      "type": "LabeledStatement",
+    },
+  ],
+  "end": 38,
+  "range": [
+    0,
+    38,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > foo: switch (x) { case x: if (foo) {break foo;} } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "cases": [
+          {
+            "consequent": [
+              {
+                "alternate": null,
+                "consequent": {
+                  "body": [
+                    {
+                      "label": {
+                        "name": "foo",
+                        "type": "Identifier",
+                      },
+                      "type": "BreakStatement",
+                    },
+                  ],
+                  "type": "BlockStatement",
+                },
+                "test": {
+                  "name": "foo",
+                  "type": "Identifier",
+                },
+                "type": "IfStatement",
+              },
+            ],
+            "test": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "SwitchCase",
+          },
+        ],
+        "discriminant": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "type": "SwitchStatement",
+      },
+      "label": {
+        "name": "foo",
+        "type": "Identifier",
+      },
+      "type": "LabeledStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > foo: while (true) if (x) break foo; 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": {
+          "alternate": null,
+          "consequent": {
+            "label": {
+              "name": "foo",
+              "type": "Identifier",
+            },
+            "type": "BreakStatement",
+          },
+          "test": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "IfStatement",
+        },
+        "test": {
+          "type": "Literal",
+          "value": true,
+        },
+        "type": "WhileStatement",
+      },
+      "label": {
+        "name": "foo",
+        "type": "Identifier",
+      },
+      "type": "LabeledStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > foo: while(true)break foo; 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": {
+          "label": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "type": "BreakStatement",
+        },
+        "test": {
+          "type": "Literal",
+          "value": true,
+        },
+        "type": "WhileStatement",
+      },
+      "label": {
+        "name": "foo",
+        "type": "Identifier",
+      },
+      "type": "LabeledStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > function f(){ for (;;)       if (x) break   } 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "body": {
+              "alternate": null,
+              "consequent": {
+                "label": null,
+                "type": "BreakStatement",
+              },
+              "test": {
+                "name": "x",
+                "type": "Identifier",
+              },
+              "type": "IfStatement",
+            },
+            "init": null,
+            "test": null,
+            "type": "ForStatement",
+            "update": null,
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > function f(){ while (true)       if (x) break   } 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "body": {
+              "alternate": null,
+              "consequent": {
+                "label": null,
+                "type": "BreakStatement",
+              },
+              "test": {
+                "name": "x",
+                "type": "Identifier",
+              },
+              "type": "IfStatement",
+            },
+            "test": {
+              "type": "Literal",
+              "value": true,
+            },
+            "type": "WhileStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > switch (a) { case 10 /* StringLiteral */:
+        if (lookAhead(function () { return nextToken() !== 57 /* ColonToken */; })) {
+            statement.expression = parseLiteralNode();
+            break;
+        }
+} 1`] = `
+{
+  "body": [
+    {
+      "cases": [
+        {
+          "consequent": [
+            {
+              "alternate": null,
+              "consequent": {
+                "body": [
+                  {
+                    "expression": {
+                      "left": {
+                        "computed": false,
+                        "object": {
+                          "name": "statement",
+                          "type": "Identifier",
+                        },
+                        "optional": false,
+                        "property": {
+                          "name": "expression",
+                          "type": "Identifier",
+                        },
+                        "type": "MemberExpression",
+                      },
+                      "operator": "=",
+                      "right": {
+                        "arguments": [],
+                        "callee": {
+                          "name": "parseLiteralNode",
+                          "type": "Identifier",
+                        },
+                        "optional": false,
+                        "type": "CallExpression",
+                      },
+                      "type": "AssignmentExpression",
+                    },
+                    "type": "ExpressionStatement",
+                  },
+                  {
+                    "label": null,
+                    "type": "BreakStatement",
+                  },
+                ],
+                "type": "BlockStatement",
+              },
+              "test": {
+                "arguments": [
+                  {
+                    "async": false,
+                    "body": {
+                      "body": [
+                        {
+                          "argument": {
+                            "left": {
+                              "arguments": [],
+                              "callee": {
+                                "name": "nextToken",
+                                "type": "Identifier",
+                              },
+                              "optional": false,
+                              "type": "CallExpression",
+                            },
+                            "operator": "!==",
+                            "right": {
+                              "type": "Literal",
+                              "value": 57,
+                            },
+                            "type": "BinaryExpression",
+                          },
+                          "type": "ReturnStatement",
+                        },
+                      ],
+                      "type": "BlockStatement",
+                    },
+                    "generator": false,
+                    "id": null,
+                    "params": [],
+                    "type": "FunctionExpression",
+                  },
+                ],
+                "callee": {
+                  "name": "lookAhead",
+                  "type": "Identifier",
+                },
+                "optional": false,
+                "type": "CallExpression",
+              },
+              "type": "IfStatement",
+            },
+          ],
+          "test": {
+            "type": "Literal",
+            "value": 10,
+          },
+          "type": "SwitchCase",
+        },
+      ],
+      "discriminant": {
+        "name": "a",
+        "type": "Identifier",
+      },
+      "type": "SwitchStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > switch (a) { case 123: { if (a) {} break } } 1`] = `
+{
+  "body": [
+    {
+      "cases": [
+        {
+          "consequent": [
+            {
+              "body": [
+                {
+                  "alternate": null,
+                  "consequent": {
+                    "body": [],
+                    "end": 34,
+                    "range": [
+                      32,
+                      34,
+                    ],
+                    "start": 32,
+                    "type": "BlockStatement",
+                  },
+                  "end": 34,
+                  "range": [
+                    25,
+                    34,
+                  ],
+                  "start": 25,
+                  "test": {
+                    "end": 30,
+                    "name": "a",
+                    "range": [
+                      29,
+                      30,
+                    ],
+                    "start": 29,
+                    "type": "Identifier",
+                  },
+                  "type": "IfStatement",
+                },
+                {
+                  "end": 40,
+                  "label": null,
+                  "range": [
+                    35,
+                    40,
+                  ],
+                  "start": 35,
+                  "type": "BreakStatement",
+                },
+              ],
+              "end": 42,
+              "range": [
+                23,
+                42,
+              ],
+              "start": 23,
+              "type": "BlockStatement",
+            },
+          ],
+          "end": 42,
+          "range": [
+            13,
+            42,
+          ],
+          "start": 13,
+          "test": {
+            "end": 21,
+            "range": [
+              18,
+              21,
+            ],
+            "start": 18,
+            "type": "Literal",
+            "value": 123,
+          },
+          "type": "SwitchCase",
+        },
+      ],
+      "discriminant": {
+        "end": 9,
+        "name": "a",
+        "range": [
+          8,
+          9,
+        ],
+        "start": 8,
+        "type": "Identifier",
+      },
+      "end": 44,
+      "range": [
+        0,
+        44,
+      ],
+      "start": 0,
+      "type": "SwitchStatement",
+    },
+  ],
+  "end": 44,
+  "range": [
+    0,
+    44,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > switch (x) { case x: {break;} } 1`] = `
+{
+  "body": [
+    {
+      "cases": [
+        {
+          "consequent": [
+            {
+              "body": [
+                {
+                  "label": null,
+                  "type": "BreakStatement",
+                },
+              ],
+              "type": "BlockStatement",
+            },
+          ],
+          "test": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "SwitchCase",
+        },
+      ],
+      "discriminant": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "type": "SwitchStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > switch (x) { case x: break; } 1`] = `
+{
+  "body": [
+    {
+      "cases": [
+        {
+          "consequent": [
+            {
+              "end": 27,
+              "label": null,
+              "range": [
+                21,
+                27,
+              ],
+              "start": 21,
+              "type": "BreakStatement",
+            },
+          ],
+          "end": 27,
+          "range": [
+            13,
+            27,
+          ],
+          "start": 13,
+          "test": {
+            "end": 19,
+            "name": "x",
+            "range": [
+              18,
+              19,
+            ],
+            "start": 18,
+            "type": "Identifier",
+          },
+          "type": "SwitchCase",
+        },
+      ],
+      "discriminant": {
+        "end": 9,
+        "name": "x",
+        "range": [
+          8,
+          9,
+        ],
+        "start": 8,
+        "type": "Identifier",
+      },
+      "end": 29,
+      "range": [
+        0,
+        29,
+      ],
+      "start": 0,
+      "type": "SwitchStatement",
+    },
+  ],
+  "end": 29,
+  "range": [
+    0,
+    29,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > switch (x) { case x: if (foo) break; } 1`] = `
+{
+  "body": [
+    {
+      "cases": [
+        {
+          "consequent": [
+            {
+              "alternate": null,
+              "consequent": {
+                "label": null,
+                "type": "BreakStatement",
+              },
+              "test": {
+                "name": "foo",
+                "type": "Identifier",
+              },
+              "type": "IfStatement",
+            },
+          ],
+          "test": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "SwitchCase",
+        },
+      ],
+      "discriminant": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "type": "SwitchStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > switch (x) { default: break; } 1`] = `
+{
+  "body": [
+    {
+      "cases": [
+        {
+          "consequent": [
+            {
+              "label": null,
+              "type": "BreakStatement",
+            },
+          ],
+          "test": null,
+          "type": "SwitchCase",
+        },
+      ],
+      "discriminant": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "type": "SwitchStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > this 1`] = `
+{
+  "body": [
+    {
+      "end": 4,
+      "expression": {
+        "end": 4,
+        "range": [
+          0,
+          4,
+        ],
+        "start": 0,
+        "type": "ThisExpression",
+      },
+      "range": [
+        0,
+        4,
+      ],
+      "start": 0,
+      "type": "ExpressionStatement",
+    },
+  ],
+  "end": 4,
+  "range": [
+    0,
+    4,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Statements - Break > Statements - Break (pass) > while (true)    { break }    1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "label": null,
+            "type": "BreakStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "test": {
+        "type": "Literal",
+        "value": true,
+      },
+      "type": "WhileStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;

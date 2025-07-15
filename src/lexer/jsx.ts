@@ -1,10 +1,11 @@
-import { CharFlags, CharTypes } from './charClassifier';
-import { Token } from '../token';
-import { ParserState, Context } from '../common';
-import { report, Errors } from '../errors';
-import { advanceChar, LexerState, scanSingleToken, scanNewLine, consumeLineFeed } from './';
-import { decodeHTMLStrict } from './decodeHTML';
 import { Chars } from '../chars';
+import { type Context } from '../common';
+import { Errors } from '../errors';
+import { type Parser } from '../parser/parser';
+import { Token } from '../token';
+import { advanceChar, consumeLineFeed, LexerState, scanNewLine, scanSingleToken } from './';
+import { CharFlags, CharTypes } from './charClassifier';
+import { decodeHTMLStrict } from './decodeHTML';
 
 /**
  * Scans JSX attribute value
@@ -12,15 +13,15 @@ import { Chars } from '../chars';
  * @param parser The parser instance
  * @param context Context masks
  */
-export function scanJSXAttributeValue(parser: ParserState, context: Context): Token {
+export function scanJSXAttributeValue(parser: Parser, context: Context): Token {
   // skip "=" before the value
   parser.startIndex = parser.tokenIndex = parser.index;
   parser.startColumn = parser.tokenColumn = parser.column;
   parser.startLine = parser.tokenLine = parser.line;
   parser.setToken(
     CharTypes[parser.currentChar] & CharFlags.StringLiteral
-      ? scanJSXString(parser, context)
-      : scanSingleToken(parser, context, LexerState.None)
+      ? scanJSXString(parser)
+      : scanSingleToken(parser, context, LexerState.None),
   );
   return parser.getToken();
 }
@@ -30,20 +31,20 @@ export function scanJSXAttributeValue(parser: ParserState, context: Context): To
  *
  * @param parser The parser object
  */
-export function scanJSXString(parser: ParserState, context: Context): Token {
+function scanJSXString(parser: Parser): Token {
   const quote = parser.currentChar;
   let char = advanceChar(parser);
   const start = parser.index;
   while (char !== quote) {
-    if (parser.index >= parser.end) report(parser, Errors.UnterminatedString);
+    if (parser.index >= parser.end) parser.report(Errors.UnterminatedString);
     char = advanceChar(parser);
   }
 
   // check for unterminated string
-  if (char !== quote) report(parser, Errors.UnterminatedString);
+  if (char !== quote) parser.report(Errors.UnterminatedString);
   parser.tokenValue = parser.source.slice(start, parser.index);
   advanceChar(parser); // skip the quote
-  if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
+  if (parser.options.raw) parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
   return Token.StringLiteral;
 }
 
@@ -52,7 +53,7 @@ export function scanJSXString(parser: ParserState, context: Context): Token {
  *
  * @param parser The parser object
  */
-export function nextJSXToken(parser: ParserState, context: Context) {
+export function nextJSXToken(parser: Parser) {
   parser.startIndex = parser.tokenIndex = parser.index;
   parser.startColumn = parser.tokenColumn = parser.column;
   parser.startLine = parser.tokenLine = parser.line;
@@ -93,10 +94,10 @@ export function nextJSXToken(parser: ParserState, context: Context) {
   }
 
   // No text, next char is "}" or ">"
-  if (parser.tokenIndex === parser.index) report(parser, Errors.Unexpected);
+  if (parser.tokenIndex === parser.index) parser.report(Errors.Unexpected);
 
   const raw = parser.source.slice(parser.tokenIndex, parser.index);
-  if (context & Context.OptionsRaw) parser.tokenRaw = raw;
+  if (parser.options.raw) parser.tokenRaw = raw;
   parser.tokenValue = decodeHTMLStrict(raw);
   parser.setToken(Token.JSXText);
 }
@@ -106,7 +107,7 @@ export function nextJSXToken(parser: ParserState, context: Context) {
  *
  * @param parser The parser instance
  */
-export function rescanJSXIdentifier(parser: ParserState): Token {
+export function rescanJSXIdentifier(parser: Parser): Token {
   if ((parser.getToken() & Token.IsIdentifier) === Token.IsIdentifier) {
     const { index } = parser;
     let char = parser.currentChar;

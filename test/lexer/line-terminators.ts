@@ -1,8 +1,9 @@
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { Context } from '../../src/common';
-import { Token } from '../../src/token';
-import { create } from '../../src/parser';
 import { scanSingleToken } from '../../src/lexer/scan';
+import { Parser } from '../../src/parser/parser';
+import { Token } from '../../src/token';
 
 describe('Lexer - Line terminators', () => {
   const tokens: [Context, Token, string, string][] = [
@@ -18,35 +19,35 @@ describe('Lexer - Line terminators', () => {
     [Context.None, Token.Identifier, '\rx', 'x'],
     [Context.None, Token.Identifier, '\u2028x', 'x'],
     [Context.None, Token.Identifier, '\u2029x', 'x'],
-    [Context.None, Token.Identifier, '\u000Ax', 'x']
+    [Context.None, Token.Identifier, '\u000Ax', 'x'],
   ];
 
   for (const [ctx, token, op, value] of tokens) {
     it(`scans '${op}' at the end`, () => {
-      const state = create(op, '', undefined);
-      const found = scanSingleToken(state, ctx, 0);
+      const parser = new Parser(op);
+      const found = scanSingleToken(parser, ctx, 0);
 
       t.deepEqual(
         {
           token: found,
-          hasNext: state.index < state.source.length,
-          value: state.tokenValue,
-          index: state.index
+          hasNext: parser.index < parser.source.length,
+          value: parser.tokenValue,
+          index: parser.index,
         },
         {
           token: token,
           hasNext: false,
           value,
-          index: op.length
-        }
+          index: op.length,
+        },
       );
     });
   }
 
   function fail(name: string, source: string, context: Context) {
     it(name, () => {
-      const state = create(source, '', undefined);
-      t.throws(() => scanSingleToken(state, context, 0));
+      const parser = new Parser(source);
+      t.throws(() => scanSingleToken(parser, context, 0));
     });
   }
 

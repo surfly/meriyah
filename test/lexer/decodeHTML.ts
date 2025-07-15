@@ -1,4 +1,5 @@
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { decodeHTMLStrict } from '../../src/lexer/decodeHTML';
 
 describe('decodeHTMLStrict', () => {
@@ -6,6 +7,12 @@ describe('decodeHTMLStrict', () => {
     t.strictEqual(decodeHTMLStrict('&amp;'), '&');
     t.strictEqual(decodeHTMLStrict('&ampa'), '&ampa');
     t.strictEqual(decodeHTMLStrict('&amp;a'), '&a');
+  });
+
+  it('decode non-named character', () => {
+    t.strictEqual(decodeHTMLStrict('&constructor;'), '&constructor;');
+    t.strictEqual(decodeHTMLStrict('&__proto__;'), '&__proto__;');
+    t.strictEqual(decodeHTMLStrict('&toString;'), '&toString;');
   });
 
   it('decode decimal numeric character', () => {

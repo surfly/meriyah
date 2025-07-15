@@ -1,6 +1,0 @@
-explicit-resource-management
-regexp-modifiers
-import-assertions
-regexp-duplicate-named-groups
-source-phase-imports
-source-phase-imports-module-source

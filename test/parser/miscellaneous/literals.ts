@@ -1,130 +1,61 @@
-import { Context } from '../../../src/common';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
 import { pass } from '../../test-utils';
 
 describe('Miscellaneous - Literal', () => {
   for (const arg of [
-    "('\\u{0000000000F8}')",
-    "('\\u{00F8}')",
-    "('\\7a')",
-    "('\\5a')",
-    "('\\2111')",
-    "('\\1')",
+    String.raw`('\u{0000000000F8}')`,
+    String.raw`('\u{00F8}')`,
+    String.raw`('\7a')`,
+    String.raw`('\5a')`,
+    String.raw`('\2111')`,
+    String.raw`('\1')`,
     "('\u202a')",
     "('\\\u2028')",
     "('\\\n')",
-    '("\\\\\\"")'
+    String.raw`("\\\"")`,
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
 
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsNext | Context.OptionsWebCompat);
+        parseSource(`${arg}`, { next: true, webcompat: true });
       });
     });
   }
 
   for (const arg of [
-    "'use strict'; ('\\1')",
-    "'use strict'; ('\\4')",
-    "'use strict'; ('\\11')",
-    "'use strict'; ('\\000')",
-    "'use strict'; ('\\00')",
-    "'use strict'; ('\\123')",
-    "('\\x')",
+    String.raw`'use strict'; ('\1')`,
+    String.raw`'use strict'; ('\4')`,
+    String.raw`'use strict'; ('\11')`,
+    String.raw`'use strict'; ('\000')`,
+    String.raw`'use strict'; ('\00')`,
+    String.raw`'use strict'; ('\123')`,
+    String.raw`('\x')`,
     '(")',
-    '\\0009',
-    '("\\u{FFFFFFF}")',
+    String.raw`\0009`,
+    String.raw`("\u{FFFFFFF}")`,
     "'",
     "(')",
-    "('\n')"
+    "('\n')",
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
 
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsNext | Context.OptionsWebCompat);
+        parseSource(`${arg}`, { next: true, webcompat: true });
       });
     });
   }
 
-  pass('Miscellaneous - Literal (pass)', [
-    [
-      "('\\\\\\'')",
-      Context.None,
-      {
-        body: [
-          {
-            expression: {
-              type: 'Literal',
-              value: "\\'"
-            },
-            type: 'ExpressionStatement'
-          }
-        ],
-        sourceType: 'script',
-        type: 'Program'
-      }
-    ],
-    [
-      '("x")',
-      Context.None,
-      {
-        body: [
-          {
-            expression: {
-              type: 'Literal',
-              value: 'x'
-            },
-            type: 'ExpressionStatement'
-          }
-        ],
-        sourceType: 'script',
-        type: 'Program'
-      }
-    ],
-    [
-      "('\\0')",
-      Context.None,
-      {
-        body: [
-          {
-            expression: {
-              type: 'Literal',
-              value: '\u0000'
-            },
-            type: 'ExpressionStatement'
-          }
-        ],
-        sourceType: 'script',
-        type: 'Program'
-      }
-    ],
-    [
-      "('\\7a')",
-      Context.None,
-      {
-        body: [
-          {
-            expression: {
-              type: 'Literal',
-              value: '\u0007a'
-            },
-            type: 'ExpressionStatement'
-          }
-        ],
-        sourceType: 'script',
-        type: 'Program'
-      }
-    ]
-  ]);
+  pass('Miscellaneous - Literal (pass)', [String.raw`('\\\'')`, '("x")', String.raw`('\0')`, String.raw`('\7a')`]);
 });

@@ -1,5 +1,5 @@
-import { _Node, SourceLocation } from './estree';
-import { ParserState, ScopeError } from './common';
+import { type Location } from './common';
+import { type _Node, type SourceLocation } from './estree';
 
 export const enum Errors {
   Unexpected,
@@ -24,7 +24,7 @@ export const enum Errors {
   InvalidDynamicUnicode,
   IllegalCharacter,
   MissingHexDigits,
-  InvalidImplicitOctals,
+  InvalidImplicitOctal,
   InvalidStringLT,
   InvalidEscapeIdentifier,
   ExpectedToken,
@@ -146,7 +146,7 @@ export const enum Errors {
   ImportNotOneArg,
   InvalidImportNew,
   InvalidSpreadInImport,
-  UncompleteArrow,
+  IncompleteArrow,
   DuplicateBinding,
   DuplicatePrivateIdentifier,
   DuplicateExportBinding,
@@ -179,10 +179,10 @@ export const enum Errors {
   InvalidImportMeta,
   InvalidEscapedImportMeta,
   InvalidAwaitAsIdentifier,
-  InvalidAwaitInStaticBlock
+  InvalidAwaitInStaticBlock,
 }
 
-export const errorMessages: {
+const errorMessages: {
   [key: string]: string;
 } = {
   [Errors.Unexpected]: 'Unexpected token',
@@ -209,7 +209,7 @@ export const errorMessages: {
   [Errors.InvalidDynamicUnicode]: 'The identifier contained dynamic unicode escape that was not closed',
   [Errors.IllegalCharacter]: "Illegal character '%0'",
   [Errors.MissingHexDigits]: 'Missing hexadecimal digits',
-  [Errors.InvalidImplicitOctals]: 'Invalid implicit octal',
+  [Errors.InvalidImplicitOctal]: 'Invalid implicit octal',
   [Errors.InvalidStringLT]: 'Invalid line break in string literal',
   [Errors.InvalidEscapeIdentifier]: 'Only unicode escapes are legal in identifier names',
   [Errors.ExpectedToken]: "Expected '%0'",
@@ -337,7 +337,7 @@ export const errorMessages: {
   [Errors.ImportNotOneArg]: 'import() requires exactly one argument',
   [Errors.InvalidImportNew]: 'Cannot use new with import(...)',
   [Errors.InvalidSpreadInImport]: '... is not allowed in import()',
-  [Errors.UncompleteArrow]: "Expected '=>'",
+  [Errors.IncompleteArrow]: "Expected '=>'",
   [Errors.DuplicateBinding]: "Duplicate binding '%0'",
   [Errors.DuplicatePrivateIdentifier]: 'Duplicate private identifier #%0',
   [Errors.DuplicateExportBinding]: "Cannot export a duplicate name '%0'",
@@ -364,13 +364,13 @@ export const errorMessages: {
   [Errors.OptionalChainingNoNew]: 'Invalid optional chain from new expression',
   [Errors.ImportMetaOutsideModule]: 'Cannot use "import.meta" outside a module',
   [Errors.InvalidLeadingDecorator]: 'Leading decorators must be attached to a class declaration',
-  [Errors.InvalidExportName]: 'An export name cannot include a lone surrogate, found %0',
+  [Errors.InvalidExportName]: 'An export name cannot include a lone surrogate',
   [Errors.InvalidExportReference]: 'A string literal cannot be used as an exported binding without `from`',
   [Errors.InvalidSuperPrivate]: "Private fields can't be accessed on super",
   [Errors.InvalidImportMeta]: "The only valid meta property for import is 'import.meta'",
   [Errors.InvalidEscapedImportMeta]: "'import.meta' must not contain escaped characters",
   [Errors.InvalidAwaitAsIdentifier]: 'cannot use "await" as identifier inside an async function',
-  [Errors.InvalidAwaitInStaticBlock]: 'cannot use "await" in static blocks'
+  [Errors.InvalidAwaitInStaticBlock]: 'cannot use "await" in static blocks',
 };
 
 export class ParseError extends SyntaxError implements _Node {
@@ -381,115 +381,17 @@ export class ParseError extends SyntaxError implements _Node {
 
   public description: string;
 
-  constructor(
-    start: number,
-    startLine: number,
-    startColumn: number,
-    end: number,
-    endLine: number,
-    endColumn: number,
-    type: Errors,
-    ...params: string[]
-  ) {
-    const message =
-      '[' +
-      startLine +
-      ':' +
-      startColumn +
-      '-' +
-      endLine +
-      ':' +
-      endColumn +
-      ']: ' +
-      errorMessages[type].replace(/%(\d+)/g, (_: string, i: number) => params[i]);
-    super(`${message}`);
-    this.start = start;
-    this.end = end;
-    this.range = [start, end];
+  constructor(start: Location, end: Location, type: Errors, ...params: string[]) {
+    const description = errorMessages[type].replace(/%(\d+)/g, (_: string, i: number) => params[i]);
+    const message = '[' + start.line + ':' + start.column + '-' + end.line + ':' + end.column + ']: ' + description;
+    super(message);
+    this.start = start.index;
+    this.end = end.index;
+    this.range = [start.index, end.index];
     this.loc = {
-      start: { line: startLine, column: startColumn },
-      end: { line: endLine, column: endColumn }
+      start: { line: start.line, column: start.column },
+      end: { line: end.line, column: end.column },
     };
-    this.description = message;
+    this.description = description;
   }
-}
-/**
- * Throws an error
- *
- * @export
- * @param {ParserState} state
- * @param {Errors} type
- * @param {...string[]} params
- * @returns {never}
- */
-export function report(parser: ParserState, type: Errors, ...params: string[]): never {
-  throw new ParseError(
-    parser.tokenIndex,
-    parser.tokenLine,
-    parser.tokenColumn,
-    parser.index,
-    parser.line,
-    parser.column,
-    type,
-    ...params
-  );
-}
-
-export function reportScopeError(scope: ScopeError): never {
-  throw new ParseError(
-    scope.tokenIndex,
-    scope.tokenLine,
-    scope.tokenColumn,
-    scope.index,
-    scope.line,
-    scope.column,
-    scope.type,
-    ...scope.params
-  );
-}
-
-/**
- * Throws an error at a given position
- *
- * @export
- * @param {ParserState} state
- * @param {number} index
- * @param {number} line
- * @param {number} column
- * @param {Errors} type
- * @param {...string[]} params
- */
-export function reportMessageAt(
-  tokenIndex: number,
-  tokenLine: number,
-  tokenColumn: number,
-  index: number,
-  line: number,
-  column: number,
-  type: Errors,
-  ...params: string[]
-): never {
-  throw new ParseError(tokenIndex, tokenLine, tokenColumn, index, line, column, type, ...params);
-}
-
-/**
- * Throws an error at a given position
- *
- * @export
- * @param {ParserState} state
- * @param {number} index
- * @param {number} line
- * @param {number} column
- * @param {Errors} type
- */
-export function reportScannerError(
-  tokenIndex: number,
-  tokenLine: number,
-  tokenColumn: number,
-  index: number,
-  line: number,
-  column: number,
-  type: Errors
-): never {
-  throw new ParseError(tokenIndex, tokenLine, tokenColumn, index, line, column, type);
 }

@@ -1,36 +1,41 @@
-import { Context } from '../../../src/common';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { outdent } from 'outdent';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
 
 describe('Miscellaneous - HTML Comments', () => {
   for (const arg of [
-    `<!-- test --->`,
-    `;-->`,
-    `---*/
--->`
+    '<!-- test --->',
+    ';-->',
+    outdent`
+      ---*/
+      -->
+    `,
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.Strict | Context.Module);
+        parseSource(`${arg}`, { sourceType: 'module' });
       });
     });
   }
 
   for (const arg of [
-    `/*
-    */ the comment should not include these characters, regardless of AnnexB extensions -->`,
-    ';-->'
+    outdent`
+      /*
+      */ the comment should not include these characters, regardless of AnnexB extensions -->
+    `,
+    ';-->',
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
   }
 
   for (const arg of [
     // Babylon issue: https://github.com/babel/babel/issues/7802
-    `<!-- test --->`,
+    '<!-- test --->',
     '<!-- HTML comment (not ECMA)',
     '--> HTML comment',
     'x = -1 <!--x;',
@@ -40,19 +45,21 @@ describe('Miscellaneous - HTML Comments', () => {
     //'/* optional SingleLineDelimitedCommentSequence */-->the comment extends to these characters',
     '-->',
     '-->[0];',
-    `Function("-->", "");`,
-    `/*
-    */-->`,
+    'Function("-->", "");',
+    outdent`
+      /*
+      */-->
+    `,
     '0/*\n*/--> a comment',
     //'/* block comment */--> comment',
     //' \t /* block comment */  --> comment',
     //' \t --> comment',
-    '<!-- foo'
+    '<!-- foo',
     //'--> comment'
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat);
+        parseSource(`${arg}`, { webcompat: true });
       });
     });
   }

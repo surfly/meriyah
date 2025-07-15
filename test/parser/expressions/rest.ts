@@ -1,7 +1,7 @@
-import { Context } from '../../../src/common';
-import { pass, fail } from '../../test-utils';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
+import { fail, pass } from '../../test-utils';
 describe('Expressions - Rest', () => {
   for (const arg of [
     'let { ...x = y } = z;',
@@ -42,23 +42,23 @@ describe('Expressions - Rest', () => {
     '({...obj1,a} = foo)',
     '({...obj1,} = foo)',
     'let {...[a,b]} = foo',
-    'let {...{a,b}} = foo'
+    'let {...{a,b}} = foo',
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
 
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsNext);
+        parseSource(`${arg}`, { next: true });
       });
     });
 
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat);
+        parseSource(`${arg}`, { webcompat: true });
       });
     });
   }
@@ -77,11 +77,11 @@ describe('Expressions - Rest', () => {
     '({a, b, ...{c, e}})',
     '({ x, ...{y , z} })',
     'function f({ x, y, ...z }) {}',
-    '({...(obj)} = foo)'
+    '({...(obj)} = foo)',
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
   }
@@ -89,7 +89,7 @@ describe('Expressions - Rest', () => {
   for (const arg of ['function f(a, ...b, c) {}']) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
   }
@@ -127,642 +127,55 @@ describe('Expressions - Rest', () => {
     'function multiElementWithRest(...[a, b, ...c]) {}',
     'function multiElementWithLeading(x, y, ...[a, b, c]) {}',
     'function af(...a) {}',
-    'function bf(a, ...b) {}'
+    'function bf(a, ...b) {}',
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
 
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat);
+        parseSource(`${arg}`, { webcompat: true });
       });
     });
 
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsNext);
+        parseSource(`${arg}`, { next: true });
       });
     });
   }
 
   fail('Expressions - Rest (fail)', [
-    ['function foo(...[a], ...b) {}', Context.None],
-    ['function foo(...a, ...[b]) {}', Context.None],
-    ['function foo(a, ...b, c) => {}', Context.None],
-    ['function foo(a, ...[b], c) => {}', Context.None],
-    ['var obj = class { method(a, b = 1, ...c = [2,3]) {} };', Context.None],
-    ['function f(a, ...b) { "use strict"; }', Context.None],
-    ['function f(a, ...[b]) { "use strict"; }', Context.None],
-    ['var x = { set setter(...[x]) {} }', Context.None],
-    ['var x = class { set setter(...x) {} }', Context.None],
-    ['var x = class { set setter(...[x]) {} }', Context.None],
-    ['(a = ...NaN, b = [...[1,2,3]], ...rest) => {};', Context.None],
-    ['(a = (...NaN), ...b = [...[1,2,3]], rest) => {};', Context.None],
-    ['(a = [...NaN], ...b = [...[1,2,3]], rest) => {};', Context.None],
-    ['(a, ...b, ...rest) => {};', Context.None],
-    ['(...rest = ...NaN) => {};', Context.None],
-    ['[...x,] = [1,2,3];', Context.None],
-    ['[...x, y] = [1,2,3];', Context.None],
-    ['function foo(...[a],) {}', Context.None]
+    'function foo(...[a], ...b) {}',
+    'function foo(...a, ...[b]) {}',
+    'function foo(a, ...b, c) => {}',
+    'function foo(a, ...[b], c) => {}',
+    'var obj = class { method(a, b = 1, ...c = [2,3]) {} };',
+    'function f(a, ...b) { "use strict"; }',
+    'function f(a, ...[b]) { "use strict"; }',
+    'var x = { set setter(...[x]) {} }',
+    'var x = class { set setter(...x) {} }',
+    'var x = class { set setter(...[x]) {} }',
+    '(a = ...NaN, b = [...[1,2,3]], ...rest) => {};',
+    '(a = (...NaN), ...b = [...[1,2,3]], rest) => {};',
+    '(a = [...NaN], ...b = [...[1,2,3]], rest) => {};',
+    '(a, ...b, ...rest) => {};',
+    '(...rest = ...NaN) => {};',
+    '[...x,] = [1,2,3];',
+    '[...x, y] = [1,2,3];',
+    'function foo(...[a],) {}',
   ]);
 
   pass('Expressions - Rest (pass)', [
-    [
-      'var obj = { method(a, b, c, ...[d]) { return [a, b, c, d]; } };',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'VariableDeclaration',
-            kind: 'var',
-            declarations: [
-              {
-                type: 'VariableDeclarator',
-                init: {
-                  type: 'ObjectExpression',
-                  properties: [
-                    {
-                      type: 'Property',
-                      key: {
-                        type: 'Identifier',
-                        name: 'method'
-                      },
-                      value: {
-                        type: 'FunctionExpression',
-                        params: [
-                          {
-                            type: 'Identifier',
-                            name: 'a'
-                          },
-                          {
-                            type: 'Identifier',
-                            name: 'b'
-                          },
-                          {
-                            type: 'Identifier',
-                            name: 'c'
-                          },
-                          {
-                            type: 'RestElement',
-                            argument: {
-                              type: 'ArrayPattern',
-                              elements: [
-                                {
-                                  type: 'Identifier',
-                                  name: 'd'
-                                }
-                              ]
-                            }
-                          }
-                        ],
-                        body: {
-                          type: 'BlockStatement',
-                          body: [
-                            {
-                              type: 'ReturnStatement',
-                              argument: {
-                                type: 'ArrayExpression',
-                                elements: [
-                                  {
-                                    type: 'Identifier',
-                                    name: 'a'
-                                  },
-                                  {
-                                    type: 'Identifier',
-                                    name: 'b'
-                                  },
-                                  {
-                                    type: 'Identifier',
-                                    name: 'c'
-                                  },
-                                  {
-                                    type: 'Identifier',
-                                    name: 'd'
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        },
-                        async: false,
-                        generator: false,
-                        id: null
-                      },
-                      kind: 'init',
-                      computed: false,
-                      method: true,
-                      shorthand: false
-                    }
-                  ]
-                },
-                id: {
-                  type: 'Identifier',
-                  name: 'obj'
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    [
-      "function objRest(...{'0': a, '1': b, length}) { return [a, b, length]; }",
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'FunctionDeclaration',
-            params: [
-              {
-                type: 'RestElement',
-                argument: {
-                  type: 'ObjectPattern',
-                  properties: [
-                    {
-                      type: 'Property',
-                      kind: 'init',
-                      key: {
-                        type: 'Literal',
-                        value: '0'
-                      },
-                      computed: false,
-                      value: {
-                        type: 'Identifier',
-                        name: 'a'
-                      },
-                      method: false,
-                      shorthand: false
-                    },
-                    {
-                      type: 'Property',
-                      kind: 'init',
-                      key: {
-                        type: 'Literal',
-                        value: '1'
-                      },
-                      computed: false,
-                      value: {
-                        type: 'Identifier',
-                        name: 'b'
-                      },
-                      method: false,
-                      shorthand: false
-                    },
-                    {
-                      type: 'Property',
-                      kind: 'init',
-                      key: {
-                        type: 'Identifier',
-                        name: 'length'
-                      },
-                      computed: false,
-                      value: {
-                        type: 'Identifier',
-                        name: 'length'
-                      },
-                      method: false,
-                      shorthand: true
-                    }
-                  ]
-                }
-              }
-            ],
-            body: {
-              type: 'BlockStatement',
-              body: [
-                {
-                  type: 'ReturnStatement',
-                  argument: {
-                    type: 'ArrayExpression',
-                    elements: [
-                      {
-                        type: 'Identifier',
-                        name: 'a'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'b'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'length'
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            async: false,
-
-            generator: false,
-            id: {
-              type: 'Identifier',
-              name: 'objRest'
-            }
-          }
-        ]
-      }
-    ],
-    [
-      'function singleRest(...[d]) { return d; }',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'FunctionDeclaration',
-            params: [
-              {
-                type: 'RestElement',
-                argument: {
-                  type: 'ArrayPattern',
-                  elements: [
-                    {
-                      type: 'Identifier',
-                      name: 'd'
-                    }
-                  ]
-                }
-              }
-            ],
-            body: {
-              type: 'BlockStatement',
-              body: [
-                {
-                  type: 'ReturnStatement',
-                  argument: {
-                    type: 'Identifier',
-                    name: 'd'
-                  }
-                }
-              ]
-            },
-            async: false,
-            generator: false,
-
-            id: {
-              type: 'Identifier',
-              name: 'singleRest'
-            }
-          }
-        ]
-      }
-    ],
-    [
-      'function foo(a, b, c, ...[d]) { arguments; return [a, b, c, d]; }',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'FunctionDeclaration',
-            params: [
-              {
-                type: 'Identifier',
-                name: 'a'
-              },
-              {
-                type: 'Identifier',
-                name: 'b'
-              },
-              {
-                type: 'Identifier',
-                name: 'c'
-              },
-              {
-                type: 'RestElement',
-                argument: {
-                  type: 'ArrayPattern',
-                  elements: [
-                    {
-                      type: 'Identifier',
-                      name: 'd'
-                    }
-                  ]
-                }
-              }
-            ],
-            body: {
-              type: 'BlockStatement',
-              body: [
-                {
-                  type: 'ExpressionStatement',
-                  expression: {
-                    type: 'Identifier',
-                    name: 'arguments'
-                  }
-                },
-                {
-                  type: 'ReturnStatement',
-                  argument: {
-                    type: 'ArrayExpression',
-                    elements: [
-                      {
-                        type: 'Identifier',
-                        name: 'a'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'b'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'c'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'd'
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            async: false,
-            generator: false,
-
-            id: {
-              type: 'Identifier',
-              name: 'foo'
-            }
-          }
-        ]
-      }
-    ],
-    [
-      'class restClass { method(a, b, c, ...[d]) { arguments; return [a, b, c, d]; } };',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ClassDeclaration',
-            id: {
-              type: 'Identifier',
-              name: 'restClass'
-            },
-            superClass: null,
-            body: {
-              type: 'ClassBody',
-              body: [
-                {
-                  type: 'MethodDefinition',
-                  kind: 'method',
-                  static: false,
-                  computed: false,
-                  key: {
-                    type: 'Identifier',
-                    name: 'method'
-                  },
-                  value: {
-                    type: 'FunctionExpression',
-                    params: [
-                      {
-                        type: 'Identifier',
-                        name: 'a'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'b'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'c'
-                      },
-                      {
-                        type: 'RestElement',
-                        argument: {
-                          type: 'ArrayPattern',
-                          elements: [
-                            {
-                              type: 'Identifier',
-                              name: 'd'
-                            }
-                          ]
-                        }
-                      }
-                    ],
-                    body: {
-                      type: 'BlockStatement',
-                      body: [
-                        {
-                          type: 'ExpressionStatement',
-                          expression: {
-                            type: 'Identifier',
-                            name: 'arguments'
-                          }
-                        },
-                        {
-                          type: 'ReturnStatement',
-                          argument: {
-                            type: 'ArrayExpression',
-                            elements: [
-                              {
-                                type: 'Identifier',
-                                name: 'a'
-                              },
-                              {
-                                type: 'Identifier',
-                                name: 'b'
-                              },
-                              {
-                                type: 'Identifier',
-                                name: 'c'
-                              },
-                              {
-                                type: 'Identifier',
-                                name: 'd'
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    async: false,
-                    generator: false,
-                    id: null
-                  }
-                }
-              ]
-            }
-          },
-          {
-            type: 'EmptyStatement'
-          }
-        ]
-      }
-    ],
-    [
-      'function fooInline(a, b, c, ...rest) { arguments; this; return [a, b, c, ...rest]; }',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'FunctionDeclaration',
-            params: [
-              {
-                type: 'Identifier',
-                name: 'a'
-              },
-              {
-                type: 'Identifier',
-                name: 'b'
-              },
-              {
-                type: 'Identifier',
-                name: 'c'
-              },
-              {
-                type: 'RestElement',
-                argument: {
-                  type: 'Identifier',
-                  name: 'rest'
-                }
-              }
-            ],
-            body: {
-              type: 'BlockStatement',
-              body: [
-                {
-                  type: 'ExpressionStatement',
-                  expression: {
-                    type: 'Identifier',
-                    name: 'arguments'
-                  }
-                },
-                {
-                  type: 'ExpressionStatement',
-                  expression: {
-                    type: 'ThisExpression'
-                  }
-                },
-                {
-                  type: 'ReturnStatement',
-                  argument: {
-                    type: 'ArrayExpression',
-                    elements: [
-                      {
-                        type: 'Identifier',
-                        name: 'a'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'b'
-                      },
-                      {
-                        type: 'Identifier',
-                        name: 'c'
-                      },
-                      {
-                        type: 'SpreadElement',
-                        argument: {
-                          type: 'Identifier',
-                          name: 'rest'
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            async: false,
-            generator: false,
-
-            id: {
-              type: 'Identifier',
-              name: 'fooInline'
-            }
-          }
-        ]
-      }
-    ],
-    [
-      'var func5 = function (...[argArr13]) { function foo() { eval(); } };',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'VariableDeclaration',
-            kind: 'var',
-            declarations: [
-              {
-                type: 'VariableDeclarator',
-                init: {
-                  type: 'FunctionExpression',
-                  params: [
-                    {
-                      type: 'RestElement',
-                      argument: {
-                        type: 'ArrayPattern',
-                        elements: [
-                          {
-                            type: 'Identifier',
-                            name: 'argArr13'
-                          }
-                        ]
-                      }
-                    }
-                  ],
-                  body: {
-                    type: 'BlockStatement',
-                    body: [
-                      {
-                        type: 'FunctionDeclaration',
-                        params: [],
-                        body: {
-                          type: 'BlockStatement',
-                          body: [
-                            {
-                              type: 'ExpressionStatement',
-                              expression: {
-                                type: 'CallExpression',
-                                callee: {
-                                  type: 'Identifier',
-                                  name: 'eval'
-                                },
-                                arguments: []
-                              }
-                            }
-                          ]
-                        },
-                        async: false,
-                        generator: false,
-
-                        id: {
-                          type: 'Identifier',
-                          name: 'foo'
-                        }
-                      }
-                    ]
-                  },
-                  async: false,
-                  generator: false,
-
-                  id: null
-                },
-                id: {
-                  type: 'Identifier',
-                  name: 'func5'
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    'var obj = { method(a, b, c, ...[d]) { return [a, b, c, d]; } };',
+    "function objRest(...{'0': a, '1': b, length}) { return [a, b, length]; }",
+    'function singleRest(...[d]) { return d; }',
+    'function foo(a, b, c, ...[d]) { arguments; return [a, b, c, d]; }',
+    'class restClass { method(a, b, c, ...[d]) { arguments; return [a, b, c, d]; } };',
+    'function fooInline(a, b, c, ...rest) { arguments; this; return [a, b, c, ...rest]; }',
+    'var func5 = function (...[argArr13]) { function foo() { eval(); } };',
   ]);
 });

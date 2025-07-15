@@ -1,52 +1,53 @@
-import * as t from 'assert';
-import { SourceLocation } from '../../../src/estree';
-import { parseScript } from '../../../src/meriyah';
-import { Token } from '../../../src/token';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
+import { type SourceLocation } from '../../../src/estree';
+import { parseSource } from '../../../src/parser';
+import { type Token } from '../../../src/token';
 
 describe('Miscellaneous - onToken', () => {
   it('tokenize braces using array', () => {
     const tokens: Token[] = [];
-    parseScript('{}', {
-      onToken: tokens
+    parseSource('{}', {
+      onToken: tokens,
     });
     t.deepEqual(tokens, [
       {
-        token: 'Punctuator'
+        token: 'Punctuator',
       },
       {
-        token: 'Punctuator'
-      }
+        token: 'Punctuator',
+      },
     ]);
   });
 
   it('tokenize braces using array with ranges', () => {
     const tokens: Token[] = [];
-    parseScript('{}', {
+    parseSource('{}', {
       onToken: tokens,
-      ranges: true
+      ranges: true,
     });
     t.deepEqual(tokens, [
       {
         end: 1,
         start: 0,
         range: [0, 1],
-        token: 'Punctuator'
+        token: 'Punctuator',
       },
       {
         end: 2,
         start: 1,
         range: [1, 2],
-        token: 'Punctuator'
-      }
+        token: 'Punctuator',
+      },
     ]);
   });
 
   it('tokenize braces using array with ranges and loc', () => {
     const tokens: Token[] = [];
-    parseScript('{}', {
+    parseSource('{}', {
       onToken: tokens,
       ranges: true,
-      loc: true
+      loc: true,
     });
     t.deepEqual(tokens, [
       {
@@ -55,9 +56,9 @@ describe('Miscellaneous - onToken', () => {
         range: [0, 1],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 1, column: 1 }
+          end: { line: 1, column: 1 },
         },
-        token: 'Punctuator'
+        token: 'Punctuator',
       },
       {
         end: 2,
@@ -65,27 +66,27 @@ describe('Miscellaneous - onToken', () => {
         range: [1, 2],
         loc: {
           start: { line: 1, column: 1 },
-          end: { line: 1, column: 2 }
+          end: { line: 1, column: 2 },
         },
-        token: 'Punctuator'
-      }
+        token: 'Punctuator',
+      },
     ]);
   });
 
   it('tokenize boolean using function', () => {
     let onTokenCount = 0;
-    parseScript('// c\nfalse', {
+    parseSource('// c\nfalse', {
       onToken: function (token: string, start: number, end: number, loc: SourceLocation) {
         t.deepEqual(token, 'BooleanLiteral');
         t.deepEqual(start, 5);
         t.deepEqual(end, 10);
         t.deepEqual(loc, {
           start: { line: 2, column: 0 },
-          end: { line: 2, column: 5 }
+          end: { line: 2, column: 5 },
         });
         onTokenCount++;
       },
-      loc: true
+      loc: true,
     });
     t.equal(onTokenCount, 1);
   });
@@ -93,15 +94,15 @@ describe('Miscellaneous - onToken', () => {
   it('tokenize template literal', () => {
     const tokens: any[] = [];
     const source = 'var a = `${a}b${c}d`;';
-    parseScript(source, {
+    parseSource(source, {
       onToken(token: string, start: number, end: number) {
         tokens.push({
           token,
           start,
           end,
-          value: source.slice(start, end)
+          value: source.slice(start, end),
         });
-      }
+      },
     });
     t.deepEqual(tokens, [
       { token: 'Keyword', value: 'var', start: 0, end: 3 },
@@ -112,23 +113,23 @@ describe('Miscellaneous - onToken', () => {
       { token: 'TemplateLiteral', value: '}b${', start: 12, end: 16 },
       { token: 'Identifier', value: 'c', start: 16, end: 17 },
       { token: 'TemplateLiteral', value: '}d`', start: 17, end: 20 },
-      { token: 'Punctuator', value: ';', start: 20, end: 21 }
+      { token: 'Punctuator', value: ';', start: 20, end: 21 },
     ]);
   });
 
   it('tokenize jsx', () => {
     const tokens: any[] = [];
     const source = 'var a = <div>\ndemo {w}\n<a-b>hello</a-b><c /></div>;';
-    parseScript(source, {
+    parseSource(source, {
       jsx: true,
       onToken(token: string, start: number, end: number) {
         tokens.push({
           token,
           start,
           end,
-          value: source.slice(start, end)
+          value: source.slice(start, end),
         });
-      }
+      },
     });
     t.deepEqual(tokens, [
       { token: 'Keyword', start: 0, end: 3, value: 'var' },
@@ -158,23 +159,23 @@ describe('Miscellaneous - onToken', () => {
       { token: 'Punctuator', start: 45, end: 46, value: '/' },
       { token: 'Identifier', start: 46, end: 49, value: 'div' },
       { token: 'Punctuator', start: 49, end: 50, value: '>' },
-      { token: 'Punctuator', start: 50, end: 51, value: ';' }
+      { token: 'Punctuator', start: 50, end: 51, value: ';' },
     ]);
   });
 
   it('tokenize jsx fragment', () => {
     const tokens: any[] = [];
     const source = 'var a = <>\ndemo {w}\n<a-b>hello</a-b><c /></>;';
-    parseScript(source, {
+    parseSource(source, {
       jsx: true,
       onToken(token: string, start: number, end: number) {
         tokens.push({
           token,
           start,
           end,
-          value: source.slice(start, end)
+          value: source.slice(start, end),
         });
-      }
+      },
     });
     t.deepEqual(tokens, [
       { token: 'Keyword', start: 0, end: 3, value: 'var' },
@@ -202,23 +203,23 @@ describe('Miscellaneous - onToken', () => {
       { token: 'Punctuator', start: 41, end: 42, value: '<' },
       { token: 'Punctuator', start: 42, end: 43, value: '/' },
       { token: 'Punctuator', start: 43, end: 44, value: '>' },
-      { token: 'Punctuator', start: 44, end: 45, value: ';' }
+      { token: 'Punctuator', start: 44, end: 45, value: ';' },
     ]);
   });
 
   it('tokenize jsx with gaps', () => {
     const tokens: any[] = [];
     const source = '<\na>< /a\n>';
-    parseScript(source, {
+    parseSource(source, {
       jsx: true,
       onToken(token: string, start: number, end: number) {
         tokens.push({
           token,
           start,
           end,
-          value: source.slice(start, end)
+          value: source.slice(start, end),
         });
-      }
+      },
     });
     t.deepEqual(tokens, [
       { token: 'Punctuator', start: 0, end: 1, value: '<' },
@@ -227,23 +228,23 @@ describe('Miscellaneous - onToken', () => {
       { token: 'Punctuator', start: 4, end: 5, value: '<' },
       { token: 'Punctuator', start: 6, end: 7, value: '/' },
       { token: 'Identifier', start: 7, end: 8, value: 'a' },
-      { token: 'Punctuator', start: 9, end: 10, value: '>' }
+      { token: 'Punctuator', start: 9, end: 10, value: '>' },
     ]);
   });
 
   it('tokenize jsx with comments', () => {
     const tokens: any[] = [];
     const source = '<// lorem\na>< /* mm */ / /* xx */ a\n>';
-    parseScript(source, {
+    parseSource(source, {
       jsx: true,
       onToken(token: string, start: number, end: number) {
         tokens.push({
           token,
           start,
           end,
-          value: source.slice(start, end)
+          value: source.slice(start, end),
         });
-      }
+      },
     });
     t.deepEqual(tokens, [
       { token: 'Punctuator', start: 0, end: 1, value: '<' },
@@ -252,7 +253,7 @@ describe('Miscellaneous - onToken', () => {
       { token: 'Punctuator', start: 12, end: 13, value: '<' },
       { token: 'Punctuator', start: 23, end: 24, value: '/' },
       { token: 'Identifier', start: 34, end: 35, value: 'a' },
-      { token: 'Punctuator', start: 36, end: 37, value: '>' }
+      { token: 'Punctuator', start: 36, end: 37, value: '>' },
     ]);
   });
 });

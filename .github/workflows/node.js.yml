@@ -17,31 +17,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm i
-      - run: npm run lint
-
   test:
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
-        # Skip nodejs v22 for now, as it implemented new features of RegExp that affects
-        # the test262 tests whitelist.
-        node-version: [20, 18]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+        node:
+          - '24'
+          - '22'
+          - '20'
+    name: Node.js ${{ matrix.node }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm i
-      - run: npm test
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
+          cache-dependency-path: ./package.json
+      - uses: actions/cache@v4
+        with:
+          path: test262/test262
+          key: ${{ hashFiles('test262/test262-commit-hash') }}
+      - run: yarn
+      - run: npm run build
+      - run: npm run test
+      - run: npm run lint
+
+  preview:
+    if: github.repository == 'meriyah/meriyah'
+    name: Preview release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'yarn'
+          cache-dependency-path: ./package.json
+      - run: yarn
+      - run: npm run build
+      - run: npx pkg-pr-new publish --compact

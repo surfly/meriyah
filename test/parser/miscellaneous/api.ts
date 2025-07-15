@@ -1,19 +1,19 @@
-import * as t from 'assert';
-import { parseModule, parseScript, parse } from '../../../src/meriyah';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
+import { parse, parseModule, parseScript } from '../../../src/meriyah';
 
 describe('Expressions - API', () => {
   it('should parse script code with "parse"', () => {
     t.deepEqual(
       parse('foo', {
         loc: true,
-        globalReturn: true,
         ranges: true,
         webcompat: true,
-        module: true,
+        sourceType: 'module',
         preserveParens: true,
         jsx: true,
         lexical: true,
-        source: 'bullshit'
+        source: 'bullshit',
       }),
       {
         body: [
@@ -25,51 +25,51 @@ describe('Expressions - API', () => {
               loc: {
                 end: {
                   column: 3,
-                  line: 1
+                  line: 1,
                 },
                 source: 'bullshit',
                 start: {
                   column: 0,
-                  line: 1
-                }
+                  line: 1,
+                },
               },
               name: 'foo',
               start: 0,
               end: 3,
               range: [0, 3],
-              type: 'Identifier'
+              type: 'Identifier',
             },
             loc: {
               end: {
                 column: 3,
-                line: 1
+                line: 1,
               },
               source: 'bullshit',
               start: {
                 column: 0,
-                line: 1
-              }
+                line: 1,
+              },
             },
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         loc: {
           end: {
             column: 3,
-            line: 1
+            line: 1,
           },
           source: 'bullshit',
           start: {
             column: 0,
-            line: 1
-          }
+            line: 1,
+          },
         },
         sourceType: 'module',
         start: 0,
         end: 3,
         range: [0, 3],
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
   });
 
@@ -79,13 +79,13 @@ describe('Expressions - API', () => {
         {
           expression: {
             name: 'foo',
-            type: 'Identifier'
+            type: 'Identifier',
           },
-          type: 'ExpressionStatement'
-        }
+          type: 'ExpressionStatement',
+        },
       ],
       sourceType: 'script',
-      type: 'Program'
+      type: 'Program',
     });
   });
   it('should parse module code with directive node', () => {
@@ -94,13 +94,13 @@ describe('Expressions - API', () => {
         {
           expression: {
             type: 'Literal',
-            value: 1
+            value: 1,
           },
-          type: 'ExpressionStatement'
-        }
+          type: 'ExpressionStatement',
+        },
       ],
       sourceType: 'module',
-      type: 'Program'
+      type: 'Program',
     });
   });
 
@@ -115,18 +115,18 @@ describe('Expressions - API', () => {
           expression: {
             type: 'Literal',
             value: 'use strict',
-            raw: '"use strict"'
-          }
+            raw: '"use strict"',
+          },
         },
         {
           type: 'ExpressionStatement',
           expression: {
             type: 'Literal',
             value: 1,
-            raw: '1'
-          }
-        }
-      ]
+            raw: '1',
+          },
+        },
+      ],
     });
   });
 
@@ -136,13 +136,13 @@ describe('Expressions - API', () => {
         {
           expression: {
             name: 'foo',
-            type: 'Identifier'
+            type: 'Identifier',
           },
-          type: 'ExpressionStatement'
-        }
+          type: 'ExpressionStatement',
+        },
       ],
       sourceType: 'module',
-      type: 'Program'
+      type: 'Program',
     });
   });
 
@@ -150,84 +150,65 @@ describe('Expressions - API', () => {
     t.deepEqual(
       parseScript('foo', {
         impliedStrict: true,
-        next: true
+        next: true,
       }),
       {
         body: [
           {
             expression: {
               name: 'foo',
-              type: 'Identifier'
+              type: 'Identifier',
             },
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'script',
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
   });
 
   it('should parse with raw option', () => {
     t.deepEqual(
       parseModule('foo', {
-        raw: true
-      }) as any,
+        raw: true,
+      }),
       {
         body: [
           {
             expression: {
               name: 'foo',
-              type: 'Identifier'
+              type: 'Identifier',
             },
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'module',
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
   });
 
   it('should parse with raw option - string', () => {
     t.deepEqual(
       parseModule('"a"', {
-        raw: true
-      }) as any,
+        raw: true,
+      }),
       {
         body: [
           {
             expression: {
               type: 'Literal',
               raw: '"a"',
-              value: 'a'
+              value: 'a',
             },
             directive: 'a',
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'module',
-        type: 'Program'
-      }
-    );
-  });
-
-  it('should parse with globalReturn option', () => {
-    t.deepEqual(
-      parseModule('return', {
-        globalReturn: true,
-        next: true
-      }) as any,
-      {
-        body: [
-          {
-            argument: null,
-            type: 'ReturnStatement'
-          }
-        ],
-        sourceType: 'module',
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
   });
 
@@ -235,8 +216,8 @@ describe('Expressions - API', () => {
     t.deepEqual(
       parseModule('"abc"', {
         raw: true,
-        next: true
-      }) as any,
+        next: true,
+      }),
       {
         body: [
           {
@@ -244,14 +225,14 @@ describe('Expressions - API', () => {
             expression: {
               type: 'Literal',
               raw: '"abc"',
-              value: 'abc'
+              value: 'abc',
             },
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'module',
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
   });
 
@@ -260,8 +241,8 @@ describe('Expressions - API', () => {
       parseModule('a ?? (x || dd && aa) / y - foo', {
         next: true,
         ranges: true,
-        loc: true
-      }) as any,
+        loc: true,
+      }),
       {
         type: 'Program',
         sourceType: 'module',
@@ -279,13 +260,13 @@ describe('Expressions - API', () => {
                 loc: {
                   start: {
                     line: 1,
-                    column: 0
+                    column: 0,
                   },
                   end: {
                     line: 1,
-                    column: 1
-                  }
-                }
+                    column: 1,
+                  },
+                },
               },
               right: {
                 type: 'BinaryExpression',
@@ -302,13 +283,13 @@ describe('Expressions - API', () => {
                       loc: {
                         start: {
                           line: 1,
-                          column: 6
+                          column: 6,
                         },
                         end: {
                           line: 1,
-                          column: 7
-                        }
-                      }
+                          column: 7,
+                        },
+                      },
                     },
                     right: {
                       type: 'LogicalExpression',
@@ -321,13 +302,13 @@ describe('Expressions - API', () => {
                         loc: {
                           start: {
                             line: 1,
-                            column: 11
+                            column: 11,
                           },
                           end: {
                             line: 1,
-                            column: 13
-                          }
-                        }
+                            column: 13,
+                          },
+                        },
                       },
                       right: {
                         type: 'Identifier',
@@ -338,13 +319,13 @@ describe('Expressions - API', () => {
                         loc: {
                           start: {
                             line: 1,
-                            column: 17
+                            column: 17,
                           },
                           end: {
                             line: 1,
-                            column: 19
-                          }
-                        }
+                            column: 19,
+                          },
+                        },
                       },
                       operator: '&&',
                       start: 11,
@@ -353,13 +334,13 @@ describe('Expressions - API', () => {
                       loc: {
                         start: {
                           line: 1,
-                          column: 11
+                          column: 11,
                         },
                         end: {
                           line: 1,
-                          column: 19
-                        }
-                      }
+                          column: 19,
+                        },
+                      },
                     },
                     operator: '||',
                     start: 6,
@@ -368,13 +349,13 @@ describe('Expressions - API', () => {
                     loc: {
                       start: {
                         line: 1,
-                        column: 6
+                        column: 6,
                       },
                       end: {
                         line: 1,
-                        column: 19
-                      }
-                    }
+                        column: 19,
+                      },
+                    },
                   },
                   right: {
                     type: 'Identifier',
@@ -385,13 +366,13 @@ describe('Expressions - API', () => {
                     loc: {
                       start: {
                         line: 1,
-                        column: 23
+                        column: 23,
                       },
                       end: {
                         line: 1,
-                        column: 24
-                      }
-                    }
+                        column: 24,
+                      },
+                    },
                   },
                   operator: '/',
                   start: 5,
@@ -400,13 +381,13 @@ describe('Expressions - API', () => {
                   loc: {
                     start: {
                       line: 1,
-                      column: 5
+                      column: 5,
                     },
                     end: {
                       line: 1,
-                      column: 24
-                    }
-                  }
+                      column: 24,
+                    },
+                  },
                 },
                 right: {
                   type: 'Identifier',
@@ -417,13 +398,13 @@ describe('Expressions - API', () => {
                   loc: {
                     start: {
                       line: 1,
-                      column: 27
+                      column: 27,
                     },
                     end: {
                       line: 1,
-                      column: 30
-                    }
-                  }
+                      column: 30,
+                    },
+                  },
                 },
                 operator: '-',
                 start: 5,
@@ -432,13 +413,13 @@ describe('Expressions - API', () => {
                 loc: {
                   start: {
                     line: 1,
-                    column: 5
+                    column: 5,
                   },
                   end: {
                     line: 1,
-                    column: 30
-                  }
-                }
+                    column: 30,
+                  },
+                },
               },
               operator: '??',
               start: 0,
@@ -447,13 +428,13 @@ describe('Expressions - API', () => {
               loc: {
                 start: {
                   line: 1,
-                  column: 0
+                  column: 0,
                 },
                 end: {
                   line: 1,
-                  column: 30
-                }
-              }
+                  column: 30,
+                },
+              },
             },
             start: 0,
             end: 30,
@@ -461,14 +442,14 @@ describe('Expressions - API', () => {
             loc: {
               start: {
                 line: 1,
-                column: 0
+                column: 0,
               },
               end: {
                 line: 1,
-                column: 30
-              }
-            }
-          }
+                column: 30,
+              },
+            },
+          },
         ],
         start: 0,
         end: 30,
@@ -476,14 +457,14 @@ describe('Expressions - API', () => {
         loc: {
           start: {
             line: 1,
-            column: 0
+            column: 0,
           },
           end: {
             line: 1,
-            column: 30
-          }
-        }
-      }
+            column: 30,
+          },
+        },
+      },
     );
   });
 
@@ -491,8 +472,8 @@ describe('Expressions - API', () => {
     t.deepEqual(
       parseModule('x || y || z && a ** x ? b ? c : d : e', {
         jsx: true,
-        next: true
-      }) as any,
+        next: true,
+      }),
       {
         type: 'Program',
         sourceType: 'module',
@@ -507,59 +488,59 @@ describe('Expressions - API', () => {
                   type: 'LogicalExpression',
                   left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
                   },
                   right: {
                     type: 'Identifier',
-                    name: 'y'
+                    name: 'y',
                   },
-                  operator: '||'
+                  operator: '||',
                 },
                 right: {
                   type: 'LogicalExpression',
                   left: {
                     type: 'Identifier',
-                    name: 'z'
+                    name: 'z',
                   },
                   right: {
                     type: 'BinaryExpression',
                     left: {
                       type: 'Identifier',
-                      name: 'a'
+                      name: 'a',
                     },
                     right: {
                       type: 'Identifier',
-                      name: 'x'
+                      name: 'x',
                     },
-                    operator: '**'
+                    operator: '**',
                   },
-                  operator: '&&'
+                  operator: '&&',
                 },
-                operator: '||'
+                operator: '||',
               },
               consequent: {
                 type: 'ConditionalExpression',
                 test: {
                   type: 'Identifier',
-                  name: 'b'
+                  name: 'b',
                 },
                 consequent: {
                   type: 'Identifier',
-                  name: 'c'
+                  name: 'c',
                 },
                 alternate: {
                   type: 'Identifier',
-                  name: 'd'
-                }
+                  name: 'd',
+                },
               },
               alternate: {
                 type: 'Identifier',
-                name: 'e'
-              }
-            }
-          }
-        ]
-      }
+                name: 'e',
+              },
+            },
+          },
+        ],
+      },
     );
   });
 
@@ -567,8 +548,8 @@ describe('Expressions - API', () => {
     t.deepEqual(
       parseModule('<ul></ul>', {
         jsx: true,
-        next: true
-      }) as any,
+        next: true,
+      }),
       {
         body: [
           {
@@ -577,27 +558,27 @@ describe('Expressions - API', () => {
               closingElement: {
                 name: {
                   name: 'ul',
-                  type: 'JSXIdentifier'
+                  type: 'JSXIdentifier',
                 },
-                type: 'JSXClosingElement'
+                type: 'JSXClosingElement',
               },
               openingElement: {
                 attributes: [],
                 name: {
                   name: 'ul',
-                  type: 'JSXIdentifier'
+                  type: 'JSXIdentifier',
                 },
                 selfClosing: false,
-                type: 'JSXOpeningElement'
+                type: 'JSXOpeningElement',
               },
-              type: 'JSXElement'
+              type: 'JSXElement',
             },
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'module',
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
   });
 });

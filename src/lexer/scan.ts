@@ -1,23 +1,24 @@
 import { Chars } from '../chars';
+import { Context, Flags } from '../common';
+import { Errors } from '../errors';
+import { type Parser } from '../parser/parser';
 import { Token } from '../token';
-import { ParserState, Context, Flags } from '../common';
-import { report, Errors } from '../errors';
 import { isIDStart } from '../unicode';
+import { CommentTypeEnum, skipMultiLineComment, skipSingleHTMLComment, skipSingleLineComment } from './comments';
 import {
   advanceChar,
-  LexerState,
-  isExoticECMAScriptWhitespace,
-  NumberKind,
   consumeLineFeed,
+  consumePossibleSurrogatePair,
+  isExoticECMAScriptWhitespace,
+  LexerState,
+  NumberKind,
   scanNewLine,
-  consumePossibleSurrogatePair
 } from './common';
-import { skipSingleLineComment, skipMultiLineComment, skipSingleHTMLComment, CommentTypeEnum } from './comments';
-import { scanRegularExpression } from './regexp';
-import { scanTemplate } from './template';
+import { scanIdentifier, scanIdentifierSlowCase, scanPrivateIdentifier, scanUnicodeIdentifier } from './identifier';
 import { scanNumber } from './numeric';
+import { scanRegularExpression } from './regexp';
 import { scanString } from './string';
-import { scanIdentifier, scanUnicodeIdentifier, scanIdentifierSlowCase, scanPrivateIdentifier } from './identifier';
+import { scanTemplate } from './template';
 
 /*
  * OneChar:          40,  41,  44,  58,  59,  63,  91,  93,  123, 125, 126:
@@ -33,135 +34,135 @@ import { scanIdentifier, scanUnicodeIdentifier, scanIdentifierSlowCase, scanPriv
  * Template:         96: '`'
  */
 
-export const TokenLookup = [
-  /*   0 - Null               */ Token.Illegal,
-  /*   1 - Start of Heading   */ Token.Illegal,
-  /*   2 - Start of Text      */ Token.Illegal,
-  /*   3 - End of Text        */ Token.Illegal,
-  /*   4 - End of Transm.     */ Token.Illegal,
-  /*   5 - Enquiry            */ Token.Illegal,
-  /*   6 - Acknowledgment     */ Token.Illegal,
-  /*   7 - Bell               */ Token.Illegal,
-  /*   8 - Backspace          */ Token.Illegal,
-  /*   9 - Horizontal Tab     */ Token.WhiteSpace,
-  /*  10 - Line Feed          */ Token.LineFeed,
-  /*  11 - Vertical Tab       */ Token.WhiteSpace,
-  /*  12 - Form Feed          */ Token.WhiteSpace,
-  /*  13 - Carriage Return    */ Token.CarriageReturn,
-  /*  14 - Shift Out          */ Token.Illegal,
-  /*  15 - Shift In           */ Token.Illegal,
-  /*  16 - Data Line Escape   */ Token.Illegal,
-  /*  17 - Device Control 1   */ Token.Illegal,
-  /*  18 - Device Control 2   */ Token.Illegal,
-  /*  19 - Device Control 3   */ Token.Illegal,
-  /*  20 - Device Control 4   */ Token.Illegal,
-  /*  21 - Negative Ack.      */ Token.Illegal,
-  /*  22 - Synchronous Idle   */ Token.Illegal,
-  /*  23 - End of Transmit    */ Token.Illegal,
-  /*  24 - Cancel             */ Token.Illegal,
-  /*  25 - End of Medium      */ Token.Illegal,
-  /*  26 - Substitute         */ Token.Illegal,
-  /*  27 - Escape             */ Token.Illegal,
-  /*  28 - File Separator     */ Token.Illegal,
-  /*  29 - Group Separator    */ Token.Illegal,
-  /*  30 - Record Separator   */ Token.Illegal,
-  /*  31 - Unit Separator     */ Token.Illegal,
-  /*  32 - Space              */ Token.WhiteSpace,
-  /*  33 - !                  */ Token.Negate,
-  /*  34 - "                  */ Token.StringLiteral,
-  /*  35 - #                  */ Token.PrivateField,
-  /*  36 - $                  */ Token.Identifier,
-  /*  37 - %                  */ Token.Modulo,
-  /*  38 - &                  */ Token.BitwiseAnd,
-  /*  39 - '                  */ Token.StringLiteral,
-  /*  40 - (                  */ Token.LeftParen,
-  /*  41 - )                  */ Token.RightParen,
-  /*  42 - *                  */ Token.Multiply,
-  /*  43 - +                  */ Token.Add,
-  /*  44 - ,                  */ Token.Comma,
-  /*  45 - -                  */ Token.Subtract,
-  /*  46 - .                  */ Token.Period,
-  /*  47 - /                  */ Token.Divide,
-  /*  48 - 0                  */ Token.NumericLiteral,
-  /*  49 - 1                  */ Token.NumericLiteral,
-  /*  50 - 2                  */ Token.NumericLiteral,
-  /*  51 - 3                  */ Token.NumericLiteral,
-  /*  52 - 4                  */ Token.NumericLiteral,
-  /*  53 - 5                  */ Token.NumericLiteral,
-  /*  54 - 6                  */ Token.NumericLiteral,
-  /*  55 - 7                  */ Token.NumericLiteral,
-  /*  56 - 8                  */ Token.NumericLiteral,
-  /*  57 - 9                  */ Token.NumericLiteral,
-  /*  58 - :                  */ Token.Colon,
-  /*  59 - ;                  */ Token.Semicolon,
-  /*  60 - <                  */ Token.LessThan,
-  /*  61 - =                  */ Token.Assign,
-  /*  62 - >                  */ Token.GreaterThan,
-  /*  63 - ?                  */ Token.QuestionMark,
-  /*  64 - @                  */ Token.Decorator,
-  /*  65 - A                  */ Token.Identifier,
-  /*  66 - B                  */ Token.Identifier,
-  /*  67 - C                  */ Token.Identifier,
-  /*  68 - D                  */ Token.Identifier,
-  /*  69 - E                  */ Token.Identifier,
-  /*  70 - F                  */ Token.Identifier,
-  /*  71 - G                  */ Token.Identifier,
-  /*  72 - H                  */ Token.Identifier,
-  /*  73 - I                  */ Token.Identifier,
-  /*  74 - J                  */ Token.Identifier,
-  /*  75 - K                  */ Token.Identifier,
-  /*  76 - L                  */ Token.Identifier,
-  /*  77 - M                  */ Token.Identifier,
-  /*  78 - N                  */ Token.Identifier,
-  /*  79 - O                  */ Token.Identifier,
-  /*  80 - P                  */ Token.Identifier,
-  /*  81 - Q                  */ Token.Identifier,
-  /*  82 - R                  */ Token.Identifier,
-  /*  83 - S                  */ Token.Identifier,
-  /*  84 - T                  */ Token.Identifier,
-  /*  85 - U                  */ Token.Identifier,
-  /*  86 - V                  */ Token.Identifier,
-  /*  87 - W                  */ Token.Identifier,
-  /*  88 - X                  */ Token.Identifier,
-  /*  89 - Y                  */ Token.Identifier,
-  /*  90 - Z                  */ Token.Identifier,
-  /*  91 - [                  */ Token.LeftBracket,
-  /*  92 - \                  */ Token.EscapeStart,
-  /*  93 - ]                  */ Token.RightBracket,
-  /*  94 - ^                  */ Token.BitwiseXor,
-  /*  95 - _                  */ Token.Identifier,
-  /*  96 - `                  */ Token.Template,
-  /*  97 - a                  */ Token.Keyword,
-  /*  98 - b                  */ Token.Keyword,
-  /*  99 - c                  */ Token.Keyword,
-  /* 100 - d                  */ Token.Keyword,
-  /* 101 - e                  */ Token.Keyword,
-  /* 102 - f                  */ Token.Keyword,
-  /* 103 - g                  */ Token.Keyword,
-  /* 104 - h                  */ Token.Identifier,
-  /* 105 - i                  */ Token.Keyword,
-  /* 106 - j                  */ Token.Identifier,
-  /* 107 - k                  */ Token.Identifier,
-  /* 108 - l                  */ Token.Keyword,
-  /* 109 - m                  */ Token.Identifier,
-  /* 110 - n                  */ Token.Keyword,
-  /* 111 - o                  */ Token.Identifier,
-  /* 112 - p                  */ Token.Keyword,
-  /* 113 - q                  */ Token.Identifier,
-  /* 114 - r                  */ Token.Keyword,
-  /* 115 - s                  */ Token.Keyword,
-  /* 116 - t                  */ Token.Keyword,
-  /* 117 - u                  */ Token.Identifier,
-  /* 118 - v                  */ Token.Keyword,
-  /* 119 - w                  */ Token.Keyword,
-  /* 120 - x                  */ Token.Identifier,
-  /* 121 - y                  */ Token.Keyword,
-  /* 122 - z                  */ Token.Keyword,
-  /* 123 - {                  */ Token.LeftBrace,
-  /* 124 - |                  */ Token.BitwiseOr,
-  /* 125 - }                  */ Token.RightBrace,
-  /* 126 - ~                  */ Token.Complement,
-  /* 127 - Delete             */ Token.Illegal
+const TokenLookup = [
+  /*   0 - Null                */ Token.Illegal,
+  /*   1 - Start of Heading    */ Token.Illegal,
+  /*   2 - Start of Text       */ Token.Illegal,
+  /*   3 - End of Text         */ Token.Illegal,
+  /*   4 - End of Transmission */ Token.Illegal,
+  /*   5 - Enquiry             */ Token.Illegal,
+  /*   6 - Acknowledgment      */ Token.Illegal,
+  /*   7 - Bell                */ Token.Illegal,
+  /*   8 - Backspace           */ Token.Illegal,
+  /*   9 - Horizontal Tab      */ Token.WhiteSpace,
+  /*  10 - Line Feed           */ Token.LineFeed,
+  /*  11 - Vertical Tab        */ Token.WhiteSpace,
+  /*  12 - Form Feed           */ Token.WhiteSpace,
+  /*  13 - Carriage Return     */ Token.CarriageReturn,
+  /*  14 - Shift Out           */ Token.Illegal,
+  /*  15 - Shift In            */ Token.Illegal,
+  /*  16 - Data Line Escape    */ Token.Illegal,
+  /*  17 - Device Control 1    */ Token.Illegal,
+  /*  18 - Device Control 2    */ Token.Illegal,
+  /*  19 - Device Control 3    */ Token.Illegal,
+  /*  20 - Device Control 4    */ Token.Illegal,
+  /*  21 - Negative Ack.       */ Token.Illegal,
+  /*  22 - Synchronous Idle    */ Token.Illegal,
+  /*  23 - End of Transmit     */ Token.Illegal,
+  /*  24 - Cancel              */ Token.Illegal,
+  /*  25 - End of Medium       */ Token.Illegal,
+  /*  26 - Substitute          */ Token.Illegal,
+  /*  27 - Escape              */ Token.Illegal,
+  /*  28 - File Separator      */ Token.Illegal,
+  /*  29 - Group Separator     */ Token.Illegal,
+  /*  30 - Record Separator    */ Token.Illegal,
+  /*  31 - Unit Separator      */ Token.Illegal,
+  /*  32 - Space               */ Token.WhiteSpace,
+  /*  33 - !                   */ Token.Negate,
+  /*  34 - "                   */ Token.StringLiteral,
+  /*  35 - #                   */ Token.PrivateField,
+  /*  36 - $                   */ Token.Identifier,
+  /*  37 - %                   */ Token.Modulo,
+  /*  38 - &                   */ Token.BitwiseAnd,
+  /*  39 - '                   */ Token.StringLiteral,
+  /*  40 - (                   */ Token.LeftParen,
+  /*  41 - )                   */ Token.RightParen,
+  /*  42 - *                   */ Token.Multiply,
+  /*  43 - +                   */ Token.Add,
+  /*  44 - ,                   */ Token.Comma,
+  /*  45 - -                   */ Token.Subtract,
+  /*  46 - .                   */ Token.Period,
+  /*  47 - /                   */ Token.Divide,
+  /*  48 - 0                   */ Token.NumericLiteral,
+  /*  49 - 1                   */ Token.NumericLiteral,
+  /*  50 - 2                   */ Token.NumericLiteral,
+  /*  51 - 3                   */ Token.NumericLiteral,
+  /*  52 - 4                   */ Token.NumericLiteral,
+  /*  53 - 5                   */ Token.NumericLiteral,
+  /*  54 - 6                   */ Token.NumericLiteral,
+  /*  55 - 7                   */ Token.NumericLiteral,
+  /*  56 - 8                   */ Token.NumericLiteral,
+  /*  57 - 9                   */ Token.NumericLiteral,
+  /*  58 - :                   */ Token.Colon,
+  /*  59 - ;                   */ Token.Semicolon,
+  /*  60 - <                   */ Token.LessThan,
+  /*  61 - =                   */ Token.Assign,
+  /*  62 - >                   */ Token.GreaterThan,
+  /*  63 - ?                   */ Token.QuestionMark,
+  /*  64 - @                   */ Token.Decorator,
+  /*  65 - A                   */ Token.Identifier,
+  /*  66 - B                   */ Token.Identifier,
+  /*  67 - C                   */ Token.Identifier,
+  /*  68 - D                   */ Token.Identifier,
+  /*  69 - E                   */ Token.Identifier,
+  /*  70 - F                   */ Token.Identifier,
+  /*  71 - G                   */ Token.Identifier,
+  /*  72 - H                   */ Token.Identifier,
+  /*  73 - I                   */ Token.Identifier,
+  /*  74 - J                   */ Token.Identifier,
+  /*  75 - K                   */ Token.Identifier,
+  /*  76 - L                   */ Token.Identifier,
+  /*  77 - M                   */ Token.Identifier,
+  /*  78 - N                   */ Token.Identifier,
+  /*  79 - O                   */ Token.Identifier,
+  /*  80 - P                   */ Token.Identifier,
+  /*  81 - Q                   */ Token.Identifier,
+  /*  82 - R                   */ Token.Identifier,
+  /*  83 - S                   */ Token.Identifier,
+  /*  84 - T                   */ Token.Identifier,
+  /*  85 - U                   */ Token.Identifier,
+  /*  86 - V                   */ Token.Identifier,
+  /*  87 - W                   */ Token.Identifier,
+  /*  88 - X                   */ Token.Identifier,
+  /*  89 - Y                   */ Token.Identifier,
+  /*  90 - Z                   */ Token.Identifier,
+  /*  91 - [                   */ Token.LeftBracket,
+  /*  92 - \                   */ Token.EscapeStart,
+  /*  93 - ]                   */ Token.RightBracket,
+  /*  94 - ^                   */ Token.BitwiseXor,
+  /*  95 - _                   */ Token.Identifier,
+  /*  96 - `                   */ Token.Template,
+  /*  97 - a                   */ Token.Keyword,
+  /*  98 - b                   */ Token.Keyword,
+  /*  99 - c                   */ Token.Keyword,
+  /* 100 - d                   */ Token.Keyword,
+  /* 101 - e                   */ Token.Keyword,
+  /* 102 - f                   */ Token.Keyword,
+  /* 103 - g                   */ Token.Keyword,
+  /* 104 - h                   */ Token.Identifier,
+  /* 105 - i                   */ Token.Keyword,
+  /* 106 - j                   */ Token.Identifier,
+  /* 107 - k                   */ Token.Identifier,
+  /* 108 - l                   */ Token.Keyword,
+  /* 109 - m                   */ Token.Identifier,
+  /* 110 - n                   */ Token.Keyword,
+  /* 111 - o                   */ Token.Identifier,
+  /* 112 - p                   */ Token.Keyword,
+  /* 113 - q                   */ Token.Identifier,
+  /* 114 - r                   */ Token.Keyword,
+  /* 115 - s                   */ Token.Keyword,
+  /* 116 - t                   */ Token.Keyword,
+  /* 117 - u                   */ Token.Identifier,
+  /* 118 - v                   */ Token.Keyword,
+  /* 119 - w                   */ Token.Keyword,
+  /* 120 - x                   */ Token.Identifier,
+  /* 121 - y                   */ Token.Keyword,
+  /* 122 - z                   */ Token.Keyword,
+  /* 123 - {                   */ Token.LeftBrace,
+  /* 124 - |                   */ Token.BitwiseOr,
+  /* 125 - }                   */ Token.RightBrace,
+  /* 126 - ~                   */ Token.Complement,
+  /* 127 - Delete              */ Token.Illegal,
 ];
 
 /**
@@ -170,7 +171,7 @@ export const TokenLookup = [
  * @param parser  Parser object
  * @param context Context masks
  */
-export function nextToken(parser: ParserState, context: Context): void {
+export function nextToken(parser: Parser, context: Context): void {
   parser.flags = (parser.flags | Flags.NewLine) ^ Flags.NewLine;
   parser.startIndex = parser.index;
   parser.startColumn = parser.column;
@@ -178,21 +179,16 @@ export function nextToken(parser: ParserState, context: Context): void {
   parser.setToken(scanSingleToken(parser, context, LexerState.None));
 }
 
-export function scanSingleToken(parser: ParserState, context: Context, state: LexerState): Token {
+export function scanSingleToken(parser: Parser, context: Context, state: LexerState): Token {
   const isStartOfLine = parser.index === 0;
 
   const { source } = parser;
-
-  // These three are only for HTMLClose comment
-  let startIndex = parser.index;
-  let startLine = parser.line;
-  let startColumn = parser.column;
 
   while (parser.index < parser.end) {
     parser.tokenIndex = parser.index;
     parser.tokenColumn = parser.column;
     parser.tokenLine = parser.line;
-    !parser.comments && (parser.comments = []);
+    parser.comments = parser.comments ?? [];
 
     let char = parser.currentChar;
 
@@ -281,19 +277,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
               ) {
                 parser.column += 3;
                 parser.currentChar = source.charCodeAt((parser.index += 3));
-                state = skipSingleHTMLComment(
-                  parser,
-                  source,
-                  state,
-                  context,
-                  CommentTypeEnum.HTMLOpen,
-                  parser.tokenIndex,
-                  parser.tokenLine,
-                  parser.tokenColumn
-                );
-                startIndex = parser.tokenIndex;
-                startLine = parser.tokenLine;
-                startColumn = parser.tokenColumn;
+                state = skipSingleHTMLComment(parser, source, state, context, CommentTypeEnum.HTMLOpen, parser.tokenStart);
                 continue;
               }
               return Token.LessThan;
@@ -355,11 +339,11 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
 
           if (ch !== Chars.Asterisk) return Token.Multiply;
 
-          if (advanceChar(parser) !== Chars.EqualSign) return Token.Exponentiate;
+          if (advanceChar(parser) !== Chars.EqualSign) return Token.Exponentiation;
 
           advanceChar(parser);
 
-          return Token.ExponentiateAssign;
+          return Token.ExponentiationAssign;
         }
 
         // `^`, `^=`
@@ -396,21 +380,9 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
           if (ch === Chars.Hyphen) {
             advanceChar(parser);
             if ((state & LexerState.NewLine || isStartOfLine) && parser.currentChar === Chars.GreaterThan) {
-              if ((context & Context.OptionsWebCompat) === 0) report(parser, Errors.HtmlCommentInWebCompat);
+              if (!parser.options.webcompat) parser.report(Errors.HtmlCommentInWebCompat);
               advanceChar(parser);
-              state = skipSingleHTMLComment(
-                parser,
-                source,
-                state,
-                context,
-                CommentTypeEnum.HTMLClose,
-                startIndex,
-                startLine,
-                startColumn
-              );
-              startIndex = parser.tokenIndex;
-              startLine = parser.tokenLine;
-              startColumn = parser.tokenColumn;
+              state = skipSingleHTMLComment(parser, source, state, context, CommentTypeEnum.HTMLClose, parser.tokenStart);
               continue;
             }
 
@@ -432,30 +404,16 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
             const ch = parser.currentChar;
             if (ch === Chars.Slash) {
               advanceChar(parser);
-              state = skipSingleLineComment(
-                parser,
-                source,
-                state,
-                CommentTypeEnum.Single,
-                parser.tokenIndex,
-                parser.tokenLine,
-                parser.tokenColumn
-              );
-              startIndex = parser.tokenIndex;
-              startLine = parser.tokenLine;
-              startColumn = parser.tokenColumn;
+              state = skipSingleLineComment(parser, source, state, CommentTypeEnum.Single, parser.tokenStart);
               continue;
             }
             if (ch === Chars.Asterisk) {
               advanceChar(parser);
               state = skipMultiLineComment(parser, source, state) as LexerState;
-              startIndex = parser.tokenIndex;
-              startLine = parser.tokenLine;
-              startColumn = parser.tokenColumn;
               continue;
             }
             if (context & Context.AllowRegExp) {
-              return scanRegularExpression(parser, context);
+              return scanRegularExpression(parser);
             }
             if (ch === Chars.EqualSign) {
               advanceChar(parser);
@@ -618,7 +576,7 @@ export function scanSingleToken(parser: ParserState, context: Context, state: Le
       }
 
       // Invalid ASCII code point/unit
-      report(parser, Errors.IllegalCharacter, String.fromCodePoint(char));
+      parser.report(Errors.IllegalCharacter, String.fromCodePoint(char));
     }
   }
 

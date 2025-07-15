@@ -1,23 +1,24 @@
-import * as t from 'assert';
-import { Flags, Context } from '../../src/common';
-import { create } from '../../src/parser';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
+import { Context, Flags } from '../../src/common';
 import { scanSingleToken } from '../../src/lexer/scan';
+import { Parser } from '../../src/parser/parser';
 
 describe('Lexer - Whitespace', () => {
   function pass(name: string, opts: any) {
     it(name, () => {
       const { source, ...otherOpts } = opts;
-      const state = create(source, '', undefined);
-      scanSingleToken(state, Context.OptionsWebCompat, 0);
+      const parser = new Parser(source, { webcompat: true });
+      scanSingleToken(parser, Context.None, 0);
       t.deepEqual(
         {
-          value: state.tokenValue,
-          index: state.index,
-          column: state.column,
-          line: state.line,
-          newLine: (state.flags & Flags.NewLine) !== 0
+          value: parser.tokenValue,
+          index: parser.index,
+          column: parser.column,
+          line: parser.line,
+          newLine: (parser.flags & Flags.NewLine) !== 0,
         },
-        otherOpts
+        otherOpts,
       );
     });
   }
@@ -28,7 +29,7 @@ describe('Lexer - Whitespace', () => {
     index: 0,
     value: '',
     line: 1,
-    column: 0
+    column: 0,
   });
 
   pass('skips spaces', {
@@ -37,7 +38,7 @@ describe('Lexer - Whitespace', () => {
     index: 8,
     value: '',
     line: 1,
-    column: 8
+    column: 8,
   });
 
   pass('skips tabs', {
@@ -46,7 +47,7 @@ describe('Lexer - Whitespace', () => {
     index: 8,
     value: '',
     line: 1,
-    column: 8
+    column: 8,
   });
 
   pass('skips vertical tabs', {
@@ -56,7 +57,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
 
     line: 1,
-    column: 8
+    column: 8,
   });
 
   pass('skips white spacee', {
@@ -65,7 +66,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 1,
-    column: 1
+    column: 1,
   });
 
   pass('skips white space', {
@@ -74,7 +75,7 @@ describe('Lexer - Whitespace', () => {
     newLine: true,
     line: 5,
     index: 9,
-    column: 0
+    column: 0,
   });
 
   pass('skips paragraphseparator', {
@@ -83,7 +84,7 @@ describe('Lexer - Whitespace', () => {
     newLine: true,
     line: 2,
     index: 1,
-    column: 0
+    column: 0,
   });
 
   pass('skips paragraphseparator', {
@@ -92,7 +93,7 @@ describe('Lexer - Whitespace', () => {
     newLine: true,
     line: 2,
     index: 1,
-    column: 0
+    column: 0,
   });
 
   pass('skips white space', {
@@ -101,7 +102,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 4,
-    column: 4
+    column: 4,
   });
 
   pass('skips lineseparator', {
@@ -110,7 +111,7 @@ describe('Lexer - Whitespace', () => {
     newLine: true,
     line: 2,
     index: 1,
-    column: 0
+    column: 0,
   });
 
   pass('skips lineseparator after identifier', {
@@ -119,7 +120,7 @@ describe('Lexer - Whitespace', () => {
     value: 'foo',
     line: 1,
     index: 3,
-    column: 3
+    column: 3,
   });
 
   pass('skips crlf', {
@@ -128,7 +129,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 2,
     index: 2,
-    column: 0
+    column: 0,
   });
 
   pass('skips crlf before identifier', {
@@ -137,7 +138,7 @@ describe('Lexer - Whitespace', () => {
     value: 'foo',
     line: 2,
     index: 6,
-    column: 4
+    column: 4,
   });
 
   pass('skips form feed', {
@@ -146,7 +147,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 1,
-    column: 1
+    column: 1,
   });
 
   pass('skips line feeds', {
@@ -155,7 +156,7 @@ describe('Lexer - Whitespace', () => {
     index: 8,
     value: '',
     line: 9,
-    column: 0
+    column: 0,
   });
 
   pass('skips carriage returns', {
@@ -164,7 +165,7 @@ describe('Lexer - Whitespace', () => {
     index: 8,
     value: '',
     line: 9,
-    column: 0
+    column: 0,
   });
 
   pass('skips Windows newlines', {
@@ -173,7 +174,7 @@ describe('Lexer - Whitespace', () => {
     index: 16,
     value: '',
     line: 9,
-    column: 0
+    column: 0,
   });
 
   pass('skips line separators', {
@@ -182,7 +183,7 @@ describe('Lexer - Whitespace', () => {
     index: 8,
     value: '',
     line: 9,
-    column: 0
+    column: 0,
   });
 
   pass('skips paragraph separators', {
@@ -191,7 +192,7 @@ describe('Lexer - Whitespace', () => {
     index: 8,
     value: '',
     line: 9,
-    column: 0
+    column: 0,
   });
   pass('skips mixed whitespace', {
     source: '    \t \r\n \n\r \v\f\t ',
@@ -199,7 +200,7 @@ describe('Lexer - Whitespace', () => {
     index: 16,
     value: '',
     line: 4,
-    column: 5
+    column: 5,
   });
 
   pass('skips single line comments with line feed', {
@@ -208,7 +209,7 @@ describe('Lexer - Whitespace', () => {
     index: 17,
     value: '',
     line: 2,
-    column: 2
+    column: 2,
   });
 
   pass('skips single line comments with carriage return', {
@@ -217,7 +218,7 @@ describe('Lexer - Whitespace', () => {
     index: 17,
     value: '',
     line: 2,
-    column: 2
+    column: 2,
   });
 
   pass('skips single line comments with Windows newlines', {
@@ -226,7 +227,7 @@ describe('Lexer - Whitespace', () => {
     index: 18,
     value: '',
     line: 2,
-    column: 2
+    column: 2,
   });
 
   pass('skips single line comments with line separators', {
@@ -235,7 +236,7 @@ describe('Lexer - Whitespace', () => {
     index: 17,
     value: '',
     line: 2,
-    column: 2
+    column: 2,
   });
 
   pass('skips single line comments with paragraph separators', {
@@ -244,7 +245,7 @@ describe('Lexer - Whitespace', () => {
     index: 17,
     value: '',
     line: 2,
-    column: 2
+    column: 2,
   });
 
   pass('skips multiple single line comments with line feed', {
@@ -253,7 +254,7 @@ describe('Lexer - Whitespace', () => {
     index: 27,
     value: '',
     line: 3,
-    column: 3
+    column: 3,
   });
 
   pass('skips multiple single line comments with carriage return', {
@@ -262,7 +263,7 @@ describe('Lexer - Whitespace', () => {
     index: 27,
     value: '',
     line: 3,
-    column: 3
+    column: 3,
   });
 
   pass('skips multiple single line comments with Windows newlines', {
@@ -271,7 +272,7 @@ describe('Lexer - Whitespace', () => {
     index: 28,
     value: '',
     line: 3,
-    column: 3
+    column: 3,
   });
 
   pass('skips multiple single line comments with line separators', {
@@ -280,7 +281,7 @@ describe('Lexer - Whitespace', () => {
     index: 27,
     value: '',
     line: 3,
-    column: 3
+    column: 3,
   });
 
   pass('skips multiple single line comments with paragraph separators', {
@@ -289,7 +290,7 @@ describe('Lexer - Whitespace', () => {
     index: 27,
     value: '',
     line: 3,
-    column: 3
+    column: 3,
   });
 
   pass('skips multiline comments with nothing', {
@@ -298,7 +299,7 @@ describe('Lexer - Whitespace', () => {
     index: 24,
     value: '',
     line: 1,
-    column: 24
+    column: 24,
   });
 
   pass('skips multiline comments with line feed', {
@@ -307,7 +308,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 26,
     line: 2,
-    column: 5
+    column: 5,
   });
 
   pass('skips multiline comments with carriage return', {
@@ -316,7 +317,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 26,
     line: 2,
-    column: 5
+    column: 5,
   });
 
   pass('skips multiline comments with Windows newlines', {
@@ -325,7 +326,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 27,
     line: 2,
-    column: 5
+    column: 5,
   });
 
   pass('skips multiple multiline comments with carriage return', {
@@ -334,34 +335,34 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 33,
     line: 3,
-    column: 5
+    column: 5,
   });
 
   pass('skips vertical tab in a string', {
-    source: "'\\u000Bstr\\u000Bing\\u000B'",
+    source: String.raw`'\u000Bstr\u000Bing\u000B'`,
     value: '\u000bstr\u000bing\u000b',
     newLine: false,
     line: 1,
     index: 26,
-    column: 26
+    column: 26,
   });
 
   pass('skips form feed in a string - #1', {
-    source: "'\\u000Cstr\\u000Cing\\u000C'",
+    source: String.raw`'\u000Cstr\u000Cing\u000C'`,
     value: '\fstr\fing\f',
     newLine: false,
     line: 1,
     index: 26,
-    column: 26
+    column: 26,
   });
 
   pass('skips form feed in a string - #2', {
-    source: "'\\fstr\\fing\\f'",
+    source: String.raw`'\fstr\fing\f'`,
     value: '\fstr\fing\f',
     newLine: false,
     line: 1,
     index: 14,
-    column: 14
+    column: 14,
   });
 
   pass('skips multiline comment with space - #1', {
@@ -370,7 +371,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 28,
-    column: 28
+    column: 28,
   });
 
   pass('skips multiline comment with no break space - #1', {
@@ -379,7 +380,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 28,
-    column: 28
+    column: 28,
   });
 
   pass('skips multiline comment with no break space - #2', {
@@ -388,7 +389,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 35,
-    column: 35
+    column: 35,
   });
 
   pass('skips multiline comment with space - #2', {
@@ -397,7 +398,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 35,
-    column: 35
+    column: 35,
   });
 
   pass('skips single comment with veritcal tab - #1', {
@@ -406,7 +407,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 27,
-    column: 27
+    column: 27,
   });
 
   pass('skips single comment with veritcal tab - #2', {
@@ -415,7 +416,7 @@ describe('Lexer - Whitespace', () => {
     newLine: false,
     line: 1,
     index: 34,
-    column: 34
+    column: 34,
   });
 
   pass('skips exotic whitespace', {
@@ -425,7 +426,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 20,
-    column: 20
+    column: 20,
   });
 
   pass('skips single line comment with identifier and newline', {
@@ -434,24 +435,24 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 7,
     line: 2,
-    column: 0
+    column: 0,
   });
   pass('skips multi line comment with escaped newline', {
-    source: '/* \\n \\r \\x0a \\u000a */',
+    source: String.raw`/* \n \r \x0a \u000a */`,
     newLine: false,
     value: '',
     index: 23,
     line: 1,
-    column: 23
+    column: 23,
   });
 
   pass('skips single line comment with escaped newlines', {
-    source: '//\\n \\r \\x0a \\u000a still comment',
+    source: String.raw`//\n \r \x0a \u000a still comment`,
     value: '',
     newLine: false,
     index: 33,
     line: 1,
-    column: 33
+    column: 33,
   });
 
   pass('skips single line comment with paragrap separator', {
@@ -460,7 +461,7 @@ describe('Lexer - Whitespace', () => {
     value: 'var',
     index: 27,
     line: 2,
-    column: 4
+    column: 4,
   });
 
   pass('skips single line comment with Windows newline', {
@@ -469,25 +470,25 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 23,
     line: 2,
-    column: 0
+    column: 0,
   });
 
   pass('skips multi line comment with carriage return', {
-    source: '/*\\rmulti\\rline\\rcomment\\rx = 1;\\r*/',
+    source: String.raw`/*\rmulti\rline\rcomment\rx = 1;\r*/`,
     newLine: false,
     value: '',
     index: 36,
     line: 1,
-    column: 36
+    column: 36,
   });
 
   pass('skips multi line comment with carriage return', {
-    source: '/*\\rmulti\\rline\\rcomment\\rx = 1;\\r*/',
+    source: String.raw`/*\rmulti\rline\rcomment\rx = 1;\r*/`,
     newLine: false,
     value: '',
     index: 36,
     line: 1,
-    column: 36
+    column: 36,
   });
 
   pass('skips single line comment with no break space', {
@@ -496,7 +497,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 27,
     line: 1,
-    column: 27
+    column: 27,
   });
 
   pass('skips single line comment with form feed', {
@@ -505,7 +506,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 27,
     line: 1,
-    column: 27
+    column: 27,
   });
 
   pass('skips single line comment with identifier and newline', {
@@ -514,7 +515,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 7,
     line: 2,
-    column: 0
+    column: 0,
   });
 
   pass('skips text after HTML close', {
@@ -523,16 +524,16 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 4,
     line: 2,
-    column: 3
+    column: 3,
   });
 
   pass('skips multi line comment with escaped newline', {
-    source: '/* \\n \\r \\x0a \\u000a */',
+    source: String.raw`/* \n \r \x0a \u000a */`,
     newLine: false,
     value: '',
     index: 23,
     line: 1,
-    column: 23
+    column: 23,
   });
 
   // should fail in the parser
@@ -542,7 +543,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 10,
     line: 1,
-    column: 10
+    column: 10,
   });
 
   pass('skips single line comment with slash', {
@@ -551,16 +552,16 @@ describe('Lexer - Whitespace', () => {
     value: '',
     index: 4,
     line: 1,
-    column: 4
+    column: 4,
   });
 
   pass('skips single line comment with malformed escape', {
-    source: '//\\unope \\u{nope} \\xno ',
+    source: String.raw`//\unope \u{nope} \xno `,
     newLine: false,
     value: '',
     index: 23,
     line: 1,
-    column: 23
+    column: 23,
   });
 
   pass('skips multiline comments with nothing', {
@@ -569,7 +570,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 24,
-    column: 24
+    column: 24,
   });
 
   pass('skips before first real token', {
@@ -578,7 +579,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 18,
-    column: 18
+    column: 18,
   });
 
   pass('skips single line comment with form feed', {
@@ -587,7 +588,7 @@ describe('Lexer - Whitespace', () => {
     value: 'var',
     line: 3,
     index: 8,
-    column: 3
+    column: 3,
   });
 
   pass('skips mixed whitespace', {
@@ -596,7 +597,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 4,
-    column: 4
+    column: 4,
   });
 
   pass('skips simple exotic whitespace', {
@@ -605,7 +606,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 1,
-    column: 1
+    column: 1,
   });
 
   pass('skips simple exotic whitespace', {
@@ -614,7 +615,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 1,
-    column: 1
+    column: 1,
   });
 
   pass('skips complex exotic whitespace', {
@@ -623,7 +624,7 @@ describe('Lexer - Whitespace', () => {
     value: '',
     line: 1,
     index: 10,
-    column: 10
+    column: 10,
   });
 
   pass('skips multiple comments preceding HTMLEndComment', {
@@ -632,6 +633,6 @@ describe('Lexer - Whitespace', () => {
     value: 'var',
     line: 3,
     index: 45,
-    column: 3
+    column: 3,
   });
 });

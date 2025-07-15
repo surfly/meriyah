@@ -1,12 +1,13 @@
-import * as t from 'assert';
-import { SourceLocation } from '../../../src/estree';
-import { parseScript } from '../../../src/meriyah';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
+import { type SourceLocation } from '../../../src/estree';
+import { parseSource } from '../../../src/parser';
 
 describe('Miscellaneous - onComment', () => {
   it('should extract single line comment', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('// Single line comment', {
+      parseSource('// Single line comment', {
         ranges: true,
         loc: true,
         onComment: (type: string, value: string, start: number, end: number, loc: SourceLocation) => {
@@ -16,10 +17,10 @@ describe('Miscellaneous - onComment', () => {
           t.equal(end, 22);
           t.deepEqual(loc, {
             start: { line: 1, column: 0 },
-            end: { line: 1, column: 22 }
+            end: { line: 1, column: 22 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [],
@@ -30,9 +31,9 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 22],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 1, column: 22 }
-        }
-      }
+          end: { line: 1, column: 22 },
+        },
+      },
     );
     t.equal(onCommentCount, 1);
   });
@@ -40,7 +41,7 @@ describe('Miscellaneous - onComment', () => {
   it('should extract single line empty comment', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('//\n', {
+      parseSource('//\n', {
         ranges: true,
         loc: true,
         onComment: (type: string, value: string, start: number, end: number, loc: SourceLocation) => {
@@ -50,10 +51,10 @@ describe('Miscellaneous - onComment', () => {
           t.equal(end, 2);
           t.deepEqual(loc, {
             start: { line: 1, column: 0 },
-            end: { line: 1, column: 2 }
+            end: { line: 1, column: 2 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [],
@@ -64,9 +65,9 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 3],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 2, column: 0 }
-        }
-      }
+          end: { line: 2, column: 0 },
+        },
+      },
     );
     t.equal(onCommentCount, 1);
   });
@@ -74,7 +75,7 @@ describe('Miscellaneous - onComment', () => {
   it('should extract single line comment with trailing new line', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('// Single line comment\n', {
+      parseSource('// Single line comment\n', {
         ranges: true,
         loc: true,
         onComment: (type: string, value: string, start: number, end: number, loc: SourceLocation) => {
@@ -84,10 +85,10 @@ describe('Miscellaneous - onComment', () => {
           t.equal(end, 22);
           t.deepEqual(loc, {
             start: { line: 1, column: 0 },
-            end: { line: 1, column: 22 }
+            end: { line: 1, column: 22 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [],
@@ -98,9 +99,9 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 23],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 2, column: 0 }
-        }
-      }
+          end: { line: 2, column: 0 },
+        },
+      },
     );
     t.equal(onCommentCount, 1);
   });
@@ -108,7 +109,7 @@ describe('Miscellaneous - onComment', () => {
   it('should extract single line comment with trailing new line and leading new line', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('a;\n// Single line comment\n', {
+      parseSource('a;\n// Single line comment\n', {
         ranges: true,
         loc: true,
         onComment: (type: string, value: string, start: number, end: number, loc: SourceLocation) => {
@@ -118,10 +119,10 @@ describe('Miscellaneous - onComment', () => {
           t.equal(end, 25);
           t.deepEqual(loc, {
             start: { line: 2, column: 0 },
-            end: { line: 2, column: 22 }
+            end: { line: 2, column: 22 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [
@@ -132,32 +133,32 @@ describe('Miscellaneous - onComment', () => {
               loc: {
                 end: {
                   column: 1,
-                  line: 1
+                  line: 1,
                 },
                 start: {
                   column: 0,
-                  line: 1
-                }
+                  line: 1,
+                },
               },
               name: 'a',
               range: [0, 1],
               start: 0,
-              type: 'Identifier'
+              type: 'Identifier',
             },
             loc: {
               end: {
                 column: 2,
-                line: 1
+                line: 1,
               },
               start: {
                 column: 0,
-                line: 1
-              }
+                line: 1,
+              },
             },
             range: [0, 2],
             start: 0,
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'script',
         type: 'Program',
@@ -166,9 +167,9 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 26],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 3, column: 0 }
-        }
-      }
+          end: { line: 3, column: 0 },
+        },
+      },
     );
     t.equal(onCommentCount, 1);
   });
@@ -176,7 +177,7 @@ describe('Miscellaneous - onComment', () => {
   it('should extract multiline line comment', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('/* Multi line comment */', {
+      parseSource('/* Multi line comment */', {
         onComment: (type: string, value: string, start: number, end: number, loc: SourceLocation) => {
           t.deepEqual(type, 'MultiLine');
           t.deepEqual(value, ' Multi line comment ');
@@ -184,16 +185,16 @@ describe('Miscellaneous - onComment', () => {
           t.equal(end, 24);
           t.deepEqual(loc, {
             start: { line: 1, column: 0 },
-            end: { line: 1, column: 24 }
+            end: { line: 1, column: 24 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [],
         sourceType: 'script',
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
     t.equal(onCommentCount, 1);
   });
@@ -201,7 +202,7 @@ describe('Miscellaneous - onComment', () => {
   it('should extract empty multiline line comment', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('/**/', {
+      parseSource('/**/', {
         onComment: (type: string, value: string, start: number, end: number, loc: SourceLocation) => {
           t.deepEqual(type, 'MultiLine');
           t.deepEqual(value, '');
@@ -209,16 +210,16 @@ describe('Miscellaneous - onComment', () => {
           t.equal(end, 4);
           t.deepEqual(loc, {
             start: { line: 1, column: 0 },
-            end: { line: 1, column: 4 }
+            end: { line: 1, column: 4 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [],
         sourceType: 'script',
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
     t.equal(onCommentCount, 1);
   });
@@ -226,7 +227,7 @@ describe('Miscellaneous - onComment', () => {
   it('should extract multiline line comment', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('a;\n/* Multi line comment */\nb;\n', {
+      parseSource('a;\n/* Multi line comment */\nb;\n', {
         ranges: true,
         loc: true,
         onComment: (type: string, value: string, start: number, end: number, loc: SourceLocation) => {
@@ -236,10 +237,10 @@ describe('Miscellaneous - onComment', () => {
           t.deepEqual(end, 27);
           t.deepEqual(loc, {
             start: { line: 2, column: 0 },
-            end: { line: 2, column: 24 }
+            end: { line: 2, column: 24 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [
@@ -250,31 +251,31 @@ describe('Miscellaneous - onComment', () => {
               loc: {
                 end: {
                   column: 1,
-                  line: 1
+                  line: 1,
                 },
                 start: {
                   column: 0,
-                  line: 1
-                }
+                  line: 1,
+                },
               },
               name: 'a',
               range: [0, 1],
               start: 0,
-              type: 'Identifier'
+              type: 'Identifier',
             },
             loc: {
               end: {
                 column: 2,
-                line: 1
+                line: 1,
               },
               start: {
                 column: 0,
-                line: 1
-              }
+                line: 1,
+              },
             },
             range: [0, 2],
             start: 0,
-            type: 'ExpressionStatement'
+            type: 'ExpressionStatement',
           },
           {
             end: 30,
@@ -283,32 +284,32 @@ describe('Miscellaneous - onComment', () => {
               loc: {
                 end: {
                   column: 1,
-                  line: 3
+                  line: 3,
                 },
                 start: {
                   column: 0,
-                  line: 3
-                }
+                  line: 3,
+                },
               },
               name: 'b',
               range: [28, 29],
               start: 28,
-              type: 'Identifier'
+              type: 'Identifier',
             },
             loc: {
               end: {
                 column: 2,
-                line: 3
+                line: 3,
               },
               start: {
                 column: 0,
-                line: 3
-              }
+                line: 3,
+              },
             },
             range: [28, 30],
             start: 28,
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'script',
         start: 0,
@@ -316,32 +317,32 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 31],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 4, column: 0 }
+          end: { line: 4, column: 0 },
         },
-        type: 'Program'
-      }
+        type: 'Program',
+      },
     );
     t.equal(onCommentCount, 1);
   });
 
   it('should extract multiline line comment in array', () => {
     const arr: any[] = [];
-    parseScript('/* Multi line comment */', {
-      onComment: arr
+    parseSource('/* Multi line comment */', {
+      onComment: arr,
     });
     t.deepEqual(arr, [
       {
         type: 'MultiLine',
-        value: ' Multi line comment '
-      }
+        value: ' Multi line comment ',
+      },
     ]);
   });
 
   it('should extract multiline line comment in array with ranges', () => {
     const arr: any[] = [];
-    parseScript('/* Multi line comment */', {
+    parseSource('/* Multi line comment */', {
       ranges: true,
-      onComment: arr
+      onComment: arr,
     });
     t.deepEqual(arr, [
       {
@@ -349,17 +350,17 @@ describe('Miscellaneous - onComment', () => {
         end: 24,
         range: [0, 24],
         type: 'MultiLine',
-        value: ' Multi line comment '
-      }
+        value: ' Multi line comment ',
+      },
     ]);
   });
 
   it('should extract multiple multiline line comment in array with ranges and loc', () => {
     const arr: any[] = [];
-    parseScript('/* a */ function /*b*/foo(/*c*//*d*/) { /* Multi line comment */ } // The end', {
+    parseSource('/* a */ function /*b*/foo(/*c*//*d*/) { /* Multi line comment */ } // The end', {
       ranges: true,
       loc: true,
-      onComment: arr
+      onComment: arr,
     });
     t.deepEqual(arr, [
       {
@@ -368,10 +369,10 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 7],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 1, column: 7 }
+          end: { line: 1, column: 7 },
         },
         type: 'MultiLine',
-        value: ' a '
+        value: ' a ',
       },
       {
         start: 17,
@@ -379,10 +380,10 @@ describe('Miscellaneous - onComment', () => {
         range: [17, 22],
         loc: {
           start: { line: 1, column: 17 },
-          end: { line: 1, column: 22 }
+          end: { line: 1, column: 22 },
         },
         type: 'MultiLine',
-        value: 'b'
+        value: 'b',
       },
       {
         start: 26,
@@ -390,10 +391,10 @@ describe('Miscellaneous - onComment', () => {
         range: [26, 31],
         loc: {
           start: { line: 1, column: 26 },
-          end: { line: 1, column: 31 }
+          end: { line: 1, column: 31 },
         },
         type: 'MultiLine',
-        value: 'c'
+        value: 'c',
       },
       {
         start: 31,
@@ -401,10 +402,10 @@ describe('Miscellaneous - onComment', () => {
         range: [31, 36],
         loc: {
           start: { line: 1, column: 31 },
-          end: { line: 1, column: 36 }
+          end: { line: 1, column: 36 },
         },
         type: 'MultiLine',
-        value: 'd'
+        value: 'd',
       },
       {
         start: 40,
@@ -412,10 +413,10 @@ describe('Miscellaneous - onComment', () => {
         range: [40, 64],
         loc: {
           start: { line: 1, column: 40 },
-          end: { line: 1, column: 64 }
+          end: { line: 1, column: 64 },
         },
         type: 'MultiLine',
-        value: ' Multi line comment '
+        value: ' Multi line comment ',
       },
       {
         start: 67,
@@ -423,21 +424,21 @@ describe('Miscellaneous - onComment', () => {
         range: [67, 77],
         loc: {
           start: { line: 1, column: 67 },
-          end: { line: 1, column: 77 }
+          end: { line: 1, column: 77 },
         },
         type: 'SingleLine',
-        value: ' The end'
-      }
+        value: ' The end',
+      },
     ]);
   });
 
   it('should extract html comments in array', () => {
     const arr: any[] = [];
-    parseScript('<!--comment #1\n--> comment #2', {
+    parseSource('<!--comment #1\n--> comment #2', {
       ranges: true,
       loc: true,
       onComment: arr,
-      webcompat: true
+      webcompat: true,
     });
     t.deepEqual(arr, [
       {
@@ -448,30 +449,30 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 14],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 1, column: 14 }
-        }
+          end: { line: 1, column: 14 },
+        },
       },
       {
         type: 'HTMLClose',
         value: ' comment #2',
-        start: 14,
+        start: 15,
         end: 29,
-        range: [14, 29],
+        range: [15, 29],
         loc: {
-          start: { line: 1, column: 14 },
-          end: { line: 2, column: 14 }
-        }
-      }
+          start: { line: 2, column: 0 },
+          end: { line: 2, column: 14 },
+        },
+      },
     ]);
   });
 
   it('should extract htmlclose comment on first line', () => {
     const arr: any[] = [];
-    parseScript('--> comment #2\n', {
+    parseSource('--> comment #2\n', {
       ranges: true,
       loc: true,
       onComment: arr,
-      webcompat: true
+      webcompat: true,
     });
     t.deepEqual(arr, [
       {
@@ -482,42 +483,42 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 14],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 1, column: 14 }
-        }
-      }
+          end: { line: 1, column: 14 },
+        },
+      },
     ]);
   });
 
   it('should extract htmlclose comment', () => {
     const arr: any[] = [];
-    parseScript('a;\n--> comment #2\n', {
+    parseSource('a;\n--> comment #2\n', {
       ranges: true,
       loc: true,
       onComment: arr,
-      webcompat: true
+      webcompat: true,
     });
     t.deepEqual(arr, [
       {
         type: 'HTMLClose',
         value: ' comment #2',
-        start: 2,
+        start: 3,
         end: 17,
-        range: [2, 17],
+        range: [3, 17],
         loc: {
-          start: { line: 1, column: 2 },
-          end: { line: 2, column: 14 }
-        }
-      }
+          start: { line: 2, column: 0 },
+          end: { line: 2, column: 14 },
+        },
+      },
     ]);
   });
 
   it('should extract htmlclose comment after multiline comment', () => {
     const arr: any[] = [];
-    parseScript('/*\na\n*/\n--> comment #2\n', {
+    parseSource('/*\na\n*/\n--> comment #2\n', {
       ranges: true,
       loc: true,
       onComment: arr,
-      webcompat: true
+      webcompat: true,
     });
     t.deepEqual(arr, [
       {
@@ -526,29 +527,29 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 7],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 3, column: 2 }
+          end: { line: 3, column: 2 },
         },
         type: 'MultiLine',
-        value: '\na\n'
+        value: '\na\n',
       },
       {
         type: 'HTMLClose',
         value: ' comment #2',
-        start: 7,
+        start: 8,
         end: 22,
-        range: [7, 22],
+        range: [8, 22],
         loc: {
-          start: { line: 3, column: 2 },
-          end: { line: 4, column: 14 }
-        }
-      }
+          start: { line: 4, column: 0 },
+          end: { line: 4, column: 14 },
+        },
+      },
     ]);
   });
 
   it('should extract hashbang comment with next flag', () => {
     let onCommentCount = 0;
     t.deepEqual(
-      parseScript('#!/usr/bin/env node\n"use strict";\n', {
+      parseSource('#!/usr/bin/env node\n"use strict";\n', {
         next: true,
         ranges: true,
         loc: true,
@@ -559,10 +560,10 @@ describe('Miscellaneous - onComment', () => {
           t.equal(end, 19);
           t.deepEqual(loc, {
             start: { line: 1, column: 0 },
-            end: { line: 1, column: 19 }
+            end: { line: 1, column: 19 },
           });
           onCommentCount++;
-        }
+        },
       }),
       {
         body: [
@@ -573,33 +574,33 @@ describe('Miscellaneous - onComment', () => {
               loc: {
                 end: {
                   column: 12,
-                  line: 2
+                  line: 2,
                 },
                 start: {
                   column: 0,
-                  line: 2
-                }
+                  line: 2,
+                },
               },
               range: [20, 32],
               start: 20,
               type: 'Literal',
-              value: 'use strict'
+              value: 'use strict',
             },
             directive: 'use strict',
             loc: {
               end: {
                 column: 13,
-                line: 2
+                line: 2,
               },
               start: {
                 column: 0,
-                line: 2
-              }
+                line: 2,
+              },
             },
             range: [20, 33],
             start: 20,
-            type: 'ExpressionStatement'
-          }
+            type: 'ExpressionStatement',
+          },
         ],
         sourceType: 'script',
         type: 'Program',
@@ -608,9 +609,9 @@ describe('Miscellaneous - onComment', () => {
         range: [0, 34],
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 3, column: 0 }
-        }
-      }
+          end: { line: 3, column: 0 },
+        },
+      },
     );
     t.equal(onCommentCount, 1);
   });

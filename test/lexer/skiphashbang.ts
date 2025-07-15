@@ -1,26 +1,27 @@
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { Flags } from '../../src/common';
-import { create } from '../../src/parser';
 import { skipHashBang } from '../../src/lexer';
+import { Parser } from '../../src/parser/parser';
 
 describe('Lexer - skiphashbang', () => {
   function pass(name: string, opts: any) {
     it(name, () => {
-      const state = create(opts.source, '', undefined);
-      skipHashBang(state);
+      const parser = new Parser(opts.source);
+      skipHashBang(parser);
       t.deepEqual(
         {
-          value: state.tokenValue,
-          index: state.index,
-          column: state.column,
-          newLine: (state.flags & Flags.NewLine) !== 0
+          value: parser.tokenValue,
+          index: parser.index,
+          column: parser.column,
+          newLine: (parser.flags & Flags.NewLine) !== 0,
         },
         {
           value: opts.value,
           index: opts.index,
           column: opts.column,
-          newLine: opts.newLine
-        }
+          newLine: opts.newLine,
+        },
       );
     });
   }
@@ -31,7 +32,7 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 0,
     line: 1,
-    column: 0
+    column: 0,
   });
 
   pass('skips nothing before an identifier', {
@@ -41,7 +42,7 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 0,
     line: 1,
-    column: 0
+    column: 0,
   });
   pass('skips nothing before a lone exclamation', {
     source: '! foo',
@@ -50,7 +51,7 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 0,
     line: 1,
-    column: 0
+    column: 0,
   });
 
   pass('skips a shebang+LF before a lone hash', {
@@ -60,7 +61,7 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 20,
     line: 2,
-    column: 0
+    column: 0,
   });
 
   pass('skips a shebang+LF in an otherwise empty source', {
@@ -70,7 +71,7 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 20,
     line: 2,
-    column: 0
+    column: 0,
   });
 
   pass('skips a shebang+LF before an identifier', {
@@ -80,7 +81,7 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 20,
     line: 2,
-    column: 0
+    column: 0,
   });
 
   pass('skips a shebang+LF before a lone exclamation', {
@@ -90,7 +91,7 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 20,
     line: 2,
-    column: 0
+    column: 0,
   });
 
   pass('skips a shebang+CR in an otherwise empty source', {
@@ -100,6 +101,6 @@ describe('Lexer - skiphashbang', () => {
     value: '',
     index: 20,
     line: 2,
-    column: 0
+    column: 0,
   });
 });

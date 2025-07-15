@@ -39,19 +39,16 @@ export type CommentType = 'SingleLine' | 'MultiLine' | 'HTMLOpen' | 'HTMLClose' 
 export interface Comment extends _Node {
   type: CommentType;
   value: string;
-  start?: number;
-  end?: number;
-  loc?: SourceLocation | null;
 }
 
 export type Node =
+  | AccessorProperty
   | ArrayExpression
   | ArrayPattern
   | ArrowFunctionExpression
   | AssignmentExpression
   | AssignmentPattern
   | AwaitExpression
-  | BigIntLiteral
   | BinaryExpression
   | BlockStatement
   | BreakStatement
@@ -82,7 +79,6 @@ export type Node =
   | FunctionExpression
   | Identifier
   | IfStatement
-  | Import
   | ImportDeclaration
   | ImportDefaultSpecifier
   | ImportAttribute
@@ -116,7 +112,6 @@ export type Node =
   | PrivateIdentifier
   | Program
   | Property
-  | RegExpLiteral
   | RestElement
   | ReturnStatement
   | SequenceExpression
@@ -171,9 +166,8 @@ export type Expression =
   | LeftHandSideExpression
   | UnaryExpression
   | UpdateExpression
-  | YieldExpression
-  | Identifier;
-export type ForInitialiser = Expression | VariableDeclaration;
+  | YieldExpression;
+export type ForInitializer = Expression | VariableDeclaration;
 export type ImportClause = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
 export type IterationStatement = DoWhileStatement | ForInStatement | ForOfStatement | ForStatement | WhileStatement;
 export type JSXChild = JSXElement | JSXExpression | JSXFragment | JSXText;
@@ -199,7 +193,6 @@ export type PrimaryExpression =
   | ClassExpression
   | FunctionExpression
   | Identifier
-  | Import
   | JSXElement
   | JSXFragment
   | JSXOpeningElement
@@ -220,7 +213,6 @@ export type PrimaryExpressionExtended =
   | ClassExpression
   | FunctionExpression
   | Identifier
-  | Import
   | JSXElement
   | JSXFragment
   | JSXOpeningElement
@@ -271,15 +263,6 @@ interface FunctionDeclarationBase extends _Node {
   body?: BlockStatement | null;
 }
 
-interface MethodDefinitionBase extends _Node {
-  key: Expression | PrivateIdentifier | null;
-  value: FunctionExpression;
-  computed: boolean;
-  static: boolean;
-  kind: 'method' | 'get' | 'set' | 'constructor';
-  decorators?: Decorator[];
-}
-
 export interface BlockStatementBase extends _Node {
   body: Statement[];
 }
@@ -300,6 +283,7 @@ export interface ArrowFunctionExpression extends _Node {
   body: Expression | BlockStatement;
   async: boolean;
   expression: boolean;
+  generator: false;
 }
 
 export interface AssignmentExpression extends _Node {
@@ -318,10 +302,6 @@ export interface AssignmentPattern extends _Node {
 export interface AwaitExpression extends _Node {
   type: 'AwaitExpression';
   argument: Expression;
-}
-
-export interface BigIntLiteral extends Literal {
-  bigint: string;
 }
 
 export interface BinaryExpression extends _Node {
@@ -357,7 +337,7 @@ export interface CallExpression extends _Node {
   type: 'CallExpression';
   callee: any; //Expression | Super;
   arguments: (Expression | SpreadElement)[];
-  optional?: boolean;
+  optional: boolean;
 }
 
 export interface CatchClause extends _Node {
@@ -368,6 +348,7 @@ export interface CatchClause extends _Node {
 
 export interface StaticBlock extends BlockStatementBase {
   type: 'StaticBlock';
+  innerComments?: Array<Comment>;
 }
 
 export interface ClassBody extends _Node {
@@ -439,9 +420,9 @@ export interface EmptyStatement extends _Node {
 
 export interface ExportAllDeclaration extends _Node {
   type: 'ExportAllDeclaration';
-  source: Literal;
-  exported: Identifier | Literal | null;
-  attributes?: ImportAttribute[];
+  source: StringLiteral;
+  exported: Identifier | StringLiteral | null;
+  attributes: ImportAttribute[];
 }
 
 export interface ExportDefaultDeclaration extends _Node {
@@ -453,31 +434,32 @@ export interface ExportNamedDeclaration extends _Node {
   type: 'ExportNamedDeclaration';
   declaration: ExportDeclaration | null;
   specifiers: ExportSpecifier[];
-  source: Literal | null;
-  attributes?: ImportAttribute[];
+  source: StringLiteral | null;
+  attributes: ImportAttribute[];
 }
 
 export interface ExportSpecifier extends _Node {
   type: 'ExportSpecifier';
-  local: Identifier | Literal;
-  exported: Identifier | Literal;
+  local: Identifier | StringLiteral;
+  exported: Identifier | StringLiteral;
 }
 
 export interface ExpressionStatement extends _Node {
   type: 'ExpressionStatement';
   expression: Expression;
+  directive?: string;
 }
 
 export interface ForInStatement extends _Node {
   type: 'ForInStatement';
-  left: ForInitialiser;
+  left: ForInitializer;
   right: Expression;
   body: Statement;
 }
 
 export interface ForOfStatement extends _Node {
   type: 'ForOfStatement';
-  left: ForInitialiser;
+  left: ForInitializer;
   right: Expression;
   body: Statement;
   await: boolean;
@@ -485,7 +467,7 @@ export interface ForOfStatement extends _Node {
 
 export interface ForStatement extends _Node {
   type: 'ForStatement';
-  init: Expression | ForInitialiser | null;
+  init: Expression | ForInitializer | null;
   test: Expression | null;
   update: Expression | null;
   body: Statement;
@@ -511,21 +493,17 @@ export interface IfStatement extends _Node {
   alternate: Statement | null;
 }
 
-export interface Import extends _Node {
-  type: 'Import';
-}
-
 export interface ImportDeclaration extends _Node {
   type: 'ImportDeclaration';
-  source: Literal;
+  source: StringLiteral;
   specifiers: ImportClause[];
-  attributes?: ImportAttribute[];
+  attributes: ImportAttribute[];
 }
 
 export interface ImportAttribute extends _Node {
   type: 'ImportAttribute';
-  key: Identifier | Literal;
-  value: Literal;
+  key: Identifier | StringLiteral;
+  value: StringLiteral;
 }
 
 export interface ImportDefaultSpecifier extends _Node {
@@ -541,7 +519,7 @@ export interface ImportNamespaceSpecifier extends _Node {
 export interface ImportSpecifier extends _Node {
   type: 'ImportSpecifier';
   local: Identifier;
-  imported: Identifier | Literal;
+  imported: Identifier | StringLiteral;
 }
 
 export interface JSXNamespacedName extends _Node {
@@ -641,10 +619,39 @@ export interface LabeledStatement extends _Node {
   body: Statement;
 }
 
-export interface Literal extends _Node {
+export type Literal = StringLiteral | NumericLiteral | BooleanLiteral | NullLiteral | BigIntLiteral | RegExpLiteral;
+
+export interface _LiteralBase extends _Node {
   type: 'Literal';
-  value: boolean | number | string | null | RegExp | bigint;
   raw?: string;
+}
+
+export interface StringLiteral extends _LiteralBase {
+  value: string;
+}
+
+export interface NumericLiteral extends _LiteralBase {
+  value: number;
+}
+export interface BooleanLiteral extends _LiteralBase {
+  value: boolean;
+}
+
+export interface NullLiteral extends _LiteralBase {
+  value: null;
+}
+
+export interface BigIntLiteral extends _LiteralBase {
+  value: bigint;
+  bigint: string;
+}
+
+export interface RegExpLiteral extends _LiteralBase {
+  value: RegExp | null;
+  regex: {
+    pattern: string;
+    flags: string;
+  };
 }
 
 export interface LogicalExpression extends _Node {
@@ -658,8 +665,8 @@ export interface MemberExpression extends _Node {
   type: 'MemberExpression';
   object: Expression | Super;
   property: Expression | PrivateIdentifier;
-  computed?: boolean;
-  optional?: boolean;
+  computed: boolean;
+  optional: boolean;
 }
 
 export type Pattern = Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression;
@@ -670,8 +677,14 @@ export interface MetaProperty extends _Node {
   property: Identifier;
 }
 
-export interface MethodDefinition extends MethodDefinitionBase {
+export interface MethodDefinition extends _Node {
   type: 'MethodDefinition';
+  key: Expression | PrivateIdentifier | null;
+  value: FunctionExpression;
+  computed: boolean;
+  static: boolean;
+  kind: 'method' | 'get' | 'set' | 'constructor';
+  decorators?: Decorator[];
 }
 
 export interface NewExpression extends _Node {
@@ -709,13 +722,6 @@ export interface Property extends _Node {
   method: boolean;
   shorthand: boolean;
   kind: 'init' | 'get' | 'set';
-}
-
-export interface RegExpLiteral extends Literal {
-  regex: {
-    pattern: string;
-    flags: string;
-  };
 }
 
 export interface RestElement extends _Node {

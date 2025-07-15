@@ -1,8 +1,9 @@
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { Context } from '../../src/common';
-import { Token } from '../../src/token';
-import { create } from '../../src/parser';
 import { scanSingleToken } from '../../src/lexer/scan';
+import { Parser } from '../../src/parser/parser';
+import { Token } from '../../src/token';
 
 describe('src/lexer/scan', () => {
   const tokens: [Context, Token, string][] = [
@@ -26,7 +27,7 @@ describe('src/lexer/scan', () => {
     [Context.None, Token.ShiftLeftAssign, '<<='],
     [Context.None, Token.ShiftRightAssign, '>>='],
     [Context.None, Token.LogicalShiftRightAssign, '>>>='],
-    [Context.None, Token.ExponentiateAssign, '**='],
+    [Context.None, Token.ExponentiationAssign, '**='],
     [Context.None, Token.AddAssign, '+='],
     [Context.None, Token.SubtractAssign, '-='],
     [Context.None, Token.MultiplyAssign, '*='],
@@ -46,7 +47,7 @@ describe('src/lexer/scan', () => {
     [Context.None, Token.Multiply, '*'],
     [Context.None, Token.Modulo, '%'],
     [Context.None, Token.Divide, '/'],
-    [Context.None, Token.Exponentiate, '**'],
+    [Context.None, Token.Exponentiation, '**'],
     [Context.None, Token.LogicalAnd, '&&'],
     [Context.None, Token.LogicalOr, '||'],
     [Context.None, Token.StrictEqual, '==='],
@@ -62,43 +63,43 @@ describe('src/lexer/scan', () => {
     [Context.None, Token.LogicalShiftRight, '>>>'],
     [Context.None, Token.BitwiseAnd, '&'],
     [Context.None, Token.BitwiseOr, '|'],
-    [Context.None, Token.BitwiseXor, '^']
+    [Context.None, Token.BitwiseXor, '^'],
   ];
 
   for (const [ctx, token, op] of tokens) {
     it(`scans '${op}' at the end`, () => {
-      const state = create(op, '', undefined);
-      const found = scanSingleToken(state, ctx, 0);
+      const parser = new Parser(op);
+      const found = scanSingleToken(parser, ctx, 0);
 
       t.deepEqual(
         {
           token: found,
-          hasNext: state.index < state.source.length,
-          index: state.index
+          hasNext: parser.index < parser.source.length,
+          index: parser.index,
         },
         {
           token: token,
           hasNext: false,
-          index: op.length
-        }
+          index: op.length,
+        },
       );
     });
 
     it(`scans '${op}' with more to go`, () => {
-      const state = create(`${op} rest`, '', undefined);
-      const found = scanSingleToken(state, ctx, 0);
+      const parser = new Parser(`${op} rest`);
+      const found = scanSingleToken(parser, ctx, 0);
 
       t.deepEqual(
         {
           token: found,
-          hasNext: state.index < state.source.length,
-          index: state.index
+          hasNext: parser.index < parser.source.length,
+          index: parser.index,
         },
         {
           token: token,
           hasNext: true,
-          index: op.length
-        }
+          index: op.length,
+        },
       );
     });
   }

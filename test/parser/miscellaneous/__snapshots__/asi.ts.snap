@@ -1,0 +1,1044 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > 
+ while(false) 1`] = `
+"SyntaxError [2:12-2:13]: Unexpected token: 'end of source'
+  1 |
+> 2 |  while(false)
+    |             ^ Unexpected token: 'end of source'"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > {} * 1 1`] = `
+"SyntaxError [1:3-1:4]: Unexpected token: '*'
+> 1 | {} * 1
+    |    ^ Unexpected token: '*'"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > do
+while (false) 1`] = `
+"SyntaxError [2:12-2:13]: Unexpected token: 'end of source'
+  1 | do
+> 2 | while (false)
+    |             ^ Unexpected token: 'end of source'"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > do {}; 
+ while(false) 1`] = `
+"SyntaxError [1:5-1:6]: Expected 'while'
+> 1 | do {}; 
+    |      ^ Expected 'while'
+  2 |  while(false)"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for header is (false 
+ false 
+) 1`] = `
+"SyntaxError [1:4-1:10]: Expected '('
+> 1 | for header is (false 
+    |     ^^^^^^ Expected '('
+  2 |  false 
+  3 | )"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for(
+    ;
+) {
+  break;
+} 1`] = `
+"SyntaxError [3:0-3:1]: Unexpected token: ')'
+  1 | for(
+  2 |     ;
+> 3 | ) {
+    | ^ Unexpected token: ')'
+  4 |   break;
+  5 | }"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for(
+    false
+;) {
+  break;
+} 1`] = `
+"SyntaxError [3:1-3:2]: Unexpected token: ')'
+  1 | for(
+  2 |     false
+> 3 | ;) {
+    |  ^ Unexpected token: ')'
+  4 |   break;
+  5 | }"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for(
+) {
+  break;
+} 1`] = `
+"SyntaxError [2:0-2:1]: Unexpected token: ')'
+  1 | for(
+> 2 | ) {
+    | ^ Unexpected token: ')'
+  3 |   break;
+  4 | }"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for(
+false
+) {
+break;
+} 1`] = `
+"SyntaxError [3:0-3:1]: Expected ';'
+  1 | for(
+  2 | false
+> 3 | ) {
+    | ^ Expected ';'
+  4 | break;
+  5 | }"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for(;
+) {
+  break;
+} 1`] = `
+"SyntaxError [2:0-2:1]: Unexpected token: ')'
+  1 | for(;
+> 2 | ) {
+    | ^ Unexpected token: ')'
+  3 |   break;
+  4 | }"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for(false
+    false
+) {
+  break;
+} 1`] = `
+"SyntaxError [2:4-2:9]: Expected ';'
+  1 | for(false
+> 2 |     false
+    |     ^^^^^ Expected ';'
+  3 | ) {
+  4 |   break;
+  5 | }"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > for(false;false;;false) { break; } 1`] = `
+"SyntaxError [1:16-1:17]: Unexpected token: ';'
+> 1 | for(false;false;;false) { break; }
+    |                 ^ Unexpected token: ';'"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > if (false) x = 1 else x = -1 1`] = `
+"SyntaxError [1:17-1:21]: Unexpected token: 'else'
+> 1 | if (false) x = 1 else x = -1
+    |                  ^^^^ Unexpected token: 'else'"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > try {
+  throw
+  1;
+} catch(e) {
+} 1`] = `
+"SyntaxError [3:2-3:3]: Illegal newline after throw
+  1 | try {
+  2 |   throw
+> 3 |   1;
+    |   ^ Illegal newline after throw
+  4 | } catch(e) {
+  5 | }"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > var x = 0;
+x
+++; 1`] = `
+"SyntaxError [3:2-3:3]: Unexpected token: ';'
+  1 | var x = 0;
+  2 | x
+> 3 | ++;
+    |   ^ Unexpected token: ';'"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > var x = 1;
+x
+--; 1`] = `
+"SyntaxError [3:2-3:3]: Unexpected token: ';'
+  1 | var x = 1;
+  2 | x
+> 3 | --;
+    |   ^ Unexpected token: ';'"
+`;
+
+exports[`Miscellaneous - ASI > Expressions - ASI (fail) > var x=0, y=0;
+var z=
+x
+++
+++
+y 1`] = `
+"SyntaxError [6:0-6:1]: Invalid increment/decrement operand
+  4 | ++
+  5 | ++
+> 6 | y
+    | ^ Invalid increment/decrement operand"
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > "USE STRICT";  var public = 1; 1`] = `
+{
+  "body": [
+    {
+      "directive": "USE STRICT",
+      "expression": {
+        "raw": ""USE STRICT"",
+        "type": "Literal",
+        "value": "USE STRICT",
+      },
+      "type": "ExpressionStatement",
+    },
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "public",
+            "type": "Identifier",
+          },
+          "init": {
+            "raw": "1",
+            "type": "Literal",
+            "value": 1,
+          },
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > "foo"
+x 1`] = `
+{
+  "body": [
+    {
+      "directive": "foo",
+      "end": 5,
+      "expression": {
+        "end": 5,
+        "range": [
+          0,
+          5,
+        ],
+        "raw": ""foo"",
+        "start": 0,
+        "type": "Literal",
+        "value": "foo",
+      },
+      "range": [
+        0,
+        5,
+      ],
+      "start": 0,
+      "type": "ExpressionStatement",
+    },
+    {
+      "end": 7,
+      "expression": {
+        "end": 7,
+        "name": "x",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        6,
+        7,
+      ],
+      "start": 6,
+      "type": "ExpressionStatement",
+    },
+  ],
+  "end": 7,
+  "range": [
+    0,
+    7,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > "ignore me"
+++x 1`] = `
+{
+  "body": [
+    {
+      "directive": "ignore me",
+      "expression": {
+        "raw": ""ignore me"",
+        "type": "Literal",
+        "value": "ignore me",
+      },
+      "type": "ExpressionStatement",
+    },
+    {
+      "expression": {
+        "argument": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "operator": "++",
+        "prefix": true,
+        "type": "UpdateExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > ("use strict"); eval = 42; 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "raw": ""use strict"",
+        "type": "Literal",
+        "value": "use strict",
+      },
+      "type": "ExpressionStatement",
+    },
+    {
+      "expression": {
+        "left": {
+          "name": "eval",
+          "type": "Identifier",
+        },
+        "operator": "=",
+        "right": {
+          "raw": "42",
+          "type": "Literal",
+          "value": 42,
+        },
+        "type": "AssignmentExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > ("use strict"); foo = 42; 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "raw": ""use strict"",
+        "type": "Literal",
+        "value": "use strict",
+      },
+      "type": "ExpressionStatement",
+    },
+    {
+      "expression": {
+        "left": {
+          "name": "foo",
+          "type": "Identifier",
+        },
+        "operator": "=",
+        "right": {
+          "raw": "42",
+          "type": "Literal",
+          "value": 42,
+        },
+        "type": "AssignmentExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > () => { "use strict"; } 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "async": false,
+        "body": {
+          "body": [
+            {
+              "directive": "use strict",
+              "expression": {
+                "raw": ""use strict"",
+                "type": "Literal",
+                "value": "use strict",
+              },
+              "type": "ExpressionStatement",
+            },
+          ],
+          "type": "BlockStatement",
+        },
+        "expression": false,
+        "generator": false,
+        "params": [],
+        "type": "ArrowFunctionExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > ({x:function(){"use strict";}}) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "properties": [
+          {
+            "computed": false,
+            "key": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "type": "Property",
+            "value": {
+              "async": false,
+              "body": {
+                "body": [
+                  {
+                    "directive": "use strict",
+                    "expression": {
+                      "raw": ""use strict"",
+                      "type": "Literal",
+                      "value": "use strict",
+                    },
+                    "type": "ExpressionStatement",
+                  },
+                ],
+                "type": "BlockStatement",
+              },
+              "generator": false,
+              "id": null,
+              "params": [],
+              "type": "FunctionExpression",
+            },
+          },
+        ],
+        "type": "ObjectExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > +function f(){"use strict";} 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "async": false,
+          "body": {
+            "body": [
+              {
+                "directive": "use strict",
+                "expression": {
+                  "raw": ""use strict"",
+                  "type": "Literal",
+                  "value": "use strict",
+                },
+                "type": "ExpressionStatement",
+              },
+            ],
+            "type": "BlockStatement",
+          },
+          "generator": false,
+          "id": {
+            "name": "f",
+            "type": "Identifier",
+          },
+          "params": [],
+          "type": "FunctionExpression",
+        },
+        "operator": "+",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > ;;1;;1;;1 1`] = `
+{
+  "body": [
+    {
+      "end": 1,
+      "range": [
+        0,
+        1,
+      ],
+      "start": 0,
+      "type": "EmptyStatement",
+    },
+    {
+      "end": 2,
+      "range": [
+        1,
+        2,
+      ],
+      "start": 1,
+      "type": "EmptyStatement",
+    },
+    {
+      "end": 4,
+      "expression": {
+        "end": 3,
+        "range": [
+          2,
+          3,
+        ],
+        "start": 2,
+        "type": "Literal",
+        "value": 1,
+      },
+      "range": [
+        2,
+        4,
+      ],
+      "start": 2,
+      "type": "ExpressionStatement",
+    },
+    {
+      "end": 5,
+      "range": [
+        4,
+        5,
+      ],
+      "start": 4,
+      "type": "EmptyStatement",
+    },
+    {
+      "end": 7,
+      "expression": {
+        "end": 6,
+        "range": [
+          5,
+          6,
+        ],
+        "start": 5,
+        "type": "Literal",
+        "value": 1,
+      },
+      "range": [
+        5,
+        7,
+      ],
+      "start": 5,
+      "type": "ExpressionStatement",
+    },
+    {
+      "end": 8,
+      "range": [
+        7,
+        8,
+      ],
+      "start": 7,
+      "type": "EmptyStatement",
+    },
+    {
+      "end": 9,
+      "expression": {
+        "end": 9,
+        "range": [
+          8,
+          9,
+        ],
+        "start": 8,
+        "type": "Literal",
+        "value": 1,
+      },
+      "range": [
+        8,
+        9,
+      ],
+      "start": 8,
+      "type": "ExpressionStatement",
+    },
+  ],
+  "end": 9,
+  "range": [
+    0,
+    9,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > { "use strict"; } 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "expression": {
+            "raw": ""use strict"",
+            "type": "Literal",
+            "value": "use strict",
+          },
+          "type": "ExpressionStatement",
+        },
+      ],
+      "type": "BlockStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function a() { "use strict" } "use strict"; foo; 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "use strict",
+            "expression": {
+              "raw": ""use strict"",
+              "type": "Literal",
+              "value": "use strict",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "a",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+    {
+      "expression": {
+        "raw": ""use strict"",
+        "type": "Literal",
+        "value": "use strict",
+      },
+      "type": "ExpressionStatement",
+    },
+    {
+      "expression": {
+        "name": "foo",
+        "type": "Identifier",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function f(){
+"foo"
+} 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "foo",
+            "expression": {
+              "raw": ""foo"",
+              "type": "Literal",
+              "value": "foo",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function f(){
+'foo';
+} 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "foo",
+            "expression": {
+              "raw": "'foo'",
+              "type": "Literal",
+              "value": "foo",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function f(){ "Esprima uses directives"; "use strict";} 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "Esprima uses directives",
+            "expression": {
+              "raw": ""Esprima uses directives"",
+              "type": "Literal",
+              "value": "Esprima uses directives",
+            },
+            "type": "ExpressionStatement",
+          },
+          {
+            "directive": "use strict",
+            "expression": {
+              "raw": ""use strict"",
+              "type": "Literal",
+              "value": "use strict",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function f(){ 123; "use strict";} 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "expression": {
+              "raw": "123",
+              "type": "Literal",
+              "value": 123,
+            },
+            "type": "ExpressionStatement",
+          },
+          {
+            "expression": {
+              "raw": ""use strict"",
+              "type": "Literal",
+              "value": "use strict",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function f(){"use strict";} 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "use strict",
+            "expression": {
+              "raw": ""use strict"",
+              "type": "Literal",
+              "value": "use strict",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function f(x){"use strict";} 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "use strict",
+            "expression": {
+              "raw": ""use strict"",
+              "type": "Literal",
+              "value": "use strict",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [
+        {
+          "name": "x",
+          "type": "Identifier",
+        },
+      ],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function f(x, y){"use strict";} 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "use strict",
+            "expression": {
+              "raw": ""use strict"",
+              "type": "Literal",
+              "value": "use strict",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [
+        {
+          "name": "x",
+          "type": "Identifier",
+        },
+        {
+          "name": "y",
+          "type": "Identifier",
+        },
+      ],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Miscellaneous - ASI > Miscellaneous - ASI > function wrap() { "use asm"; "use strict"; foo } 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "directive": "use asm",
+            "end": 28,
+            "expression": {
+              "end": 27,
+              "range": [
+                18,
+                27,
+              ],
+              "raw": ""use asm"",
+              "start": 18,
+              "type": "Literal",
+              "value": "use asm",
+            },
+            "range": [
+              18,
+              28,
+            ],
+            "start": 18,
+            "type": "ExpressionStatement",
+          },
+          {
+            "directive": "use strict",
+            "end": 42,
+            "expression": {
+              "end": 41,
+              "range": [
+                29,
+                41,
+              ],
+              "raw": ""use strict"",
+              "start": 29,
+              "type": "Literal",
+              "value": "use strict",
+            },
+            "range": [
+              29,
+              42,
+            ],
+            "start": 29,
+            "type": "ExpressionStatement",
+          },
+          {
+            "end": 46,
+            "expression": {
+              "end": 46,
+              "name": "foo",
+              "range": [
+                43,
+                46,
+              ],
+              "start": 43,
+              "type": "Identifier",
+            },
+            "range": [
+              43,
+              46,
+            ],
+            "start": 43,
+            "type": "ExpressionStatement",
+          },
+        ],
+        "end": 48,
+        "range": [
+          16,
+          48,
+        ],
+        "start": 16,
+        "type": "BlockStatement",
+      },
+      "end": 48,
+      "generator": false,
+      "id": {
+        "end": 13,
+        "name": "wrap",
+        "range": [
+          9,
+          13,
+        ],
+        "start": 9,
+        "type": "Identifier",
+      },
+      "params": [],
+      "range": [
+        0,
+        48,
+      ],
+      "start": 0,
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "end": 48,
+  "range": [
+    0,
+    48,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;

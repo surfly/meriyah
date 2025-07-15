@@ -4,8 +4,8 @@
 
 <p align="center">
     <a href="https://www.npmjs.com/package/meriyah"><img src="https://img.shields.io/npm/v/meriyah.svg?style=flat-square" alt="Meriyah NPM"/></a>
-    <a href="https://github.com/meriyah/meriyah/actions/workflows/node.js.yml"><img src="https://github.com/meriyah/meriyah/actions/workflows/node.js.yml/badge.svg" alt="Node.js CI"/></a>
-    <a href="https://github.com/meriyah/meriyah/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/meriyah/meriyah.svg" alt="License" /></a>
+    <a href="https://github.com/meriyah/meriyah/actions/workflows/node.js.yml?query=branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/meriyah/meriyah/node.js.yml?branch=main&label=test&style=flat-square" alt="Node.js CI"/></a>
+    <a href="https://github.com/meriyah/meriyah/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/meriyah/meriyah.svg?style=flat-square" alt="License" /></a>
 </p>
 
 <br>
@@ -21,7 +21,7 @@ Therefore, after each change we need to compile updated version with `npm run bu
 ## Features
 
 - Conforms to the standard ECMAScript® 2024 (ECMA-262 15th Edition) language specification
-  - Except RegExp duplicate named groups (See [RegExp support](#regexp-support))
+  - See [RegExp support](#regexp-support)
 - Support some TC39 stage 3 proposals via option "next"
 - Support for additional ECMAScript features for Web Browsers (Annex B)
 - JSX support via option "jsx"
@@ -38,28 +38,25 @@ Therefore, after each change we need to compile updated version with `npm run bu
 These features need to be enabled with the `next` option.
 
 - [Decorators](https://github.com/tc39/proposal-decorators)
-- [Import Attributes](https://github.com/tc39/proposal-import-attributes)
 - [JSON Modules](https://github.com/tc39/proposal-json-modules)
 
 ### Not yet supported stage 3 features:
 
 - [Explicit resource management](https://github.com/tc39/proposal-explicit-resource-management)
 - [Source phase import](https://github.com/tc39/proposal-source-phase-imports)
-- [RegExp modifiers](https://github.com/tc39/proposal-regexp-modifiers) (See [RegExp support](#regexp-support))
 
 ## RegExp support
 
 Meriyah doesn't parse RegExp internal syntax, ESTree spec didn't require internal structure of RegExp. Meriyah
-does use JavaScript runtime to validate the RegExp literal. That means Meriyah's RegExp support is only as good
+does use JavaScript runtime to validate the RegExp literal by default. That means Meriyah's RegExp support is only as good
 as JavaScript runtime's RegExp support.
 
-As of Auguest 2024, some latest RegExp features are not supported due to missing implementation in general
-JavaScript runtime.
+As of May 2025, some latest RegExp features requires Node.js>=24.
 
-- [RegExp modifiers](https://github.com/tc39/proposal-regexp-modifiers) (stage 3) is not supported
-- [RegExp duplicate named groups](https://github.com/tc39/proposal-duplicate-named-capturing-groups) is not supported
+- [RegExp modifiers](https://github.com/tc39/proposal-regexp-modifiers)
+- [RegExp duplicate named groups](https://github.com/tc39/proposal-duplicate-named-capturing-groups)
 
-In addition, RegExp v flag (unicodeSets) only works on Nodejs v20+ and latest browsers.
+Use `validateRegex: false` if you want consistent behavior in different environments or don't need errors for invalid RegExp.
 
 ## Installation
 
@@ -81,55 +78,55 @@ const result = parse('let some = "code";', { ranges: true });
 
 The available options:
 
-```js
+```ts
 {
-  // The flag to allow module code
-  module: false;
+  // Indicate the mode the code should be parsed in 'script', 'module', or 'commonjs' mode, default `'script'`
+  sourceType: 'script' | 'module' | 'commonjs';
 
-  // The flag to enable stage 3 support (ESNext)
-  next: false;
+  // The flag to enable stage 3 support (ESNext), default `false`
+  next: boolean;
 
-  // The flag to enable start, end offsets and range: [start, end] to each node
-  ranges: false;
+  // The flag to enable start, end offsets and range: [start, end] to each node, default `false`
+  ranges: boolean;
 
-  // Enable web compatibility
-  webcompat: false;
+  // Enable web compatibility, default `false`
+  webcompat: boolean;
 
-  // The flag to enable line/column location information to each node
-  loc: false;
+  // The flag to enable line/column location information to each node, default `false`
+  loc: boolean;
 
-  // The flag to attach raw property to each literal and identifier node
-  raw: false;
+  // The flag to attach raw property to each literal and identifier node, default `false`
+  raw: boolean;
 
-  // The flag to allow return in the global scope
-  globalReturn: false;
+  // The flag to enable implied strict mode, default `false`
+  impliedStrict: boolean;
 
-  // The flag to enable implied strict mode
-  impliedStrict: false;
-
-  // Allows comment extraction. Accepts either a function or array
+  // Allows comment extraction. Accepts either a function or array, default `undefined`
   onComment: [];
 
-  // Allows detection of automatic semicolon insertion. Accepts a callback function that will be passed the charater offset where the semicolon was inserted
-  onInsertedSemicolon: (pos) => {};
+  // Allows detection of automatic semicolon insertion. Accepts a callback function that will be passed the character offset where the semicolon was inserted, default `undefined`
+  onInsertedSemicolon: (position: number) => {};
 
   // Attach comments to AST
   attachComments: false;
 
-  // Allows token extraction. Accepts either a function or array
+  // Allows token extraction. Accepts either a function or array, default `undefined`
   onToken: [];
 
-  // Enable non-standard parenthesized expression node
-  preserveParens: false;
+  // Enable non-standard parenthesized expression node, default `false`
+  preserveParens: boolean;
 
-  // Enable lexical binding and scope tracking
-  lexical: false;
+  // Enable lexical binding and scope tracking, default `false`
+  lexical: boolean;
 
   // Adds a source attribute in every node’s loc object when the locations option is `true`
-  source: undefined; // Set to source: 'source-file.js'
+  source: string; // Set to source: 'source-file.js'
 
-  // Enable React JSX parsing
-  jsx: false;
+  // Enable React JSX parsing, default `false`
+  jsx: boolean;
+
+  // Validate regular expressions with runtime, default `true`
+  validateRegex: boolean;
 }
 ```
 
@@ -158,9 +155,9 @@ declare function onInsertedSemicolon(position: number): void;
 ## Example usage
 
 ```js
-import { parseScript } from './meriyah';
+import { parse } from './meriyah';
 
-parseScript('({x: [y] = 0} = 1)');
+parse('({x: [y] = 0} = 1)');
 ```
 
 This will return when serialized in json:

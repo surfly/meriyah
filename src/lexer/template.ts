@@ -1,14 +1,15 @@
-import { ParserState, Context } from '../common';
-import { Token } from '../token';
 import { Chars } from '../chars';
+import { Context } from '../common';
+import { Errors } from '../errors';
+import { type Parser } from '../parser/parser';
+import { Token } from '../token';
 import { advanceChar } from './common';
-import { parseEscape, Escape, handleStringError } from './string';
-import { report, Errors } from '../errors';
+import { Escape, handleStringError, parseEscape } from './string';
 
 /**
  * Scan a template section. It can start either from the quote or closing brace.
  */
-export function scanTemplate(parser: ParserState, context: Context): Token {
+export function scanTemplate(parser: Parser, context: Context): Token {
   const { index: start } = parser;
   let token: Token = Token.TemplateSpan;
   let ret: string | null = '';
@@ -54,7 +55,7 @@ export function scanTemplate(parser: ParserState, context: Context): Token {
       }
       ret += String.fromCodePoint(char);
     }
-    if (parser.index >= parser.end) report(parser, Errors.UnterminatedTemplate);
+    if (parser.index >= parser.end) parser.report(Errors.UnterminatedTemplate);
     char = advanceChar(parser);
   }
 
@@ -72,7 +73,7 @@ export function scanTemplate(parser: ParserState, context: Context): Token {
  * @param parser Parser state
  * @param ch Code point
  */
-function scanBadTemplate(parser: ParserState, ch: number): number {
+function scanBadTemplate(parser: Parser, ch: number): number {
   while (ch !== Chars.Backtick) {
     switch (ch) {
       case Chars.Dollar: {
@@ -94,15 +95,15 @@ function scanBadTemplate(parser: ParserState, ch: number): number {
       default:
       // do nothing
     }
-    if (parser.index >= parser.end) report(parser, Errors.UnterminatedTemplate);
+    if (parser.index >= parser.end) parser.report(Errors.UnterminatedTemplate);
     ch = advanceChar(parser);
   }
 
   return ch;
 }
 
-export function scanTemplateTail(parser: ParserState, context: Context): Token {
-  if (parser.index >= parser.end) report(parser, Errors.Unexpected);
+export function scanTemplateTail(parser: Parser, context: Context): Token {
+  if (parser.index >= parser.end) parser.report(Errors.Unexpected);
   parser.index--;
   parser.column--;
   return scanTemplate(parser, context);

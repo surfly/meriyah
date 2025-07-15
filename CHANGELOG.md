@@ -1,3 +1,85 @@
+## [6.1.4](https://github.com/meriyah/meriyah/compare/v6.1.3...v6.1.4) (2025-07-02)
+
+
+### Bug Fixes
+
+* add missing `AccessorProperty` to `Node` ([#482](https://github.com/meriyah/meriyah/issues/482)) ([e6dcc62](https://github.com/meriyah/meriyah/commit/e6dcc62e3b6436ca626e18c621419e8da9f1f9c9))
+* fix `decodeHTMLStrict()` ([#505](https://github.com/meriyah/meriyah/issues/505)) ([bd3ce8e](https://github.com/meriyah/meriyah/commit/bd3ce8e267f5941044436541e7488bee6ef4d850))
+* **parser:** fix class member range with decorators ([#506](https://github.com/meriyah/meriyah/issues/506)) ([1dfa82c](https://github.com/meriyah/meriyah/commit/1dfa82cc3f6957a6013fee2fa137f6f09e9eb26d))
+* **parser:** stop complaining about named import/export with `{type: "json"}` attribute ([#484](https://github.com/meriyah/meriyah/issues/484)) ([ab8a383](https://github.com/meriyah/meriyah/commit/ab8a3836336f7418b42ea22997141c211b097605))
+
+
+
+## [6.1.3](https://github.com/meriyah/meriyah/compare/v6.1.2...v6.1.3) (2025-06-24)
+
+
+### Bug Fixes
+
+* **parser:** fix line/column where string literal contains `U+2028` or `U+2029` followed by `\` ([#478](https://github.com/meriyah/meriyah/issues/478)) ([1f054a1](https://github.com/meriyah/meriyah/commit/1f054a1cbc18ca593edc73d1787880134e36aa11))
+* **parser:** fix line/column where string literal contains U+2028 or U+2029 ([#477](https://github.com/meriyah/meriyah/issues/477)) ([6117d2f](https://github.com/meriyah/meriyah/commit/6117d2f424bf2f627ff2cf5fe6f65519f4dac072))
+* **parser:** fix location of `SequenceExpression` as `ForStatement.init` ([#476](https://github.com/meriyah/meriyah/issues/476)) ([b79282b](https://github.com/meriyah/meriyah/commit/b79282b5e833440ef3433b612b856e4b1fec1bd5))
+* **parser:** fix location of object method which is a generator ([#474](https://github.com/meriyah/meriyah/issues/474)) ([c11f9dd](https://github.com/meriyah/meriyah/commit/c11f9dd880571f97daea27d2f580e8d9e952d023))
+* **parser:** fix range of static class property named `accessor`, `get`, `set`, and `async` ([#471](https://github.com/meriyah/meriyah/issues/471)) ([27f224c](https://github.com/meriyah/meriyah/commit/27f224c54748e82f4139a2d29f0278b32bc5b9e1))
+
+
+
+## [6.1.2](https://github.com/meriyah/meriyah/compare/v6.1.1...v6.1.2) (2025-06-21)
+
+
+### Bug Fixes
+
+* **parser:** fix column of escaped identifier ([#469](https://github.com/meriyah/meriyah/issues/469)) ([98d3983](https://github.com/meriyah/meriyah/commit/98d398314f03c3c850368bee1ce697b88f070c79))
+* **parser:** fix location of `import.meta` ([#461](https://github.com/meriyah/meriyah/issues/461)) ([6a05b0e](https://github.com/meriyah/meriyah/commit/6a05b0e0183f357ced7b26207a2a2f22ca287e80))
+
+
+
+## [6.1.1](https://github.com/meriyah/meriyah/compare/v6.1.0...v6.1.1) (2025-06-17)
+
+
+### Bug Fixes
+
+* **parser:** `CallExpression.optional` and `MemberExpression.{optional,computed}` is always a boolean ([#439](https://github.com/meriyah/meriyah/issues/439)) ([4bc2599](https://github.com/meriyah/meriyah/commit/4bc2599c054b0e8c932cd03fb8df9222f9e59c3c))
+* **parser:** allow decorators after `export`, forbid decorators appears both before and after `export`/`export default` ([#455](https://github.com/meriyah/meriyah/issues/455)) ([78f49f5](https://github.com/meriyah/meriyah/commit/78f49f50ce0401fdca5b3b15ee2c6e7af5144cd0))
+* **parser:** fix `MemeberExpression` location inside `For{,Of,In}Statement` ([#447](https://github.com/meriyah/meriyah/issues/447)) ([e86318d](https://github.com/meriyah/meriyah/commit/e86318d3f3cda713d58603b9973dbdbd73d839bc))
+* **parser:** fix location of `Decorator.expression` ([#438](https://github.com/meriyah/meriyah/issues/438)) ([4956772](https://github.com/meriyah/meriyah/commit/49567723752bc0017cea304a6c268c8b670bbbbb))
+* **parser:** fix location of `PrivateIdentifier` ([#437](https://github.com/meriyah/meriyah/issues/437)) ([cba2219](https://github.com/meriyah/meriyah/commit/cba22190eaa80a3ebfab40280b57d33960eb4a29))
+* **parser:** fix location of static class property ([#448](https://github.com/meriyah/meriyah/issues/448)) ([1f5c2cc](https://github.com/meriyah/meriyah/commit/1f5c2ccec291446249b1a29bee80bbd49513fd23))
+* **parser:** include decorators in `ClassDeclaration`, `ExportDeclaration`, and `ExportDefaultDeclaration` ([#457](https://github.com/meriyah/meriyah/issues/457)) ([0f0b198](https://github.com/meriyah/meriyah/commit/0f0b198bf8fb03ed6469bcc176a2fbcd26d2b251))
+* **parser:** include decorators in range of `Class{Expression,Declaration}` ([#452](https://github.com/meriyah/meriyah/issues/452)) ([82f2ea4](https://github.com/meriyah/meriyah/commit/82f2ea4cd9bd335119e665cbc259f7e5b9810356))
+* **parser:** include decorators in range of class members ([#450](https://github.com/meriyah/meriyah/issues/450)) ([da156b4](https://github.com/meriyah/meriyah/commit/da156b42dad4f5ca4fcbd0d02411f7243ea61bd1))
+
+
+
+# [6.1.0](https://github.com/meriyah/meriyah/compare/v6.0.6...v6.1.0) (2025-06-13)
+
+
+### Bug Fixes
+
+* **parser:** `attributes` on `{ExportAll,ExportNamed,Import}Declaration` is now always an array ([#423](https://github.com/meriyah/meriyah/issues/423)) ([30ea976](https://github.com/meriyah/meriyah/commit/30ea9763596050690e342257e19bdc625a0c38c8))
+* **parser:** add missing `generator` property to `ArrowFunctionExpression` ([#424](https://github.com/meriyah/meriyah/issues/424)) ([2fe6b54](https://github.com/meriyah/meriyah/commit/2fe6b54bebe40835d15ac505a210d17cb11dc467))
+* **parser:** fix `bigint` property on `BigintLiteral` ([#422](https://github.com/meriyah/meriyah/issues/422)) ([ad1922d](https://github.com/meriyah/meriyah/commit/ad1922de74ad5f8f2ab63d5e1ee809cce6c0572b))
+* **parser:** fix location of `StaticBlock` ([#434](https://github.com/meriyah/meriyah/issues/434)) ([2b9e923](https://github.com/meriyah/meriyah/commit/2b9e92333088676424234a840ee51ef5f173d959))
+* preserve nested `ParenthesizedExpression` ([#432](https://github.com/meriyah/meriyah/issues/432)) ([ae6cae5](https://github.com/meriyah/meriyah/commit/ae6cae5b1bb049408c4bf87555ad3cecb2841f0c))
+* remove `ESTree` export ([#398](https://github.com/meriyah/meriyah/issues/398)) ([49a96ff](https://github.com/meriyah/meriyah/commit/49a96ffcceda07018c927b81b3025fa3c8ddb16d))
+
+
+### Features
+
+* add `module-sync` condition ([#384](https://github.com/meriyah/meriyah/issues/384)) ([dc4a23e](https://github.com/meriyah/meriyah/commit/dc4a23e5f77ca0294eef7da0dc7a70f3858dfc7d))
+* **parser:** move "Import Attributes" out of "next" option ([#430](https://github.com/meriyah/meriyah/issues/430)) ([c5a87fd](https://github.com/meriyah/meriyah/commit/c5a87fdb7987e37531bde77623f8865028db5958))
+* remove location information from `ParseError.description` ([#390](https://github.com/meriyah/meriyah/issues/390)) ([2729651](https://github.com/meriyah/meriyah/commit/2729651f8fd8a740cf3d76eab87a679a4394a5e7))
+
+
+
+## [6.0.6](https://github.com/meriyah/meriyah/compare/v6.0.5...v6.0.6) (2025-04-04)
+
+
+### Bug Fixes
+
+* **parser:** get/set/from/of are allowed as identifiers ([#377](https://github.com/meriyah/meriyah/issues/377)) ([3ef007f](https://github.com/meriyah/meriyah/commit/3ef007f5952d05a4f82be990282b2d52cfb962f4))
+
+
+
 ## [6.0.5](https://github.com/meriyah/meriyah/compare/v6.0.4...v6.0.5) (2025-01-10)
 
 
@@ -60,12 +142,12 @@
 - **parser:** catch block without catch-binding should have lexical scope ([db7b3ae](https://github.com/meriyah/meriyah/commit/db7b3aefd8e524ec0de8a332ea5bc016a127c1a3))
 - **parser:** class is implicit strict mode, but decorator before class is not ([97f4927](https://github.com/meriyah/meriyah/commit/97f492783a4b78f5abb9645620f4b6611684fcd0))
 - **parser:** class static block disallows "await" as identifier ([4c7f2c3](https://github.com/meriyah/meriyah/commit/4c7f2c388a24f78b4f3b07ea02d08bbe8fbc25ea))
-- **parser:** class static block disllows "yield" as idenfifier ([1cb0d65](https://github.com/meriyah/meriyah/commit/1cb0d65a3e7c1f5276b83cf172df424407cb2d96))
+- **parser:** class static block disallows "yield" as identifier ([1cb0d65](https://github.com/meriyah/meriyah/commit/1cb0d65a3e7c1f5276b83cf172df424407cb2d96))
 - **parser:** class static block has no return statement ([f2b73ee](https://github.com/meriyah/meriyah/commit/f2b73ee4b43b48d49452a5e4f067b58968085659))
 - **parser:** dot property name can be escaped reserved or future reserved ([eedce98](https://github.com/meriyah/meriyah/commit/eedce98913f6a8f8f16df60e73edc6ac231b2a28))
 - **parser:** escaped reserved keyword can be used as class element name ([b8e4b3c](https://github.com/meriyah/meriyah/commit/b8e4b3c231d5fc5b57aff1bd2b8a15e2af20b11c))
 - **parser:** fix an edge case of invalid escape in tagged template ([118fdae](https://github.com/meriyah/meriyah/commit/118fdae97ab0c5640b3ede9cdbc5dc2e0fe05070))
-- **parser:** fix annexB behaviour (webcompat) of catch param ([359dcbe](https://github.com/meriyah/meriyah/commit/359dcbe34447a409cf87630188aafb3ce7729abf))
+- **parser:** fix annexB behavior (webcompat) of catch param ([359dcbe](https://github.com/meriyah/meriyah/commit/359dcbe34447a409cf87630188aafb3ce7729abf))
 - **parser:** fix destruct pattern check ([1e5e394](https://github.com/meriyah/meriyah/commit/1e5e3945b3de6e2eed9e700688442f4bf069268f))
 - **parser:** fix duplicated function params check ([d0aeda6](https://github.com/meriyah/meriyah/commit/d0aeda6586a67b0ad85d64bfc525762d812f7064))
 - **parser:** fix duplicated proto check in async() and async() => {} ([66ad497](https://github.com/meriyah/meriyah/commit/66ad4976ae485a6cb4fb880c9fb0fe5334365872))
@@ -79,15 +161,15 @@
 - **parser:** fix unicode identifier value and check ([36a5ef6](https://github.com/meriyah/meriyah/commit/36a5ef66557e853efd1d63c36b313697903b0560))
 - **parser:** generator function should not skip duplication error ([d3c953b](https://github.com/meriyah/meriyah/commit/d3c953b2023d513333c8219a762aede08c454a87))
 - **parser:** in strict mode, escaped future reserved can be used as identifier but not destructible ([762f8c1](https://github.com/meriyah/meriyah/commit/762f8c1fa2282d36985eb068963f9db10533c040))
-- **parser:** iteration/switch cannot across class static block boundry ([c832eb6](https://github.com/meriyah/meriyah/commit/c832eb67e5d36edaced0e96d9f6ecb8ac3b6fe8a))
+- **parser:** iteration/switch cannot across class static block boundary ([c832eb6](https://github.com/meriyah/meriyah/commit/c832eb67e5d36edaced0e96d9f6ecb8ac3b6fe8a))
 - **parser:** new.target is allowed in class static block ([2cec2a9](https://github.com/meriyah/meriyah/commit/2cec2a94868e6e14b80636a542709183c7934463))
 - **parser:** object literal ({a b}) is invalid ([c069662](https://github.com/meriyah/meriyah/commit/c069662755085a0f85174898eacb299a631ea92f)), closes [#73](https://github.com/meriyah/meriyah/issues/73)
 - **parser:** oct escape and \8 \9 are not allowed in template string if not tagged ([e12d75d](https://github.com/meriyah/meriyah/commit/e12d75d4845a76e08ac42a087d6142d1ffdbb23c))
 - **parser:** only class static non-private property cannot be named 'prototype' ([03ef7bc](https://github.com/meriyah/meriyah/commit/03ef7bce129d43d1b17d03bc08a606704f1747d6))
 - **parser:** partially fix duplicated proto check in parenthesis ([e998b9c](https://github.com/meriyah/meriyah/commit/e998b9c17933b0b178959cd83f336e81dbe491e9))
 - **parser:** private identifier should work in optional chaining ([f22f7ad](https://github.com/meriyah/meriyah/commit/f22f7ada24bc0755d9717fca4a9f5e95a31a3716))
-- **paser:** fix strict mode check for arrow function ([4ca184a](https://github.com/meriyah/meriyah/commit/4ca184a0e2ee369b959d2d514c9d614278dc7863))
-- **paser:** private identifier cannot be accessed on super ([15d679d](https://github.com/meriyah/meriyah/commit/15d679df1a44de770b42ab872808f79ea95457bd))
+- **parser:** fix strict mode check for arrow function ([4ca184a](https://github.com/meriyah/meriyah/commit/4ca184a0e2ee369b959d2d514c9d614278dc7863))
+- **parser:** private identifier cannot be accessed on super ([15d679d](https://github.com/meriyah/meriyah/commit/15d679df1a44de770b42ab872808f79ea95457bd))
 - **scanner:** fix value for huge BigInt ([a09b497](https://github.com/meriyah/meriyah/commit/a09b497d4085bb491515ab50f450f92e4feb6014))
 
 ### chore
@@ -228,7 +310,7 @@
 - **lexer:** fix wrong error when using regex flag s together with m or y ([d757c6b](https://github.com/meriyah/meriyah/commit/d757c6b20ae4f6f4e55a77179726db36cf2bd50b)), closes [#202](https://github.com/meriyah/meriyah/issues/202)
 - **parser:** allow regular expression in JSXExpressionContainer ([a5fcb80](https://github.com/meriyah/meriyah/commit/a5fcb8072084f2961e11e9db24f7b8ac0ecd04a6)), closes [#204](https://github.com/meriyah/meriyah/issues/204)
 - **parser:** allow top level await in expressions ([37c6361](https://github.com/meriyah/meriyah/commit/37c63613771e5bc6e23b7da2d92e992c60dafc5a)), closes [#212](https://github.com/meriyah/meriyah/issues/212)
-- **parser:** fix wrong starting loc for any non-trival expression in return statement ([7063af5](https://github.com/meriyah/meriyah/commit/7063af55b2c5d6d370fdf6480b87b70387c707fe)), closes [#207](https://github.com/meriyah/meriyah/issues/207)
+- **parser:** fix wrong starting loc for any non-trivial expression in return statement ([7063af5](https://github.com/meriyah/meriyah/commit/7063af55b2c5d6d370fdf6480b87b70387c707fe)), closes [#207](https://github.com/meriyah/meriyah/issues/207)
 - **parser:** super call should be allowed in private method ([6de707a](https://github.com/meriyah/meriyah/commit/6de707a0efb3053767deaa36b1ed6979b0d3f873)), closes [#203](https://github.com/meriyah/meriyah/issues/203)
 
 # [4.2.0](https://github.com/meriyah/meriyah/compare/v4.1.5...v4.2.0) (2021-07-11)
@@ -431,7 +513,7 @@
 - **all:** fixed issue with TS bundle 'const enum'. Values out of order and tokens got wrong values ([4ed317c](https://github.com/meriyah/meriyah/commit/4ed317cdeb4ee649e818c30212e448f331fc6596))
 - **all:** Improved ESTree compat ([4192641](https://github.com/meriyah/meriyah/commit/4192641c1ad45c4989965a6ee9ca81d92c6891ca))
 - **all:** used logical names to avoid confusions ([6f25b7b](https://github.com/meriyah/meriyah/commit/6f25b7b4fde7d35cb3ec84935dc8e8bbb6fbb815))
-- **chore:** improved line and coloumn tracking - [#46](https://github.com/meriyah/meriyah/issues/46) ([dc2f3be](https://github.com/meriyah/meriyah/commit/dc2f3bef49a32f5a3215522220f2b33f713eb6c3))
+- **chore:** improved line and column tracking - [#46](https://github.com/meriyah/meriyah/issues/46) ([dc2f3be](https://github.com/meriyah/meriyah/commit/dc2f3bef49a32f5a3215522220f2b33f713eb6c3))
 - **lexer:** dedupe some code ([bc86b42](https://github.com/meriyah/meriyah/commit/bc86b422f3baa1e5e5cb83f2832eebf19f41a7c9))
 - **lexer:** fixed a optional chaining token bug introduced earlier ([79e8fa3](https://github.com/meriyah/meriyah/commit/79e8fa31c04458ad796653064cd17e9449c875c4))
 - **lexer:** fixed CRLF issues - [#46](https://github.com/meriyah/meriyah/issues/46) ([43bc755](https://github.com/meriyah/meriyah/commit/43bc7551af1d3b93453ae592c87b113e52f4252d))
@@ -441,7 +523,7 @@
 - **lexer:** fixed JSX issue break bundled build only and in the REPL ([32f347f](https://github.com/meriyah/meriyah/commit/32f347f5399e37e2ff5d7a009a76acede4145965))
 - **lexer:** fixed JSX issue in lexer. Caused only the bundled build to break on JSX parsing. ([0bc45af](https://github.com/meriyah/meriyah/commit/0bc45af2e562c1eebede23bf125ecad41c80a914))
 - **lexer:** fixed loc tracking for jsx and optimized jsx scanning ([708a1a6](https://github.com/meriyah/meriyah/commit/708a1a63374a4fdbbf422028d66b8e35f26a1247))
-- **lexer:** fixed potensial issue with BOM ([b380d62](https://github.com/meriyah/meriyah/commit/b380d6275293045808ca62951b3a5334b8536e31))
+- **lexer:** fixed potential issue with BOM ([b380d62](https://github.com/meriyah/meriyah/commit/b380d6275293045808ca62951b3a5334b8536e31))
 - **lexer:** fixed WS skipping issue ([bf27362](https://github.com/meriyah/meriyah/commit/bf27362f06f15031aaa148f25643a60a941cdbf1))
 - **lexer:** fixed ZWJ issue in identifierPart validation ([3708214](https://github.com/meriyah/meriyah/commit/3708214121e8de4d74560755ed2b6fa673755f70))
 - **lexer:** improved identifier scanning ([bb65cd7](https://github.com/meriyah/meriyah/commit/bb65cd744415ed41fe690cb4cd6f298f5049a8f5))
@@ -579,7 +661,7 @@
 - **parser:** improved error reporting for duplicate bindings ([0483d25](https://github.com/meriyah/meriyah/commit/0483d25f3794f0b8d339f1e920d036b443e0eaca))
 - **parser:** improved module code parsing ([9ecef95](https://github.com/meriyah/meriyah/commit/9ecef95779b2de807bc54e59e8389dd30b387008))
 - **parser:** improved nullish coalescing performance ([83cbdd5](https://github.com/meriyah/meriyah/commit/83cbdd54323e467d7dfb626fd18646aa4f366ecf))
-- **parser:** improved optional chaing implementation ([c8532d9](https://github.com/meriyah/meriyah/commit/c8532d9a95fd611fe902771fe0a07eb7d5681b27))
+- **parser:** improved optional chaining implementation ([c8532d9](https://github.com/meriyah/meriyah/commit/c8532d9a95fd611fe902771fe0a07eb7d5681b27))
 - **parser:** improved optional chaining implementation ([90c139c](https://github.com/meriyah/meriyah/commit/90c139ce36af5fdd2500e365f23ed305445bfdec))
 - **parser:** improved optional chaining implementation ([2766dd9](https://github.com/meriyah/meriyah/commit/2766dd9303a3775a09492f4ca9bfd68015b0dd0d))
 - **parser:** improved performance - create less lexical scopes ([8485cbb](https://github.com/meriyah/meriyah/commit/8485cbb9d6a75a2a4d9cbbfaef1b29278bc94ac7))
@@ -608,7 +690,7 @@
 - **parser:** reduced branching and simplified for parenthesized arrow head & async arrow ([25a5bff](https://github.com/meriyah/meriyah/commit/25a5bffc4364f0d26f5903d55d4985d76e887c2b))
 - **parser:** refactored and simplified location tracking ([0899ad3](https://github.com/meriyah/meriyah/commit/0899ad37fab3cec42545727f7b79b77fa7d55c66))
 - **parser:** Refactoring SyntaxError messages ([66098ea](https://github.com/meriyah/meriyah/commit/66098ea443b91ae12b15e55a7d1577f9a2b81f66))
-- **parser:** removed reduntant empty binding validations ([cf98ab5](https://github.com/meriyah/meriyah/commit/cf98ab53a12915dfdc84e56e6ae49d7276643170))
+- **parser:** removed redundant empty binding validations ([cf98ab5](https://github.com/meriyah/meriyah/commit/cf98ab53a12915dfdc84e56e6ae49d7276643170))
 - **parser:** removed some unused code and simplified a few things ([4ffe12d](https://github.com/meriyah/meriyah/commit/4ffe12d597367dd75c45651558b406e390617730))
 - **parser:** removed some useless code ([597eaf2](https://github.com/meriyah/meriyah/commit/597eaf25d36ab4971a07df391321ec97fb0c911f))
 - **parser:** removed unnecessary func args ([6c44bb7](https://github.com/meriyah/meriyah/commit/6c44bb75d86ff269f5bfcf61c6bf7d5ebe43b3b6))
@@ -648,7 +730,7 @@
 
 - **all:** added benchmark ([8a525b3](https://github.com/meriyah/meriyah/commit/8a525b36e290d4d6f8c8dd0dafc55ea77c6dec3e))
 - **all:** Emit errors in standard format for compilers ([7f83f6a](https://github.com/meriyah/meriyah/commit/7f83f6a368c1b0fdd4d724f075887f140577bd0f))
-- **lexer:** added lexer souce code ([ade6e8f](https://github.com/meriyah/meriyah/commit/ade6e8f757beb2220783e7ab3bc6615d90bcdc91))
+- **lexer:** added lexer source code ([ade6e8f](https://github.com/meriyah/meriyah/commit/ade6e8f757beb2220783e7ab3bc6615d90bcdc91))
 - **lexer:** implement numeric literal scanning ([8ba7461](https://github.com/meriyah/meriyah/commit/8ba7461e9a2cfbafbf180da1792070b641c76e0a))
 - **parser:** enable line/column location information to each node ([75c43c7](https://github.com/meriyah/meriyah/commit/75c43c7005a8fc69fbbbf283556dec1c67ae354b))
 - **parser:** 'export' '\*' 'as' IdentifierName 'from' ModuleSpecifier ';' ([01db03c](https://github.com/meriyah/meriyah/commit/01db03c08816ffdb092ebd890130bfd189f5e3eb))

@@ -1,0 +1,5944 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Module - Export > Module - Export (fail) > ({ set m(x) { export default null; } }); 1`] = `
+"SyntaxError [1:14-1:20]: The export keyword can only be used with the module goal
+> 1 | ({ set m(x) { export default null; } });
+    |               ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > (function() { export default null; }); 1`] = `
+"SyntaxError [1:14-1:20]: The export keyword can only be used with the module goal
+> 1 | (function() { export default null; });
+    |               ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > { export default null; } 1`] = `
+"SyntaxError [1:2-1:8]: The export keyword can only be used with the module goal
+> 1 | { export default null; }
+    |   ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > {export {x};} 1`] = `
+"SyntaxError [1:1-1:7]: The export keyword can only be used with the module goal
+> 1 | {export {x};}
+    |  ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > {export default 3} 1`] = `
+"SyntaxError [1:1-1:7]: The export keyword can only be used with the module goal
+> 1 | {export default 3}
+    |  ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > class A extends B { foo() { (super).foo } } 1`] = `
+"SyntaxError [1:34-1:35]: Unexpected token: 'super'
+> 1 | class A extends B { foo() { (super).foo } }
+    |                                   ^ Unexpected token: 'super'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > class C { method() { export default null; } } 1`] = `
+"SyntaxError [1:21-1:27]: The export keyword can only be used with the module goal
+> 1 | class C { method() { export default null; } }
+    |                      ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > class x { foo(){ export {x}; }} 1`] = `
+"SyntaxError [1:17-1:23]: The export keyword can only be used with the module goal
+> 1 | class x { foo(){ export {x}; }}
+    |                  ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > const a = 0; export class a {}; 1`] = `
+"SyntaxError [1:26-1:27]: Duplicate binding 'a'
+> 1 | const a = 0; export class a {};
+    |                           ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > const a = 0; export const a = 1; 1`] = `
+"SyntaxError [1:28-1:29]: Duplicate binding 'a'
+> 1 | const a = 0; export const a = 1;
+    |                             ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > const a = 0; export function a(){}; 1`] = `
+"SyntaxError [1:29-1:30]: Duplicate binding 'a'
+> 1 | const a = 0; export function a(){};
+    |                              ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > const a = 0; export let a; 1`] = `
+"SyntaxError [1:25-1:26]: Duplicate binding 'a'
+> 1 | const a = 0; export let a;
+    |                          ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > const a = 1; export {a as "", a as ""} 1`] = `
+"SyntaxError [1:37-1:38]: Cannot export a duplicate name ''
+> 1 | const a = 1; export {a as "", a as ""}
+    |                                      ^ Cannot export a duplicate name ''"
+`;
+
+exports[`Module - Export > Module - Export (fail) > const a = 1; export {a as "a", a as "a"} 1`] = `
+"SyntaxError [1:39-1:40]: Cannot export a duplicate name 'a'
+> 1 | const a = 1; export {a as "a", a as "a"}
+    |                                        ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > const f = foo; export async function f(){}; 1`] = `
+"SyntaxError [1:37-1:38]: Duplicate binding 'f'
+> 1 | const f = foo; export async function f(){};
+    |                                      ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > do export default null; while (false) 1`] = `
+"SyntaxError [1:3-1:9]: Unexpected token: 'export'
+> 1 | do export default null; while (false)
+    |    ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export  1`] = `
+"SyntaxError [1:6-1:7]: Unexpected token: 'end of source'
+> 1 | export 
+    |       ^ Unexpected token: 'end of source'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export "string_constant"; 1`] = `
+"SyntaxError [1:7-1:24]: Unexpected token: 'string'
+> 1 | export "string_constant";
+    |        ^^^^^^^^^^^^^^^^^ Unexpected token: 'string'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as "foo" from "./f"; export { foo }; 1`] = `
+"SyntaxError [1:44-1:45]: Cannot export a duplicate name 'foo'
+> 1 | export * as "foo" from "./f"; export { foo };
+    |                                             ^ Cannot export a duplicate name 'foo'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as ,foo from 'bar' 1`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: ','
+> 1 | export * as ,foo from 'bar'
+    |             ^ Unexpected token: ','"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as ,foo from 'bar' 2`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: ','
+> 1 | export * as ,foo from 'bar'
+    |             ^ Unexpected token: ','"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo from "./f"; export { "a" as "foo" } from "./m"; 1`] = `
+"SyntaxError [1:62-1:63]: Cannot export a duplicate name 'foo'
+> 1 | export * as foo from "./f"; export { "a" as "foo" } from "./m";
+    |                                                               ^ Cannot export a duplicate name 'foo'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo from "./f"; export { "foo" } from "./m"; 1`] = `
+"SyntaxError [1:55-1:56]: Cannot export a duplicate name 'foo'
+> 1 | export * as foo from "./f"; export { "foo" } from "./m";
+    |                                                        ^ Cannot export a duplicate name 'foo'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo from "./f"; export { foo }; 1`] = `
+"SyntaxError [1:42-1:43]: Cannot export a duplicate name 'foo'
+> 1 | export * as foo from "./f"; export { foo };
+    |                                           ^ Cannot export a duplicate name 'foo'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo from '; 1`] = `
+"SyntaxError [1:21-1:23]: Unterminated string literal
+> 1 | export * as foo from ';
+    |                      ^^ Unterminated string literal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo from '; 2`] = `
+"SyntaxError [1:21-1:23]: Unterminated string literal
+> 1 | export * as foo from ';
+    |                      ^^ Unterminated string literal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo from; 1`] = `
+"SyntaxError [1:20-1:21]: Export source must be string
+> 1 | export * as foo from;
+    |                     ^ Export source must be string"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo from; 2`] = `
+"SyntaxError [1:20-1:21]: Export source must be string
+> 1 | export * as foo from;
+    |                     ^ Export source must be string"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as foo; 1`] = `
+"SyntaxError [1:15-1:16]: Expected 'from'
+> 1 | export * as foo;
+    |                ^ Expected 'from'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as; 1`] = `
+"SyntaxError [1:11-1:12]: Unexpected token: ';'
+> 1 | export * as;
+    |            ^ Unexpected token: ';'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export * as; 2`] = `
+"SyntaxError [1:11-1:12]: Unexpected token: ';'
+> 1 | export * as;
+    |            ^ Unexpected token: ';'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export *; 1`] = `
+"SyntaxError [1:8-1:9]: Expected 'from'
+> 1 | export *;
+    |         ^ Expected 'from'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export *; 2`] = `
+"SyntaxError [1:8-1:9]: Expected 'from'
+> 1 | export *;
+    |         ^ Expected 'from'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export ...x = y 1`] = `
+"SyntaxError [1:7-1:10]: Unexpected token: '...'
+> 1 | export ...x = y
+    |        ^^^ Unexpected token: '...'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { "\\uD83C" as b } from "./foo"; 1`] = `
+"SyntaxError [1:9-1:17]: An export name cannot include a lone surrogate
+> 1 | export { "\\uD83C" as b } from "./foo";
+    |          ^^^^^^^^ An export name cannot include a lone surrogate"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { "a" as b }; 1`] = `
+"SyntaxError [1:19-1:20]: A string literal cannot be used as an exported binding without \`from\`
+> 1 | export { "a" as b };
+    |                    ^ A string literal cannot be used as an exported binding without \`from\`"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { 1`] = `
+"SyntaxError [1:7-1:8]: Expected '}'
+> 1 | export {
+    |        ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { 2`] = `
+"SyntaxError [1:7-1:8]: Expected '}'
+> 1 | export {
+    |        ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { Q } from; 1`] = `
+"SyntaxError [1:17-1:18]: Export source must be string
+> 1 | export { Q } from;
+    |                  ^ Export source must be string"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { a }; export { "\\u0061" } from "./m"; 1`] = `
+"SyntaxError [1:44-1:45]: Cannot export a duplicate name 'a'
+> 1 | export { a }; export { "\\u0061" } from "./m";
+    |                                             ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { a as "\\uD83C" } from "./foo"; 1`] = `
+"SyntaxError [1:14-1:22]: An export name cannot include a lone surrogate
+> 1 | export { a as "\\uD83C" } from "./foo";
+    |               ^^^^^^^^ An export name cannot include a lone surrogate"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { arguments } 1`] = `
+"SyntaxError [1:19-1:20]: Exported binding 'arguments' needs to refer to a top-level declared variable
+> 1 | export { arguments }
+    |                    ^ Exported binding 'arguments' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { bar, }; 1`] = `
+"SyntaxError [1:15-1:16]: Exported binding 'bar' needs to refer to a top-level declared variable
+> 1 | export { bar, };
+    |                ^ Exported binding 'bar' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { foo }; 1`] = `
+"SyntaxError [1:14-1:15]: Exported binding 'foo' needs to refer to a top-level declared variable
+> 1 | export { foo };
+    |               ^ Exported binding 'foo' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { foo as foo2, baz } 1`] = `
+"SyntaxError [1:26-1:27]: Exported binding 'foo' needs to refer to a top-level declared variable
+> 1 | export { foo as foo2, baz }
+    |                           ^ Exported binding 'foo' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { foo as foo3, baz as baz2, } 1`] = `
+"SyntaxError [1:35-1:36]: Exported binding 'foo' needs to refer to a top-level declared variable
+> 1 | export { foo as foo3, baz as baz2, }
+    |                                    ^ Exported binding 'foo' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { foo as foo4, bar as bar2, foobar } 1`] = `
+"SyntaxError [1:42-1:43]: Exported binding 'foo' needs to refer to a top-level declared variable
+> 1 | export { foo as foo4, bar as bar2, foobar }
+    |                                           ^ Exported binding 'foo' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { for } 1`] = `
+"SyntaxError [1:13-1:14]: Exported binding 'for' needs to refer to a top-level declared variable
+> 1 | export { for }
+    |              ^ Exported binding 'for' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { for } 2`] = `
+"SyntaxError [1:13-1:14]: Exported binding 'for' needs to refer to a top-level declared variable
+> 1 | export { for }
+    |              ^ Exported binding 'for' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { for as foo } 1`] = `
+"SyntaxError [1:20-1:21]: Exported binding 'for' needs to refer to a top-level declared variable
+> 1 | export { for as foo }
+    |                     ^ Exported binding 'for' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { x as default }; 1`] = `
+"SyntaxError [1:23-1:24]: Exported binding 'x' needs to refer to a top-level declared variable
+> 1 | export { x as default };
+    |                        ^ Exported binding 'x' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export { x as y }; 1`] = `
+"SyntaxError [1:17-1:18]: Exported binding 'x' needs to refer to a top-level declared variable
+> 1 | export { x as y };
+    |                  ^ Exported binding 'x' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {Array} 1`] = `
+"SyntaxError [1:13-1:14]: Exported binding 'Array' needs to refer to a top-level declared variable
+> 1 | export {Array}
+    |              ^ Exported binding 'Array' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a as b}; let b; 1`] = `
+"SyntaxError [1:22-1:23]: Exported binding 'a' needs to refer to a top-level declared variable
+> 1 | export {a as b}; let b;
+    |                       ^ Exported binding 'a' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a as b}; var b; 1`] = `
+"SyntaxError [1:22-1:23]: Exported binding 'a' needs to refer to a top-level declared variable
+> 1 | export {a as b}; var b;
+    |                       ^ Exported binding 'a' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a, a as a}; 1`] = `
+"SyntaxError [1:18-1:19]: Cannot export a duplicate name 'a'
+> 1 | export {a, a as a};
+    |                   ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a, a}; 1`] = `
+"SyntaxError [1:13-1:14]: Cannot export a duplicate name 'a'
+> 1 | export {a, a};
+    |              ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a, b as a}; 1`] = `
+"SyntaxError [1:18-1:19]: Cannot export a duplicate name 'a'
+> 1 | export {a, b as a};
+    |                   ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a,,b} 1`] = `
+"SyntaxError [1:10-1:11]: Expected '}'
+> 1 | export {a,,b}
+    |           ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a}; 1`] = `
+"SyntaxError [1:10-1:11]: Exported binding 'a' needs to refer to a top-level declared variable
+> 1 | export {a};
+    |           ^ Exported binding 'a' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a}; export {b as a}; 1`] = `
+"SyntaxError [1:27-1:28]: Cannot export a duplicate name 'a'
+> 1 | export {a}; export {b as a};
+    |                            ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a}; export {b as a}; 2`] = `
+"SyntaxError [1:27-1:28]: Cannot export a duplicate name 'a'
+> 1 | export {a}; export {b as a};
+    |                            ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a}; export {b as a}; 3`] = `
+"SyntaxError [1:27-1:28]: Cannot export a duplicate name 'a'
+> 1 | export {a}; export {b as a};
+    |                            ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a}; export class a{}; 1`] = `
+"SyntaxError [1:25-1:26]: Cannot export a duplicate name 'a'
+> 1 | export {a}; export class a{};
+    |                          ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {a}; export function a(){}; 1`] = `
+"SyntaxError [1:28-1:29]: Cannot export a duplicate name 'a'
+> 1 | export {a}; export function a(){};
+    |                             ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {aa as bb, x}; 1`] = `
+"SyntaxError [1:20-1:21]: Exported binding 'aa' needs to refer to a top-level declared variable
+> 1 | export {aa as bb, x};
+    |                     ^ Exported binding 'aa' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {b as a}; export {a}; 1`] = `
+"SyntaxError [1:27-1:28]: Cannot export a duplicate name 'a'
+> 1 | export {b as a}; export {a};
+    |                            ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {b as a}; export {a}; 2`] = `
+"SyntaxError [1:27-1:28]: Cannot export a duplicate name 'a'
+> 1 | export {b as a}; export {a};
+    |                            ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {default} + 1`] = `
+"SyntaxError [1:17-1:18]: Unexpected token: '+'
+> 1 | export {default} +
+    |                  ^ Unexpected token: '+'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {f} export class f {}; 1`] = `
+"SyntaxError [1:11-1:17]: Unexpected token: 'export'
+> 1 | export {f} export class f {};
+    |            ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {f}; export async function f() {} 1`] = `
+"SyntaxError [1:34-1:35]: Cannot export a duplicate name 'f'
+> 1 | export {f}; export async function f() {}
+    |                                   ^ Cannot export a duplicate name 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {f}; export const x = y; 1`] = `
+"SyntaxError [1:30-1:31]: Exported binding 'f' needs to refer to a top-level declared variable
+> 1 | export {f}; export const x = y;
+    |                               ^ Exported binding 'f' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {foo, bar,}; 1`] = `
+"SyntaxError [1:18-1:19]: Exported binding 'foo' needs to refer to a top-level declared variable
+> 1 | export {foo, bar,};
+    |                   ^ Exported binding 'foo' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {foo} 1`] = `
+"SyntaxError [1:11-1:12]: Exported binding 'foo' needs to refer to a top-level declared variable
+> 1 | export {foo}
+    |            ^ Exported binding 'foo' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {foob}; 1`] = `
+"SyntaxError [1:13-1:14]: Exported binding 'foob' needs to refer to a top-level declared variable
+> 1 | export {foob};
+    |              ^ Exported binding 'foob' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {function} from a 1`] = `
+"SyntaxError [1:23-1:24]: Export source must be string
+> 1 | export {function} from a
+    |                        ^ Export source must be string"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {mustExist as canBeUndeclared}; 1`] = `
+"SyntaxError [1:37-1:38]: Exported binding 'mustExist' needs to refer to a top-level declared variable
+> 1 | export {mustExist as canBeUndeclared};
+    |                                      ^ Exported binding 'mustExist' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {x}; export let [...x] = y; 1`] = `
+"SyntaxError [1:28-1:29]: Cannot export a duplicate name 'x'
+> 1 | export {x}; export let [...x] = y;
+    |                             ^ Cannot export a duplicate name 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {x}; export let [x] = y; 1`] = `
+"SyntaxError [1:25-1:26]: Cannot export a duplicate name 'x'
+> 1 | export {x}; export let [x] = y;
+    |                          ^ Cannot export a duplicate name 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export {x}; export let {...x} = y; 1`] = `
+"SyntaxError [1:28-1:29]: Cannot export a duplicate name 'x'
+> 1 | export {x}; export let {...x} = y;
+    |                             ^ Cannot export a duplicate name 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export 3 1`] = `
+"SyntaxError [1:7-1:8]: Unexpected token: 'number'
+> 1 | export 3
+    |        ^ Unexpected token: 'number'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export 12; 1`] = `
+"SyntaxError [1:7-1:9]: Unexpected token: 'number'
+> 1 | export 12;
+    |        ^^ Unexpected token: 'number'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async () => y 1`] = `
+"SyntaxError [1:13-1:14]: Unexpected token: '('
+> 1 | export async () => y
+    |              ^ Unexpected token: '('"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async 1`] = `
+"SyntaxError [1:7-1:12]: Unexpected token: 'end of source'
+> 1 | export async
+    |        ^^^^^ Unexpected token: 'end of source'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function *f() {}
+export default function *f() {} 1`] = `
+"SyntaxError [2:25-2:26]: Duplicate binding 'f'
+  1 | export async function *f() {}
+> 2 | export default function *f() {}
+    |                          ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function *f() {}
+export function *f() {} 1`] = `
+"SyntaxError [2:17-2:18]: Duplicate binding 'f'
+  1 | export async function *f() {}
+> 2 | export function *f() {}
+    |                  ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function a() {}
+export async function a() {} 1`] = `
+"SyntaxError [2:22-2:23]: Duplicate binding 'a'
+  1 | export async function a() {}
+> 2 | export async function a() {}
+    |                       ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function a() {}
+export const a = 1; 1`] = `
+"SyntaxError [2:15-2:16]: Duplicate binding 'a'
+  1 | export async function a() {}
+> 2 | export const a = 1;
+    |                ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function a() {}
+export function a() {} 1`] = `
+"SyntaxError [2:16-2:17]: Duplicate binding 'a'
+  1 | export async function a() {}
+> 2 | export function a() {}
+    |                 ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function f(){} foo 1`] = `
+"SyntaxError [1:0-1:6]: The export keyword can only be used with the module goal
+> 1 | export async function f(){} foo
+    | ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function f(){}; class f{}; 1`] = `
+"SyntaxError [1:35-1:36]: Duplicate binding 'f'
+> 1 | export async function f(){}; class f{};
+    |                                    ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function f(){}; const f = foo; 1`] = `
+"SyntaxError [1:37-1:38]: Duplicate binding 'f'
+> 1 | export async function f(){}; const f = foo;
+    |                                      ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function f(){}; export {f}; 1`] = `
+"SyntaxError [1:39-1:40]: Cannot export a duplicate name 'f'
+> 1 | export async function f(){}; export {f};
+    |                                        ^ Cannot export a duplicate name 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function f(){}; function f(){}; 1`] = `
+"SyntaxError [1:38-1:39]: Duplicate binding 'f'
+> 1 | export async function f(){}; function f(){};
+    |                                       ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async function(){} 1`] = `
+"SyntaxError [1:21-1:22]: Function declaration must have a name in this context
+> 1 | export async function(){}
+    |                      ^ Function declaration must have a name in this context"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export async; 1`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: ';'
+> 1 | export async;
+    |             ^ Unexpected token: ';'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class { } 1`] = `
+"SyntaxError [1:13-1:14]: Class declaration must have a name in this context
+> 1 | export class { }
+    |              ^ Class declaration must have a name in this context"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class extends C {} 1`] = `
+"SyntaxError [1:0-1:6]: The export keyword can only be used with the module goal
+> 1 | export class extends C {}
+    | ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class f {} export {f}; 1`] = `
+"SyntaxError [1:28-1:29]: Cannot export a duplicate name 'f'
+> 1 | export class f {} export {f};
+    |                             ^ Cannot export a duplicate name 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class f {}; export function f() {} 1`] = `
+"SyntaxError [1:35-1:36]: Duplicate binding 'f'
+> 1 | export class f {}; export function f() {}
+    |                                    ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class f {}; export function f() {} 2`] = `
+"SyntaxError [1:35-1:36]: Duplicate binding 'f'
+> 1 | export class f {}; export function f() {}
+    |                                    ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class f() {}
+export function *f() {} 1`] = `
+"SyntaxError [1:14-1:15]: Expected '{'
+> 1 | export class f() {}
+    |               ^ Expected '{'
+  2 | export function *f() {}"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class f{}; async function f(){}; 1`] = `
+"SyntaxError [1:33-1:34]: Duplicate binding 'f'
+> 1 | export class f{}; async function f(){};
+    |                                  ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class f{}; function f(){}; 1`] = `
+"SyntaxError [1:27-1:28]: Duplicate binding 'f'
+> 1 | export class f{}; function f(){};
+    |                            ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class x {} foo 1`] = `
+"SyntaxError [1:0-1:6]: The export keyword can only be used with the module goal
+> 1 | export class x {} foo
+    | ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class x{}; export async function x(){}; 1`] = `
+"SyntaxError [1:40-1:41]: Duplicate binding 'x'
+> 1 | export class x{}; export async function x(){};
+    |                                         ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export class x{}; export default async function x(){}; 1`] = `
+"SyntaxError [1:48-1:49]: Duplicate binding 'x'
+> 1 | export class x{}; export default async function x(){};
+    |                                                 ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const [x, {x}] = y 1`] = `
+"SyntaxError [1:19-1:20]: Duplicate binding 'x'
+> 1 | export const [x, {x}] = y
+    |                    ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const [x, x] = c 1`] = `
+"SyntaxError [1:18-1:19]: Duplicate binding 'x'
+> 1 | export const [x, x] = c
+    |                   ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const {x:x, x:x} = c 1`] = `
+"SyntaxError [1:22-1:23]: Duplicate binding 'x'
+> 1 | export const {x:x, x:x} = c
+    |                       ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const a = 0; export const a = 0; 1`] = `
+"SyntaxError [1:35-1:36]: Duplicate binding 'a'
+> 1 | export const a = 0; export const a = 0;
+    |                                    ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const a = b; let a = c 1`] = `
+"SyntaxError [1:26-1:27]: Duplicate binding 'a'
+> 1 | export const a = b; let a = c
+    |                           ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const const1; 1`] = `
+"SyntaxError [1:19-1:20]: Missing initializer in const declaration
+> 1 | export const const1;
+    |                    ^ Missing initializer in const declaration"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const x = x, x = y; 1`] = `
+"SyntaxError [1:22-1:23]: Duplicate binding 'x'
+> 1 | export const x = x, x = y;
+    |                       ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export const x = y; export {f}; 1`] = `
+"SyntaxError [1:30-1:31]: Exported binding 'f' needs to refer to a top-level declared variable
+> 1 | export const x = y; export {f};
+    |                               ^ Exported binding 'f' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default ...x = y 1`] = `
+"SyntaxError [1:15-1:18]: Unexpected token: '...'
+> 1 | export default ...x = y
+    |                ^^^ Unexpected token: '...'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default = 42 1`] = `
+"SyntaxError [1:15-1:16]: Unexpected token: '='
+> 1 | export default = 42
+    |                ^ Unexpected token: '='"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default 0; export default 0; 1`] = `
+"SyntaxError [1:34-1:35]: Cannot export a duplicate name 'default'
+> 1 | export default 0; export default 0;
+    |                                   ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default 0; export default class a {}; 1`] = `
+"SyntaxError [1:43-1:44]: Cannot export a duplicate name 'default'
+> 1 | export default 0; export default class a {};
+    |                                            ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default 0; export default function f(){}; 1`] = `
+"SyntaxError [1:47-1:48]: Cannot export a duplicate name 'default'
+> 1 | export default 0; export default function f(){};
+    |                                                ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default 1, 2, 3; 1`] = `
+"SyntaxError [1:16-1:17]: Unexpected token: ','
+> 1 | export default 1, 2, 3;
+    |                 ^ Unexpected token: ','"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default async function *f() {}
+export function *f() {} 1`] = `
+"SyntaxError [2:17-2:18]: Duplicate binding 'f'
+  1 | export default async function *f() {}
+> 2 | export function *f() {}
+    |                  ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default async x 
+() => {} 1`] = `
+"SyntaxError [2:0-2:1]: No line break is allowed after '=>'
+  1 | export default async x 
+> 2 | () => {}
+    | ^ No line break is allowed after '=>'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default async x => { let x; }; 1`] = `
+"SyntaxError [1:33-1:34]: Duplicate binding 'x'
+> 1 | export default async x => { let x; };
+    |                                  ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default await 1`] = `
+"SyntaxError [1:15-1:20]: Can not use \`await\` as identifier in module or async func
+> 1 | export default await
+    |                ^^^^^ Can not use \`await\` as identifier in module or async func"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default class x{}; export async function x(){}; 1`] = `
+"SyntaxError [1:48-1:49]: Duplicate binding 'x'
+> 1 | export default class x{}; export async function x(){};
+    |                                                 ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default class x{}; export default () => {}; 1`] = `
+"SyntaxError [1:49-1:50]: Cannot export a duplicate name 'default'
+> 1 | export default class x{}; export default () => {};
+    |                                                  ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default class x{}; export default async function x(){}; 1`] = `
+"SyntaxError [1:56-1:57]: Duplicate binding 'x'
+> 1 | export default class x{}; export default async function x(){};
+    |                                                         ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default class x{}; export default class x{}; 1`] = `
+"SyntaxError [1:47-1:48]: Duplicate binding 'x'
+> 1 | export default class x{}; export default class x{};
+    |                                                ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default class x{}; export default function(){}; 1`] = `
+"SyntaxError [1:53-1:54]: Cannot export a duplicate name 'default'
+> 1 | export default class x{}; export default function(){};
+    |                                                      ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default default 1`] = `
+"SyntaxError [1:15-1:22]: Unexpected token: 'default'
+> 1 | export default default
+    |                ^^^^^^^ Unexpected token: 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default from "foo" 1`] = `
+"SyntaxError [1:20-1:25]: Unexpected token: 'string'
+> 1 | export default from "foo"
+    |                     ^^^^^ Unexpected token: 'string'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default function 1`] = `
+"SyntaxError [1:15-1:23]: Unexpected token: 'end of source'
+> 1 | export default function
+    |                ^^^^^^^^ Unexpected token: 'end of source'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default function() {} export default function() {} 1`] = `
+"SyntaxError [1:56-1:57]: Cannot export a duplicate name 'default'
+> 1 | export default function() {} export default function() {}
+    |                                                         ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default function(){}; export default function(){}; 1`] = `
+"SyntaxError [1:56-1:57]: Cannot export a duplicate name 'default'
+> 1 | export default function(){}; export default function(){};
+    |                                                         ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default function([a, a]){} 1`] = `
+"SyntaxError [1:29-1:30]: Duplicate binding 'a'
+> 1 | export default function([a, a]){}
+    |                              ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default function(a){ const a = 0; } 1`] = `
+"SyntaxError [1:36-1:37]: Duplicate binding 'a'
+> 1 | export default function(a){ const a = 0; }
+    |                                     ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default function(a){ let a; } 1`] = `
+"SyntaxError [1:33-1:34]: Duplicate binding 'a'
+> 1 | export default function(a){ let a; }
+    |                                  ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default function(a, a){} 1`] = `
+"SyntaxError [1:28-1:29]: Duplicate binding 'a'
+> 1 | export default function(a, a){}
+    |                             ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default let 1`] = `
+"SyntaxError [1:15-1:18]: The identifier 'let' must not be in expression position in strict mode
+> 1 | export default let
+    |                ^^^ The identifier 'let' must not be in expression position in strict mode"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export default x; export {y as default}; 1`] = `
+"SyntaxError [1:39-1:40]: Cannot export a duplicate name 'default'
+> 1 | export default x; export {y as default};
+    |                                        ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export foo 1`] = `
+"SyntaxError [1:7-1:10]: Unexpected token: 'identifier'
+> 1 | export foo
+    |        ^^^ Unexpected token: 'identifier'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export foo; export bar; class f{}; async function foo(){}; 1`] = `
+"SyntaxError [1:7-1:10]: Unexpected token: 'identifier'
+> 1 | export foo; export bar; class f{}; async function foo(){};
+    |        ^^^ Unexpected token: 'identifier'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function () {} 1`] = `
+"SyntaxError [1:16-1:17]: Function declaration must have a name in this context
+> 1 | export function () {}
+    |                 ^ Function declaration must have a name in this context"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function a() {}
+export async function a() {} 1`] = `
+"SyntaxError [2:22-2:23]: Duplicate binding 'a'
+  1 | export function a() {}
+> 2 | export async function a() {}
+    |                       ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function a() {} export default function a() {} 1`] = `
+"SyntaxError [1:47-1:48]: Duplicate binding 'a'
+> 1 | export function a() {} export default function a() {}
+    |                                                ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function f() {}
+export class f() {} 1`] = `
+"SyntaxError [2:13-2:14]: Duplicate binding 'f'
+  1 | export function f() {}
+> 2 | export class f() {}
+    |              ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function f() {}
+export function *f() {} 1`] = `
+"SyntaxError [2:17-2:18]: Duplicate binding 'f'
+  1 | export function f() {}
+> 2 | export function *f() {}
+    |                  ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function f(){}; async function f(){}; 1`] = `
+"SyntaxError [1:38-1:39]: Duplicate binding 'f'
+> 1 | export function f(){}; async function f(){};
+    |                                       ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function f(){}; class f{}; 1`] = `
+"SyntaxError [1:29-1:30]: Duplicate binding 'f'
+> 1 | export function f(){}; class f{};
+    |                              ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function f(){}; export {f}; 1`] = `
+"SyntaxError [1:33-1:34]: Cannot export a duplicate name 'f'
+> 1 | export function f(){}; export {f};
+    |                                  ^ Cannot export a duplicate name 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function f(){}; export {f}; 2`] = `
+"SyntaxError [1:33-1:34]: Cannot export a duplicate name 'f'
+> 1 | export function f(){}; export {f};
+    |                                  ^ Cannot export a duplicate name 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function f(){}; function f(){}; 1`] = `
+"SyntaxError [1:32-1:33]: Duplicate binding 'f'
+> 1 | export function f(){}; function f(){};
+    |                                 ^ Duplicate binding 'f'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function x(){}; export let [x] = y; 1`] = `
+"SyntaxError [1:36-1:37]: Duplicate binding 'x'
+> 1 | export function x(){}; export let [x] = y;
+    |                                     ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function x(){}; export let [x] = y; 2`] = `
+"SyntaxError [1:36-1:37]: Duplicate binding 'x'
+> 1 | export function x(){}; export let [x] = y;
+    |                                     ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export function* () { } 1`] = `
+"SyntaxError [1:17-1:18]: Function declaration must have a name in this context
+> 1 | export function* () { }
+    |                  ^ Function declaration must have a name in this context"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let ...x = y 1`] = `
+"SyntaxError [1:11-1:14]: Unexpected token: '...'
+> 1 | export let ...x = y
+    |            ^^^ Unexpected token: '...'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let [x, x] = y; 1`] = `
+"SyntaxError [1:16-1:17]: Duplicate binding 'x'
+> 1 | export let [x, x] = y;
+    |                 ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let [x, x] = y; 2`] = `
+"SyntaxError [1:16-1:17]: Duplicate binding 'x'
+> 1 | export let [x, x] = y;
+    |                 ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let [x] = y; export {x}; 1`] = `
+"SyntaxError [1:30-1:31]: Cannot export a duplicate name 'x'
+> 1 | export let [x] = y; export {x};
+    |                               ^ Cannot export a duplicate name 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let [x] = y; export function x(){}; 1`] = `
+"SyntaxError [1:36-1:37]: Duplicate binding 'x'
+> 1 | export let [x] = y; export function x(){};
+    |                                     ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let [x] = y; export function x(){}; 2`] = `
+"SyntaxError [1:36-1:37]: Duplicate binding 'x'
+> 1 | export let [x] = y; export function x(){};
+    |                                     ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let a = 1;
+export async function a() {} 1`] = `
+"SyntaxError [2:22-2:23]: Duplicate binding 'a'
+  1 | export let a = 1;
+> 2 | export async function a() {}
+    |                       ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let a; export let a; 1`] = `
+"SyntaxError [1:26-1:27]: Duplicate binding 'a'
+> 1 | export let a; export let a;
+    |                           ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let a; export let a; 2`] = `
+"SyntaxError [1:26-1:27]: Duplicate binding 'a'
+> 1 | export let a; export let a;
+    |                           ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let await; 1`] = `
+"SyntaxError [1:11-1:16]: Can not use \`await\` as identifier in module or async func
+> 1 | export let await;
+    |            ^^^^^ Can not use \`await\` as identifier in module or async func"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let foo; export let foo; 1`] = `
+"SyntaxError [1:30-1:31]: Duplicate binding 'foo'
+> 1 | export let foo; export let foo;
+    |                               ^ Duplicate binding 'foo'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let x = y, [...x] = y; 1`] = `
+"SyntaxError [1:23-1:24]: Duplicate binding 'x'
+> 1 | export let x = y, [...x] = y;
+    |                        ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let x = y, [...x] = y; 2`] = `
+"SyntaxError [1:23-1:24]: Duplicate binding 'x'
+> 1 | export let x = y, [...x] = y;
+    |                        ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let x = y, [x] = y; 1`] = `
+"SyntaxError [1:20-1:21]: Duplicate binding 'x'
+> 1 | export let x = y, [x] = y;
+    |                     ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let x = y, {...x} = y; 1`] = `
+"SyntaxError [1:23-1:24]: Duplicate binding 'x'
+> 1 | export let x = y, {...x} = y;
+    |                        ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let x = y, {...x} = y; 2`] = `
+"SyntaxError [1:23-1:24]: Duplicate binding 'x'
+> 1 | export let x = y, {...x} = y;
+    |                        ^ Duplicate binding 'x'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let x = y; export {f}; 1`] = `
+"SyntaxError [1:28-1:29]: Exported binding 'f' needs to refer to a top-level declared variable
+> 1 | export let x = y; export {f};
+    |                             ^ Exported binding 'f' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export let[a] = 0 export let[b] = 0 1`] = `
+"SyntaxError [1:18-1:24]: Unexpected token: 'export'
+> 1 | export let[a] = 0 export let[b] = 0
+    |                   ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export var a = x, a = y; 1`] = `
+"SyntaxError [1:20-1:21]: Cannot export a duplicate name 'a'
+> 1 | export var a = x, a = y;
+    |                     ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export var a = x, a = y; 2`] = `
+"SyntaxError [1:20-1:21]: Cannot export a duplicate name 'a'
+> 1 | export var a = x, a = y;
+    |                     ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export var a = x, a = y; 3`] = `
+"SyntaxError [1:20-1:21]: Cannot export a duplicate name 'a'
+> 1 | export var a = x, a = y;
+    |                     ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export var a; export var a; 1`] = `
+"SyntaxError [1:26-1:27]: Cannot export a duplicate name 'a'
+> 1 | export var a; export var a;
+    |                           ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export var foo; export let foo; 1`] = `
+"SyntaxError [1:30-1:31]: Duplicate binding 'foo'
+> 1 | export var foo; export let foo;
+    |                               ^ Duplicate binding 'foo'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > export var let = x; 1`] = `
+"SyntaxError [1:11-1:14]: Unexpected strict mode reserved word
+> 1 | export var let = x;
+    |            ^^^ Unexpected strict mode reserved word"
+`;
+
+exports[`Module - Export > Module - Export (fail) > for (;;) export {x}; 1`] = `
+"SyntaxError [1:9-1:15]: Unexpected token: 'export'
+> 1 | for (;;) export {x};
+    |          ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > for (let y in []) import v from "foo" 1`] = `
+"SyntaxError [1:25-1:26]: Expected '('
+> 1 | for (let y in []) import v from "foo"
+    |                          ^ Expected '('"
+`;
+
+exports[`Module - Export > Module - Export (fail) > for (let y in []) import v from "foo" 2`] = `
+"SyntaxError [1:25-1:26]: Expected '('
+> 1 | for (let y in []) import v from "foo"
+    |                          ^ Expected '('"
+`;
+
+exports[`Module - Export > Module - Export (fail) > for (x = 0; false;) export default null; 1`] = `
+"SyntaxError [1:20-1:26]: Unexpected token: 'export'
+> 1 | for (x = 0; false;) export default null;
+    |                     ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > function foo() { }; export [ foo ]; 1`] = `
+"SyntaxError [1:27-1:28]: Unexpected token: '['
+> 1 | function foo() { }; export [ foo ];
+    |                            ^ Unexpected token: '['"
+`;
+
+exports[`Module - Export > Module - Export (fail) > function foo() { }; export { foo as 100 }; 1`] = `
+"SyntaxError [1:36-1:39]: Only a identifier or string can be used to indicate alias
+> 1 | function foo() { }; export { foo as 100 };
+    |                                     ^^^ Only a identifier or string can be used to indicate alias"
+`;
+
+exports[`Module - Export > Module - Export (fail) > function foo() { }; export foo; 1`] = `
+"SyntaxError [1:27-1:30]: Unexpected token: 'identifier'
+> 1 | function foo() { }; export foo;
+    |                            ^^^ Unexpected token: 'identifier'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > function foo() { export default function() { } } 1`] = `
+"SyntaxError [1:17-1:23]: The export keyword can only be used with the module goal
+> 1 | function foo() { export default function() { } }
+    |                  ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > function* g() { export default null; } 1`] = `
+"SyntaxError [1:16-1:22]: The export keyword can only be used with the module goal
+> 1 | function* g() { export default null; }
+    |                 ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > if (true) { } else export default null; 1`] = `
+"SyntaxError [1:19-1:25]: Unexpected token: 'export'
+> 1 | if (true) { } else export default null;
+    |                    ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > if (x) export {x}; 1`] = `
+"SyntaxError [1:7-1:13]: Unexpected token: 'export'
+> 1 | if (x) export {x};
+    |        ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let a; export {b as a}; 1`] = `
+"SyntaxError [1:22-1:23]: Exported binding 'b' needs to refer to a top-level declared variable
+> 1 | let a; export {b as a};
+    |                       ^ Exported binding 'b' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let a; export class a {}; 1`] = `
+"SyntaxError [1:20-1:21]: Duplicate binding 'a'
+> 1 | let a; export class a {};
+    |                     ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let a; export const a = 0; 1`] = `
+"SyntaxError [1:22-1:23]: Duplicate binding 'a'
+> 1 | let a; export const a = 0;
+    |                       ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let a; export function a(){}; 1`] = `
+"SyntaxError [1:23-1:24]: Duplicate binding 'a'
+> 1 | let a; export function a(){};
+    |                        ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let a; export let a; 1`] = `
+"SyntaxError [1:19-1:20]: Duplicate binding 'a'
+> 1 | let a; export let a;
+    |                    ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let a; let a; 1`] = `
+"SyntaxError [1:12-1:13]: Duplicate binding 'a'
+> 1 | let a; let a;
+    |             ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let a; var a; 1`] = `
+"SyntaxError [1:12-1:13]: Duplicate binding 'a'
+> 1 | let a; var a;
+    |             ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > let x = () => {export {x};} 1`] = `
+"SyntaxError [1:15-1:21]: The export keyword can only be used with the module goal
+> 1 | let x = () => {export {x};}
+    |                ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > switch(0) { case 1: export default null; } 1`] = `
+"SyntaxError [1:20-1:26]: The export keyword can only be used with the module goal
+> 1 | switch(0) { case 1: export default null; }
+    |                     ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > switch(0) { default: export default null; } 1`] = `
+"SyntaxError [1:21-1:27]: The export keyword can only be used with the module goal
+> 1 | switch(0) { default: export default null; }
+    |                      ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > test262: export default null; 1`] = `
+"SyntaxError [1:9-1:15]: Unexpected token: 'export'
+> 1 | test262: export default null;
+    |          ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export { a as , b}; 1`] = `
+"SyntaxError [1:24-1:25]: Only a identifier or string can be used to indicate alias
+> 1 | var a, b; export { a as , b};
+    |                         ^ Only a identifier or string can be used to indicate alias"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export {a, a, b} 1`] = `
+"SyntaxError [1:25-1:26]: Cannot export a duplicate name 'a'
+> 1 | var a, b; export {a, a, b}
+    |                          ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export {a, b as a} 1`] = `
+"SyntaxError [1:27-1:28]: Cannot export a duplicate name 'a'
+> 1 | var a, b; export {a, b as a}
+    |                            ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export {a, b, a} 1`] = `
+"SyntaxError [1:25-1:26]: Cannot export a duplicate name 'a'
+> 1 | var a, b; export {a, b, a}
+    |                          ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export {a, b, a} 2`] = `
+"SyntaxError [1:25-1:26]: Cannot export a duplicate name 'a'
+> 1 | var a, b; export {a, b, a}
+    |                          ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export {a, b, c} 1`] = `
+"SyntaxError [1:25-1:26]: Exported binding 'c' needs to refer to a top-level declared variable
+> 1 | var a, b; export {a, b, c}
+    |                          ^ Exported binding 'c' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export {b, a, a} 1`] = `
+"SyntaxError [1:25-1:26]: Cannot export a duplicate name 'a'
+> 1 | var a, b; export {b, a, a}
+    |                          ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a, b; export {b, a, a} 2`] = `
+"SyntaxError [1:25-1:26]: Cannot export a duplicate name 'a'
+> 1 | var a, b; export {b, a, a}
+    |                          ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a,b; export {a, b}; export {a}; 1`] = `
+"SyntaxError [1:34-1:35]: Cannot export a duplicate name 'a'
+> 1 | var a,b; export {a, b}; export {a};
+    |                                   ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a,b; export {a}; export {a, b}; 1`] = `
+"SyntaxError [1:34-1:35]: Cannot export a duplicate name 'a'
+> 1 | var a,b; export {a}; export {a, b};
+    |                                   ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a,b; export {b, a}; export {a}; 1`] = `
+"SyntaxError [1:34-1:35]: Cannot export a duplicate name 'a'
+> 1 | var a,b; export {b, a}; export {a};
+    |                                   ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a,b; export {b, a}; export {a}; 2`] = `
+"SyntaxError [1:34-1:35]: Cannot export a duplicate name 'a'
+> 1 | var a,b; export {b, a}; export {a};
+    |                                   ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export { a 1`] = `
+"SyntaxError [1:16-1:17]: Expected ','
+> 1 | var a; export { a
+    |                 ^ Expected ','"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export { a as }; 1`] = `
+"SyntaxError [1:21-1:22]: Only a identifier or string can be used to indicate alias
+> 1 | var a; export { a as };
+    |                      ^ Only a identifier or string can be used to indicate alias"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export { a, ; 1`] = `
+"SyntaxError [1:19-1:20]: Expected '}'
+> 1 | var a; export { a, ;
+    |                    ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export { a, 1`] = `
+"SyntaxError [1:17-1:18]: Expected '}'
+> 1 | var a; export { a,
+    |                  ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export { a, 2`] = `
+"SyntaxError [1:17-1:18]: Expected '}'
+> 1 | var a; export { a,
+    |                  ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export {a, a} 1`] = `
+"SyntaxError [1:19-1:20]: Cannot export a duplicate name 'a'
+> 1 | var a; export {a, a}
+    |                    ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export {a, a} 2`] = `
+"SyntaxError [1:19-1:20]: Cannot export a duplicate name 'a'
+> 1 | var a; export {a, a}
+    |                    ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export {a}; export {a}; 1`] = `
+"SyntaxError [1:29-1:30]: Cannot export a duplicate name 'a'
+> 1 | var a; export {a}; export {a};
+    |                              ^ Cannot export a duplicate name 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export {b as a}; 1`] = `
+"SyntaxError [1:22-1:23]: Exported binding 'b' needs to refer to a top-level declared variable
+> 1 | var a; export {b as a};
+    |                       ^ Exported binding 'b' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export class a {}; 1`] = `
+"SyntaxError [1:20-1:21]: Duplicate binding 'a'
+> 1 | var a; export class a {};
+    |                     ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export const a = 0; 1`] = `
+"SyntaxError [1:22-1:23]: Duplicate binding 'a'
+> 1 | var a; export const a = 0;
+    |                       ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export function a(){}; 1`] = `
+"SyntaxError [1:23-1:24]: Duplicate binding 'a'
+> 1 | var a; export function a(){};
+    |                        ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; export let a; 1`] = `
+"SyntaxError [1:19-1:20]: Duplicate binding 'a'
+> 1 | var a; export let a;
+    |                    ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var a; let a; 1`] = `
+"SyntaxError [1:12-1:13]: Duplicate binding 'a'
+> 1 | var a; let a;
+    |             ^ Duplicate binding 'a'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var canBeUndeclared; export {mustExist as canBeUndeclared}; 1`] = `
+"SyntaxError [1:58-1:59]: Exported binding 'mustExist' needs to refer to a top-level declared variable
+> 1 | var canBeUndeclared; export {mustExist as canBeUndeclared};
+    |                                                           ^ Exported binding 'mustExist' needs to refer to a top-level declared variable"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo, bar, x; export {{foo: x}} 1`] = `
+"SyntaxError [1:25-1:26]: Expected '}'
+> 1 | var foo, bar, x; export {{foo: x}}
+    |                          ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo, bar; export {[foo]} 1`] = `
+"SyntaxError [1:22-1:23]: Expected '}'
+> 1 | var foo, bar; export {[foo]}
+    |                       ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo, bar; export {{foo}} 1`] = `
+"SyntaxError [1:22-1:23]: Expected '}'
+> 1 | var foo, bar; export {{foo}}
+    |                       ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo, bar; export {foo, ...bar} 1`] = `
+"SyntaxError [1:27-1:30]: Expected '}'
+> 1 | var foo, bar; export {foo, ...bar}
+    |                            ^^^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo; export {*foo(){}} 1`] = `
+"SyntaxError [1:17-1:18]: Expected '}'
+> 1 | var foo; export {*foo(){}}
+    |                  ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo; export {*foo(){}} 2`] = `
+"SyntaxError [1:9-1:15]: The export keyword can only be used with the module goal
+> 1 | var foo; export {*foo(){}}
+    |          ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo; export {[foo](){}} 1`] = `
+"SyntaxError [1:17-1:18]: Expected '}'
+> 1 | var foo; export {[foo](){}}
+    |                  ^ Expected '}'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo; export {async foo(){}} 1`] = `
+"SyntaxError [1:23-1:26]: Expected ','
+> 1 | var foo; export {async foo(){}}
+    |                        ^^^ Expected ','"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var foo; export {foo(){}} 1`] = `
+"SyntaxError [1:20-1:21]: Expected ','
+> 1 | var foo; export {foo(){}}
+    |                     ^ Expected ','"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var x, y; export default x; export {y as default}; 1`] = `
+"SyntaxError [1:49-1:50]: Cannot export a duplicate name 'default'
+> 1 | var x, y; export default x; export {y as default};
+    |                                                  ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var x, y; export default x; export {y as default}; 2`] = `
+"SyntaxError [1:49-1:50]: Cannot export a duplicate name 'default'
+> 1 | var x, y; export default x; export {y as default};
+    |                                                  ^ Cannot export a duplicate name 'default'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var x; export { x as z }; export * as z from "string"; 1`] = `
+"SyntaxError [1:38-1:39]: Cannot export a duplicate name 'z'
+> 1 | var x; export { x as z }; export * as z from "string";
+    |                                       ^ Cannot export a duplicate name 'z'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var x; export {x: a} 1`] = `
+"SyntaxError [1:16-1:17]: Expected ','
+> 1 | var x; export {x: a}
+    |                 ^ Expected ','"
+`;
+
+exports[`Module - Export > Module - Export (fail) > var x; export {x: a} 2`] = `
+"SyntaxError [1:7-1:13]: The export keyword can only be used with the module goal
+> 1 | var x; export {x: a}
+    |        ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > while (1) export default 3 1`] = `
+"SyntaxError [1:10-1:16]: Unexpected token: 'export'
+> 1 | while (1) export default 3
+    |           ^^^^^^ Unexpected token: 'export'"
+`;
+
+exports[`Module - Export > Module - Export (fail) > x = { foo(){ export {x}; }} 1`] = `
+"SyntaxError [1:13-1:19]: The export keyword can only be used with the module goal
+> 1 | x = { foo(){ export {x}; }}
+    |              ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (fail) > x = { foo(){ export {x}; }} 2`] = `
+"SyntaxError [1:13-1:19]: The export keyword can only be used with the module goal
+> 1 | x = { foo(){ export {x}; }}
+    |              ^^^^^^ The export keyword can only be used with the module goal"
+`;
+
+exports[`Module - Export > Module - Export (pass) > [function* (...{}) {  switch (yield) {}  }]
+a = (u) => {} 1`] = `
+{
+  "body": [
+    {
+      "end": 43,
+      "expression": {
+        "elements": [
+          {
+            "async": false,
+            "body": {
+              "body": [
+                {
+                  "cases": [],
+                  "discriminant": {
+                    "argument": null,
+                    "delegate": false,
+                    "end": 35,
+                    "range": [
+                      30,
+                      35,
+                    ],
+                    "start": 30,
+                    "type": "YieldExpression",
+                  },
+                  "end": 39,
+                  "range": [
+                    22,
+                    39,
+                  ],
+                  "start": 22,
+                  "type": "SwitchStatement",
+                },
+              ],
+              "end": 42,
+              "range": [
+                19,
+                42,
+              ],
+              "start": 19,
+              "type": "BlockStatement",
+            },
+            "end": 42,
+            "generator": true,
+            "id": null,
+            "params": [
+              {
+                "argument": {
+                  "end": 17,
+                  "properties": [],
+                  "range": [
+                    15,
+                    17,
+                  ],
+                  "start": 15,
+                  "type": "ObjectPattern",
+                },
+                "end": 17,
+                "range": [
+                  12,
+                  17,
+                ],
+                "start": 12,
+                "type": "RestElement",
+              },
+            ],
+            "range": [
+              1,
+              42,
+            ],
+            "start": 1,
+            "type": "FunctionExpression",
+          },
+        ],
+        "end": 43,
+        "range": [
+          0,
+          43,
+        ],
+        "start": 0,
+        "type": "ArrayExpression",
+      },
+      "range": [
+        0,
+        43,
+      ],
+      "start": 0,
+      "type": "ExpressionStatement",
+    },
+    {
+      "end": 57,
+      "expression": {
+        "end": 57,
+        "left": {
+          "end": 45,
+          "name": "a",
+          "range": [
+            44,
+            45,
+          ],
+          "start": 44,
+          "type": "Identifier",
+        },
+        "operator": "=",
+        "range": [
+          44,
+          57,
+        ],
+        "right": {
+          "async": false,
+          "body": {
+            "body": [],
+            "end": 57,
+            "range": [
+              55,
+              57,
+            ],
+            "start": 55,
+            "type": "BlockStatement",
+          },
+          "end": 57,
+          "expression": false,
+          "generator": false,
+          "params": [
+            {
+              "end": 50,
+              "name": "u",
+              "range": [
+                49,
+                50,
+              ],
+              "start": 49,
+              "type": "Identifier",
+            },
+          ],
+          "range": [
+            48,
+            57,
+          ],
+          "start": 48,
+          "type": "ArrowFunctionExpression",
+        },
+        "start": 44,
+        "type": "AssignmentExpression",
+      },
+      "range": [
+        44,
+        57,
+      ],
+      "start": 44,
+      "type": "ExpressionStatement",
+    },
+  ],
+  "end": 57,
+  "range": [
+    0,
+    57,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export * as "foo" from "./foo"; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "exported": {
+        "type": "Literal",
+        "value": "foo",
+      },
+      "source": {
+        "type": "Literal",
+        "value": "./foo",
+      },
+      "type": "ExportAllDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export * as class from 'source'; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "exported": {
+        "name": "class",
+        "type": "Identifier",
+      },
+      "source": {
+        "type": "Literal",
+        "value": "source",
+      },
+      "type": "ExportAllDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export * as foo from "./foo"; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "exported": {
+        "name": "foo",
+        "type": "Identifier",
+      },
+      "source": {
+        "type": "Literal",
+        "value": "./foo",
+      },
+      "type": "ExportAllDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export * as ns from "source"; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "exported": {
+        "name": "ns",
+        "type": "Identifier",
+      },
+      "source": {
+        "type": "Literal",
+        "value": "source",
+      },
+      "type": "ExportAllDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export * from "a" 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "end": 17,
+      "exported": null,
+      "range": [
+        0,
+        17,
+      ],
+      "source": {
+        "end": 17,
+        "range": [
+          14,
+          17,
+        ],
+        "start": 14,
+        "type": "Literal",
+        "value": "a",
+      },
+      "start": 0,
+      "type": "ExportAllDeclaration",
+    },
+  ],
+  "end": 17,
+  "range": [
+    0,
+    17,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export { "\\uD83C\\uDF19" as "a"} from "./foo"; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "loc": {
+        "end": {
+          "column": 45,
+          "line": 1,
+        },
+        "start": {
+          "column": 0,
+          "line": 1,
+        },
+      },
+      "source": {
+        "loc": {
+          "end": {
+            "column": 44,
+            "line": 1,
+          },
+          "start": {
+            "column": 37,
+            "line": 1,
+          },
+        },
+        "type": "Literal",
+        "value": "./foo",
+      },
+      "specifiers": [
+        {
+          "exported": {
+            "loc": {
+              "end": {
+                "column": 30,
+                "line": 1,
+              },
+              "start": {
+                "column": 27,
+                "line": 1,
+              },
+            },
+            "type": "Literal",
+            "value": "a",
+          },
+          "loc": {
+            "end": {
+              "column": 30,
+              "line": 1,
+            },
+            "start": {
+              "column": 9,
+              "line": 1,
+            },
+          },
+          "local": {
+            "loc": {
+              "end": {
+                "column": 23,
+                "line": 1,
+              },
+              "start": {
+                "column": 9,
+                "line": 1,
+              },
+            },
+            "type": "Literal",
+            "value": "🌙",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "loc": {
+    "end": {
+      "column": 45,
+      "line": 1,
+    },
+    "start": {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 9,
+      "range": [
+        0,
+        9,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 9,
+  "range": [
+    0,
+    9,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {} 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {} from "x" 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 18,
+      "range": [
+        0,
+        18,
+      ],
+      "source": {
+        "end": 18,
+        "range": [
+          15,
+          18,
+        ],
+        "start": 15,
+        "type": "Literal",
+        "value": "x",
+      },
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 18,
+  "range": [
+    0,
+    18,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {}; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {a as b}; var a; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 16,
+      "range": [
+        0,
+        16,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 14,
+          "exported": {
+            "end": 14,
+            "name": "b",
+            "range": [
+              13,
+              14,
+            ],
+            "start": 13,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 9,
+            "name": "a",
+            "range": [
+              8,
+              9,
+            ],
+            "start": 8,
+            "type": "Identifier",
+          },
+          "range": [
+            8,
+            14,
+          ],
+          "start": 8,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+    {
+      "declarations": [
+        {
+          "end": 22,
+          "id": {
+            "end": 22,
+            "name": "a",
+            "range": [
+              21,
+              22,
+            ],
+            "start": 21,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            21,
+            22,
+          ],
+          "start": 21,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 23,
+      "kind": "var",
+      "range": [
+        17,
+        23,
+      ],
+      "start": 17,
+      "type": "VariableDeclaration",
+    },
+  ],
+  "end": 23,
+  "range": [
+    0,
+    23,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {foo} from "foo"; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": {
+        "type": "Literal",
+        "value": "foo",
+      },
+      "specifiers": [
+        {
+          "exported": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {foo}; function foo() {}; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+    {
+      "async": false,
+      "body": {
+        "body": [],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "foo",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+    {
+      "type": "EmptyStatement",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x as a} from "foo" 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 26,
+      "range": [
+        0,
+        26,
+      ],
+      "source": {
+        "end": 26,
+        "range": [
+          21,
+          26,
+        ],
+        "start": 21,
+        "type": "Literal",
+        "value": "foo",
+      },
+      "specifiers": [
+        {
+          "end": 14,
+          "exported": {
+            "end": 14,
+            "name": "a",
+            "range": [
+              13,
+              14,
+            ],
+            "start": 13,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 9,
+            "name": "x",
+            "range": [
+              8,
+              9,
+            ],
+            "start": 8,
+            "type": "Identifier",
+          },
+          "range": [
+            8,
+            14,
+          ],
+          "start": 8,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 26,
+  "range": [
+    0,
+    26,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x as a} from "foo" 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": {
+        "type": "Literal",
+        "value": "foo",
+      },
+      "specifiers": [
+        {
+          "exported": {
+            "name": "a",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x,} from "foo" 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": {
+        "type": "Literal",
+        "value": "foo",
+      },
+      "specifiers": [
+        {
+          "exported": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x,} from "foo" 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": {
+        "type": "Literal",
+        "value": "foo",
+      },
+      "specifiers": [
+        {
+          "exported": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x} from "foo" 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 21,
+      "range": [
+        0,
+        21,
+      ],
+      "source": {
+        "end": 21,
+        "range": [
+          16,
+          21,
+        ],
+        "start": 16,
+        "type": "Literal",
+        "value": "foo",
+      },
+      "specifiers": [
+        {
+          "end": 9,
+          "exported": {
+            "end": 9,
+            "name": "x",
+            "range": [
+              8,
+              9,
+            ],
+            "start": 8,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 9,
+            "name": "x",
+            "range": [
+              8,
+              9,
+            ],
+            "start": 8,
+            "type": "Identifier",
+          },
+          "range": [
+            8,
+            9,
+          ],
+          "start": 8,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 21,
+  "range": [
+    0,
+    21,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x} from "foo" 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": {
+        "type": "Literal",
+        "value": "foo",
+      },
+      "specifiers": [
+        {
+          "exported": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x}; var x; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 11,
+      "range": [
+        0,
+        11,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 9,
+          "exported": {
+            "end": 9,
+            "name": "x",
+            "range": [
+              8,
+              9,
+            ],
+            "start": 8,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 9,
+            "name": "x",
+            "range": [
+              8,
+              9,
+            ],
+            "start": 8,
+            "type": "Identifier",
+          },
+          "range": [
+            8,
+            9,
+          ],
+          "start": 8,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+    {
+      "declarations": [
+        {
+          "end": 17,
+          "id": {
+            "end": 17,
+            "name": "x",
+            "range": [
+              16,
+              17,
+            ],
+            "start": 16,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            16,
+            17,
+          ],
+          "start": 16,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 18,
+      "kind": "var",
+      "range": [
+        12,
+        18,
+      ],
+      "start": 12,
+      "type": "VariableDeclaration",
+    },
+  ],
+  "end": 18,
+  "range": [
+    0,
+    18,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export {x}; var x; 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export async function f(){} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "async": true,
+        "body": {
+          "body": [],
+          "end": 27,
+          "range": [
+            25,
+            27,
+          ],
+          "start": 25,
+          "type": "BlockStatement",
+        },
+        "end": 27,
+        "generator": false,
+        "id": {
+          "end": 23,
+          "name": "f",
+          "range": [
+            22,
+            23,
+          ],
+          "start": 22,
+          "type": "Identifier",
+        },
+        "params": [],
+        "range": [
+          7,
+          27,
+        ],
+        "start": 7,
+        "type": "FunctionDeclaration",
+      },
+      "end": 27,
+      "range": [
+        0,
+        27,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 27,
+  "range": [
+    0,
+    27,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export class a {} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "body": {
+          "body": [],
+          "type": "ClassBody",
+        },
+        "id": {
+          "name": "a",
+          "type": "Identifier",
+        },
+        "superClass": null,
+        "type": "ClassDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export class x {} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "body": {
+          "body": [],
+          "end": 17,
+          "range": [
+            15,
+            17,
+          ],
+          "start": 15,
+          "type": "ClassBody",
+        },
+        "end": 17,
+        "id": {
+          "end": 14,
+          "name": "x",
+          "range": [
+            13,
+            14,
+          ],
+          "start": 13,
+          "type": "Identifier",
+        },
+        "range": [
+          7,
+          17,
+        ],
+        "start": 7,
+        "superClass": null,
+        "type": "ClassDeclaration",
+      },
+      "end": 17,
+      "range": [
+        0,
+        17,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 17,
+  "range": [
+    0,
+    17,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export const x = 10, y = 20 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "end": 19,
+            "id": {
+              "end": 14,
+              "name": "x",
+              "range": [
+                13,
+                14,
+              ],
+              "start": 13,
+              "type": "Identifier",
+            },
+            "init": {
+              "end": 19,
+              "range": [
+                17,
+                19,
+              ],
+              "start": 17,
+              "type": "Literal",
+              "value": 10,
+            },
+            "range": [
+              13,
+              19,
+            ],
+            "start": 13,
+            "type": "VariableDeclarator",
+          },
+          {
+            "end": 27,
+            "id": {
+              "end": 22,
+              "name": "y",
+              "range": [
+                21,
+                22,
+              ],
+              "start": 21,
+              "type": "Identifier",
+            },
+            "init": {
+              "end": 27,
+              "range": [
+                25,
+                27,
+              ],
+              "start": 25,
+              "type": "Literal",
+              "value": 20,
+            },
+            "range": [
+              21,
+              27,
+            ],
+            "start": 21,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "end": 27,
+        "kind": "const",
+        "range": [
+          7,
+          27,
+        ],
+        "start": 7,
+        "type": "VariableDeclaration",
+      },
+      "end": 27,
+      "range": [
+        0,
+        27,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 27,
+  "range": [
+    0,
+    27,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default () => {} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "expression": false,
+        "generator": false,
+        "params": [],
+        "type": "ArrowFunctionExpression",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default (1 + 2); 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "end": 21,
+        "left": {
+          "end": 17,
+          "range": [
+            16,
+            17,
+          ],
+          "start": 16,
+          "type": "Literal",
+          "value": 1,
+        },
+        "operator": "+",
+        "range": [
+          16,
+          21,
+        ],
+        "right": {
+          "end": 21,
+          "range": [
+            20,
+            21,
+          ],
+          "start": 20,
+          "type": "Literal",
+          "value": 2,
+        },
+        "start": 16,
+        "type": "BinaryExpression",
+      },
+      "end": 23,
+      "range": [
+        0,
+        23,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 23,
+  "range": [
+    0,
+    23,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default (a,b) => {} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "end": 26,
+          "range": [
+            24,
+            26,
+          ],
+          "start": 24,
+          "type": "BlockStatement",
+        },
+        "end": 26,
+        "expression": false,
+        "generator": false,
+        "params": [
+          {
+            "end": 17,
+            "name": "a",
+            "range": [
+              16,
+              17,
+            ],
+            "start": 16,
+            "type": "Identifier",
+          },
+          {
+            "end": 19,
+            "name": "b",
+            "range": [
+              18,
+              19,
+            ],
+            "start": 18,
+            "type": "Identifier",
+          },
+        ],
+        "range": [
+          15,
+          26,
+        ],
+        "start": 15,
+        "type": "ArrowFunctionExpression",
+      },
+      "end": 26,
+      "range": [
+        0,
+        26,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 26,
+  "range": [
+    0,
+    26,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default []; 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "elements": [],
+        "end": 17,
+        "range": [
+          15,
+          17,
+        ],
+        "start": 15,
+        "type": "ArrayExpression",
+      },
+      "end": 18,
+      "range": [
+        0,
+        18,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 18,
+  "range": [
+    0,
+    18,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default [x] = y 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "left": {
+          "elements": [
+            {
+              "name": "x",
+              "type": "Identifier",
+            },
+          ],
+          "type": "ArrayPattern",
+        },
+        "operator": "=",
+        "right": {
+          "name": "y",
+          "type": "Identifier",
+        },
+        "type": "AssignmentExpression",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default [x] = y 2`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "end": 22,
+        "left": {
+          "elements": [
+            {
+              "end": 17,
+              "name": "x",
+              "range": [
+                16,
+                17,
+              ],
+              "start": 16,
+              "type": "Identifier",
+            },
+          ],
+          "end": 18,
+          "range": [
+            15,
+            18,
+          ],
+          "start": 15,
+          "type": "ArrayPattern",
+        },
+        "operator": "=",
+        "range": [
+          15,
+          22,
+        ],
+        "right": {
+          "end": 22,
+          "name": "y",
+          "range": [
+            21,
+            22,
+          ],
+          "start": 21,
+          "type": "Identifier",
+        },
+        "start": 15,
+        "type": "AssignmentExpression",
+      },
+      "end": 22,
+      "range": [
+        0,
+        22,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 22,
+  "range": [
+    0,
+    22,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default 3; 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "type": "Literal",
+        "value": 3,
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default async 
+function f(){} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "name": "async",
+        "type": "Identifier",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+    {
+      "async": false,
+      "body": {
+        "body": [],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default async () => y 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": true,
+        "body": {
+          "end": 28,
+          "name": "y",
+          "range": [
+            27,
+            28,
+          ],
+          "start": 27,
+          "type": "Identifier",
+        },
+        "end": 28,
+        "expression": true,
+        "generator": false,
+        "params": [],
+        "range": [
+          15,
+          28,
+        ],
+        "start": 15,
+        "type": "ArrowFunctionExpression",
+      },
+      "end": 28,
+      "range": [
+        0,
+        28,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 28,
+  "range": [
+    0,
+    28,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default async (x) => y 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": true,
+        "body": {
+          "end": 29,
+          "name": "y",
+          "range": [
+            28,
+            29,
+          ],
+          "start": 28,
+          "type": "Identifier",
+        },
+        "end": 29,
+        "expression": true,
+        "generator": false,
+        "params": [
+          {
+            "end": 23,
+            "name": "x",
+            "range": [
+              22,
+              23,
+            ],
+            "start": 22,
+            "type": "Identifier",
+          },
+        ],
+        "range": [
+          15,
+          29,
+        ],
+        "start": 15,
+        "type": "ArrowFunctionExpression",
+      },
+      "end": 29,
+      "range": [
+        0,
+        29,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 29,
+  "range": [
+    0,
+    29,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default async 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "end": 20,
+        "name": "async",
+        "range": [
+          15,
+          20,
+        ],
+        "start": 15,
+        "type": "Identifier",
+      },
+      "end": 20,
+      "range": [
+        0,
+        20,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 20,
+  "range": [
+    0,
+    20,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default async function f(){} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": true,
+        "body": {
+          "body": [],
+          "end": 35,
+          "range": [
+            33,
+            35,
+          ],
+          "start": 33,
+          "type": "BlockStatement",
+        },
+        "end": 35,
+        "generator": false,
+        "id": {
+          "end": 31,
+          "name": "f",
+          "range": [
+            30,
+            31,
+          ],
+          "start": 30,
+          "type": "Identifier",
+        },
+        "params": [],
+        "range": [
+          15,
+          35,
+        ],
+        "start": 15,
+        "type": "FunctionDeclaration",
+      },
+      "end": 35,
+      "range": [
+        0,
+        35,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 35,
+  "range": [
+    0,
+    35,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default async function(){} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": true,
+        "body": {
+          "body": [],
+          "end": 33,
+          "range": [
+            31,
+            33,
+          ],
+          "start": 31,
+          "type": "BlockStatement",
+        },
+        "end": 33,
+        "generator": false,
+        "id": null,
+        "params": [],
+        "range": [
+          15,
+          33,
+        ],
+        "start": 15,
+        "type": "FunctionDeclaration",
+      },
+      "end": 33,
+      "range": [
+        0,
+        33,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 33,
+  "range": [
+    0,
+    33,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default async x => y 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": true,
+        "body": {
+          "end": 27,
+          "name": "y",
+          "range": [
+            26,
+            27,
+          ],
+          "start": 26,
+          "type": "Identifier",
+        },
+        "end": 27,
+        "expression": true,
+        "generator": false,
+        "params": [
+          {
+            "end": 22,
+            "name": "x",
+            "range": [
+              21,
+              22,
+            ],
+            "start": 21,
+            "type": "Identifier",
+          },
+        ],
+        "range": [
+          15,
+          27,
+        ],
+        "start": 15,
+        "type": "ArrowFunctionExpression",
+      },
+      "end": 27,
+      "range": [
+        0,
+        27,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 27,
+  "range": [
+    0,
+    27,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default class A {} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "body": {
+          "body": [],
+          "type": "ClassBody",
+        },
+        "id": {
+          "name": "A",
+          "type": "Identifier",
+        },
+        "superClass": null,
+        "type": "ClassDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default class f{}; export {f}; 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "body": {
+          "body": [],
+          "type": "ClassBody",
+        },
+        "id": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "superClass": null,
+        "type": "ClassDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+    {
+      "type": "EmptyStatement",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "f",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "f",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default class x {} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "body": {
+          "body": [],
+          "end": 25,
+          "range": [
+            23,
+            25,
+          ],
+          "start": 23,
+          "type": "ClassBody",
+        },
+        "end": 25,
+        "id": {
+          "end": 22,
+          "name": "x",
+          "range": [
+            21,
+            22,
+          ],
+          "start": 21,
+          "type": "Identifier",
+        },
+        "range": [
+          15,
+          25,
+        ],
+        "start": 15,
+        "superClass": null,
+        "type": "ClassDeclaration",
+      },
+      "end": 25,
+      "range": [
+        0,
+        25,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 25,
+  "range": [
+    0,
+    25,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default class x{} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "body": {
+          "body": [],
+          "end": 24,
+          "range": [
+            22,
+            24,
+          ],
+          "start": 22,
+          "type": "ClassBody",
+        },
+        "end": 24,
+        "id": {
+          "end": 22,
+          "name": "x",
+          "range": [
+            21,
+            22,
+          ],
+          "start": 21,
+          "type": "Identifier",
+        },
+        "range": [
+          15,
+          24,
+        ],
+        "start": 15,
+        "superClass": null,
+        "type": "ClassDeclaration",
+      },
+      "end": 24,
+      "range": [
+        0,
+        24,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 24,
+  "range": [
+    0,
+    24,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function () {} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": false,
+        "id": null,
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function *f(){} foo 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": true,
+        "id": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+    {
+      "expression": {
+        "name": "foo",
+        "type": "Identifier",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function *foo() {} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": true,
+        "id": {
+          "name": "foo",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function f(){} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": false,
+        "id": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function f(){}; export {f}; 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": false,
+        "id": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+    {
+      "type": "EmptyStatement",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "f",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "f",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function foo() {} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": false,
+        "id": {
+          "name": "foo",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function* (){} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": true,
+        "id": null,
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export default function* f(){} 1`] = `
+{
+  "body": [
+    {
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "end": 30,
+          "range": [
+            28,
+            30,
+          ],
+          "start": 28,
+          "type": "BlockStatement",
+        },
+        "end": 30,
+        "generator": true,
+        "id": {
+          "end": 26,
+          "name": "f",
+          "range": [
+            25,
+            26,
+          ],
+          "start": 25,
+          "type": "Identifier",
+        },
+        "params": [],
+        "range": [
+          15,
+          30,
+        ],
+        "start": 15,
+        "type": "FunctionDeclaration",
+      },
+      "end": 30,
+      "range": [
+        0,
+        30,
+      ],
+      "start": 0,
+      "type": "ExportDefaultDeclaration",
+    },
+  ],
+  "end": 30,
+  "range": [
+    0,
+    30,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export function \\u{5A}() {} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": false,
+        "id": {
+          "name": "Z",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export function f(){} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "end": 21,
+          "range": [
+            19,
+            21,
+          ],
+          "start": 19,
+          "type": "BlockStatement",
+        },
+        "end": 21,
+        "generator": false,
+        "id": {
+          "end": 17,
+          "name": "f",
+          "range": [
+            16,
+            17,
+          ],
+          "start": 16,
+          "type": "Identifier",
+        },
+        "params": [],
+        "range": [
+          7,
+          21,
+        ],
+        "start": 7,
+        "type": "FunctionDeclaration",
+      },
+      "end": 21,
+      "range": [
+        0,
+        21,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 21,
+  "range": [
+    0,
+    21,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export function foo () {} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": false,
+        "id": {
+          "name": "foo",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export function* f(){} 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "generator": true,
+        "id": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "params": [],
+        "type": "FunctionDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export let [...x] = y 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "end": 21,
+            "id": {
+              "elements": [
+                {
+                  "argument": {
+                    "end": 16,
+                    "name": "x",
+                    "range": [
+                      15,
+                      16,
+                    ],
+                    "start": 15,
+                    "type": "Identifier",
+                  },
+                  "end": 16,
+                  "range": [
+                    12,
+                    16,
+                  ],
+                  "start": 12,
+                  "type": "RestElement",
+                },
+              ],
+              "end": 17,
+              "range": [
+                11,
+                17,
+              ],
+              "start": 11,
+              "type": "ArrayPattern",
+            },
+            "init": {
+              "end": 21,
+              "name": "y",
+              "range": [
+                20,
+                21,
+              ],
+              "start": 20,
+              "type": "Identifier",
+            },
+            "range": [
+              11,
+              21,
+            ],
+            "start": 11,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "end": 21,
+        "kind": "let",
+        "range": [
+          7,
+          21,
+        ],
+        "start": 7,
+        "type": "VariableDeclaration",
+      },
+      "end": 21,
+      "range": [
+        0,
+        21,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 21,
+  "range": [
+    0,
+    21,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export let {...x} = y 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "properties": [
+                {
+                  "argument": {
+                    "name": "x",
+                    "type": "Identifier",
+                  },
+                  "type": "RestElement",
+                },
+              ],
+              "type": "ObjectPattern",
+            },
+            "init": {
+              "name": "y",
+              "type": "Identifier",
+            },
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "let",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export let a = 1; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "a",
+              "type": "Identifier",
+            },
+            "init": {
+              "type": "Literal",
+              "value": 1,
+            },
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "let",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export let x 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "end": 12,
+            "id": {
+              "end": 12,
+              "name": "x",
+              "range": [
+                11,
+                12,
+              ],
+              "start": 11,
+              "type": "Identifier",
+            },
+            "init": null,
+            "range": [
+              11,
+              12,
+            ],
+            "start": 11,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "end": 12,
+        "kind": "let",
+        "range": [
+          7,
+          12,
+        ],
+        "start": 7,
+        "type": "VariableDeclaration",
+      },
+      "end": 12,
+      "range": [
+        0,
+        12,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 12,
+  "range": [
+    0,
+    12,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export let x 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "init": null,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "let",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export let x, y 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "end": 12,
+            "id": {
+              "end": 12,
+              "name": "x",
+              "range": [
+                11,
+                12,
+              ],
+              "start": 11,
+              "type": "Identifier",
+            },
+            "init": null,
+            "range": [
+              11,
+              12,
+            ],
+            "start": 11,
+            "type": "VariableDeclarator",
+          },
+          {
+            "end": 15,
+            "id": {
+              "end": 15,
+              "name": "y",
+              "range": [
+                14,
+                15,
+              ],
+              "start": 14,
+              "type": "Identifier",
+            },
+            "init": null,
+            "range": [
+              14,
+              15,
+            ],
+            "start": 14,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "end": 15,
+        "kind": "let",
+        "range": [
+          7,
+          15,
+        ],
+        "start": 7,
+        "type": "VariableDeclaration",
+      },
+      "end": 15,
+      "range": [
+        0,
+        15,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 15,
+  "range": [
+    0,
+    15,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export let x, y 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "init": null,
+            "type": "VariableDeclarator",
+          },
+          {
+            "id": {
+              "name": "y",
+              "type": "Identifier",
+            },
+            "init": null,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "let",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export var foo = 1; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "foo",
+              "type": "Identifier",
+            },
+            "init": {
+              "type": "Literal",
+              "value": 1,
+            },
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "var",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export var x = 1; 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "init": {
+              "type": "Literal",
+              "value": 1,
+            },
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "var",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export var x = 10, y = 20 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "end": 17,
+            "id": {
+              "end": 12,
+              "name": "x",
+              "range": [
+                11,
+                12,
+              ],
+              "start": 11,
+              "type": "Identifier",
+            },
+            "init": {
+              "end": 17,
+              "range": [
+                15,
+                17,
+              ],
+              "start": 15,
+              "type": "Literal",
+              "value": 10,
+            },
+            "range": [
+              11,
+              17,
+            ],
+            "start": 11,
+            "type": "VariableDeclarator",
+          },
+          {
+            "end": 25,
+            "id": {
+              "end": 20,
+              "name": "y",
+              "range": [
+                19,
+                20,
+              ],
+              "start": 19,
+              "type": "Identifier",
+            },
+            "init": {
+              "end": 25,
+              "range": [
+                23,
+                25,
+              ],
+              "start": 23,
+              "type": "Literal",
+              "value": 20,
+            },
+            "range": [
+              19,
+              25,
+            ],
+            "start": 19,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "end": 25,
+        "kind": "var",
+        "range": [
+          7,
+          25,
+        ],
+        "start": 7,
+        "type": "VariableDeclaration",
+      },
+      "end": 25,
+      "range": [
+        0,
+        25,
+      ],
+      "source": null,
+      "specifiers": [],
+      "start": 0,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 25,
+  "range": [
+    0,
+    25,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export var x = 10, y = 20 2`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "init": {
+              "type": "Literal",
+              "value": 10,
+            },
+            "type": "VariableDeclarator",
+          },
+          {
+            "id": {
+              "name": "y",
+              "type": "Identifier",
+            },
+            "init": {
+              "type": "Literal",
+              "value": 20,
+            },
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "var",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export var x 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "init": null,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "var",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > export var x, y 1`] = `
+{
+  "body": [
+    {
+      "attributes": [],
+      "declaration": {
+        "declarations": [
+          {
+            "id": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "init": null,
+            "type": "VariableDeclarator",
+          },
+          {
+            "id": {
+              "name": "y",
+              "type": "Identifier",
+            },
+            "init": null,
+            "type": "VariableDeclarator",
+          },
+        ],
+        "kind": "var",
+        "type": "VariableDeclaration",
+      },
+      "source": null,
+      "specifiers": [],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > let foo, bar; export {foo, bar} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+        {
+          "id": {
+            "name": "bar",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+        {
+          "exported": {
+            "name": "bar",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "bar",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var a,b; export {a}; export {b}; 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 5,
+          "id": {
+            "end": 5,
+            "name": "a",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            5,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+        {
+          "end": 7,
+          "id": {
+            "end": 7,
+            "name": "b",
+            "range": [
+              6,
+              7,
+            ],
+            "start": 6,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            6,
+            7,
+          ],
+          "start": 6,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 8,
+      "kind": "var",
+      "range": [
+        0,
+        8,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 20,
+      "range": [
+        9,
+        20,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 18,
+          "exported": {
+            "end": 18,
+            "name": "a",
+            "range": [
+              17,
+              18,
+            ],
+            "start": 17,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 18,
+            "name": "a",
+            "range": [
+              17,
+              18,
+            ],
+            "start": 17,
+            "type": "Identifier",
+          },
+          "range": [
+            17,
+            18,
+          ],
+          "start": 17,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 9,
+      "type": "ExportNamedDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 32,
+      "range": [
+        21,
+        32,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 30,
+          "exported": {
+            "end": 30,
+            "name": "b",
+            "range": [
+              29,
+              30,
+            ],
+            "start": 29,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 30,
+            "name": "b",
+            "range": [
+              29,
+              30,
+            ],
+            "start": 29,
+            "type": "Identifier",
+          },
+          "range": [
+            29,
+            30,
+          ],
+          "start": 29,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 21,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 32,
+  "range": [
+    0,
+    32,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var a; export {a as b}; 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "a",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "b",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "a",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var foo; export {foo as new} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 7,
+          "id": {
+            "end": 7,
+            "name": "foo",
+            "range": [
+              4,
+              7,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            7,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 8,
+      "kind": "var",
+      "range": [
+        0,
+        8,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 28,
+      "range": [
+        9,
+        28,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 27,
+          "exported": {
+            "end": 27,
+            "name": "new",
+            "range": [
+              24,
+              27,
+            ],
+            "start": 24,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 20,
+            "name": "foo",
+            "range": [
+              17,
+              20,
+            ],
+            "start": 17,
+            "type": "Identifier",
+          },
+          "range": [
+            17,
+            27,
+          ],
+          "start": 17,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 9,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 28,
+  "range": [
+    0,
+    28,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x,y; export {x as a, y as b,} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+        {
+          "id": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "a",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+        {
+          "exported": {
+            "name": "b",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x,y; export {x as a, y as b} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 5,
+          "id": {
+            "end": 5,
+            "name": "x",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            5,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+        {
+          "end": 7,
+          "id": {
+            "end": 7,
+            "name": "y",
+            "range": [
+              6,
+              7,
+            ],
+            "start": 6,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            6,
+            7,
+          ],
+          "start": 6,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 8,
+      "kind": "var",
+      "range": [
+        0,
+        8,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 32,
+      "range": [
+        9,
+        32,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 23,
+          "exported": {
+            "end": 23,
+            "name": "a",
+            "range": [
+              22,
+              23,
+            ],
+            "start": 22,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 18,
+            "name": "x",
+            "range": [
+              17,
+              18,
+            ],
+            "start": 17,
+            "type": "Identifier",
+          },
+          "range": [
+            17,
+            23,
+          ],
+          "start": 17,
+          "type": "ExportSpecifier",
+        },
+        {
+          "end": 31,
+          "exported": {
+            "end": 31,
+            "name": "b",
+            "range": [
+              30,
+              31,
+            ],
+            "start": 30,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 26,
+            "name": "y",
+            "range": [
+              25,
+              26,
+            ],
+            "start": 25,
+            "type": "Identifier",
+          },
+          "range": [
+            25,
+            31,
+          ],
+          "start": 25,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 9,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 32,
+  "range": [
+    0,
+    32,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x,y; export {x as a, y as b} 2`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 5,
+          "id": {
+            "end": 5,
+            "name": "x",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            5,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+        {
+          "end": 7,
+          "id": {
+            "end": 7,
+            "name": "y",
+            "range": [
+              6,
+              7,
+            ],
+            "start": 6,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            6,
+            7,
+          ],
+          "start": 6,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 8,
+      "kind": "var",
+      "range": [
+        0,
+        8,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 32,
+      "range": [
+        9,
+        32,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 23,
+          "exported": {
+            "end": 23,
+            "name": "a",
+            "range": [
+              22,
+              23,
+            ],
+            "start": 22,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 18,
+            "name": "x",
+            "range": [
+              17,
+              18,
+            ],
+            "start": 17,
+            "type": "Identifier",
+          },
+          "range": [
+            17,
+            23,
+          ],
+          "start": 17,
+          "type": "ExportSpecifier",
+        },
+        {
+          "end": 31,
+          "exported": {
+            "end": 31,
+            "name": "b",
+            "range": [
+              30,
+              31,
+            ],
+            "start": 30,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 26,
+            "name": "y",
+            "range": [
+              25,
+              26,
+            ],
+            "start": 25,
+            "type": "Identifier",
+          },
+          "range": [
+            25,
+            31,
+          ],
+          "start": 25,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 9,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 32,
+  "range": [
+    0,
+    32,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x,y; export {x, y,} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+        {
+          "id": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+        {
+          "exported": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x,y; export {x, y} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+        {
+          "id": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+        {
+          "exported": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x; export { x as a }; export { x as b }; 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 5,
+          "id": {
+            "end": 5,
+            "name": "x",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            5,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 6,
+      "kind": "var",
+      "range": [
+        0,
+        6,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 25,
+      "range": [
+        7,
+        25,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 22,
+          "exported": {
+            "end": 22,
+            "name": "a",
+            "range": [
+              21,
+              22,
+            ],
+            "start": 21,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 17,
+            "name": "x",
+            "range": [
+              16,
+              17,
+            ],
+            "start": 16,
+            "type": "Identifier",
+          },
+          "range": [
+            16,
+            22,
+          ],
+          "start": 16,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 7,
+      "type": "ExportNamedDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 44,
+      "range": [
+        26,
+        44,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 41,
+          "exported": {
+            "end": 41,
+            "name": "b",
+            "range": [
+              40,
+              41,
+            ],
+            "start": 40,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 36,
+            "name": "x",
+            "range": [
+              35,
+              36,
+            ],
+            "start": 35,
+            "type": "Identifier",
+          },
+          "range": [
+            35,
+            41,
+          ],
+          "start": 35,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 26,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 44,
+  "range": [
+    0,
+    44,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x; export {x as a,} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 5,
+          "id": {
+            "end": 5,
+            "name": "x",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            5,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 6,
+      "kind": "var",
+      "range": [
+        0,
+        6,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 23,
+      "range": [
+        7,
+        23,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 21,
+          "exported": {
+            "end": 21,
+            "name": "a",
+            "range": [
+              20,
+              21,
+            ],
+            "start": 20,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 16,
+            "name": "x",
+            "range": [
+              15,
+              16,
+            ],
+            "start": 15,
+            "type": "Identifier",
+          },
+          "range": [
+            15,
+            21,
+          ],
+          "start": 15,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 7,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 23,
+  "range": [
+    0,
+    23,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x; export {x as a,} 2`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "a",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x; export {x as a} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 5,
+          "id": {
+            "end": 5,
+            "name": "x",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            5,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 6,
+      "kind": "var",
+      "range": [
+        0,
+        6,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 22,
+      "range": [
+        7,
+        22,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 21,
+          "exported": {
+            "end": 21,
+            "name": "a",
+            "range": [
+              20,
+              21,
+            ],
+            "start": 20,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 16,
+            "name": "x",
+            "range": [
+              15,
+              16,
+            ],
+            "start": 15,
+            "type": "Identifier",
+          },
+          "range": [
+            15,
+            21,
+          ],
+          "start": 15,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 7,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 22,
+  "range": [
+    0,
+    22,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x; export {x as a} 2`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "a",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x; export {x,} 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 5,
+          "id": {
+            "end": 5,
+            "name": "x",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": null,
+          "range": [
+            4,
+            5,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 6,
+      "kind": "var",
+      "range": [
+        0,
+        6,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "end": 18,
+      "range": [
+        7,
+        18,
+      ],
+      "source": null,
+      "specifiers": [
+        {
+          "end": 16,
+          "exported": {
+            "end": 16,
+            "name": "x",
+            "range": [
+              15,
+              16,
+            ],
+            "start": 15,
+            "type": "Identifier",
+          },
+          "local": {
+            "end": 16,
+            "name": "x",
+            "range": [
+              15,
+              16,
+            ],
+            "start": 15,
+            "type": "Identifier",
+          },
+          "range": [
+            15,
+            16,
+          ],
+          "start": 15,
+          "type": "ExportSpecifier",
+        },
+      ],
+      "start": 7,
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "end": 18,
+  "range": [
+    0,
+    18,
+  ],
+  "sourceType": "module",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Module - Export > Module - Export (pass) > var x; export {x,} 2`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "attributes": [],
+      "declaration": null,
+      "source": null,
+      "specifiers": [
+        {
+          "exported": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "local": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ExportSpecifier",
+        },
+      ],
+      "type": "ExportNamedDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;

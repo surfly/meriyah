@@ -1,0 +1,2152 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Next - Public fields > Next - Public fields (pass) > {
+  class X {
+    static p = function() { return arguments[0]; }
+  }
+}
+
+{
+  class X {
+    static t = () => {
+      function p() { return arguments[0]; };
+      return p;
+    }
+  }
+
+  let p = X.t();
+} 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "body": {
+            "body": [
+              {
+                "computed": false,
+                "decorators": [],
+                "end": 64,
+                "key": {
+                  "end": 26,
+                  "name": "p",
+                  "range": [
+                    25,
+                    26,
+                  ],
+                  "start": 25,
+                  "type": "Identifier",
+                },
+                "range": [
+                  18,
+                  64,
+                ],
+                "start": 18,
+                "static": true,
+                "type": "PropertyDefinition",
+                "value": {
+                  "async": false,
+                  "body": {
+                    "body": [
+                      {
+                        "argument": {
+                          "computed": true,
+                          "end": 61,
+                          "object": {
+                            "end": 58,
+                            "name": "arguments",
+                            "range": [
+                              49,
+                              58,
+                            ],
+                            "start": 49,
+                            "type": "Identifier",
+                          },
+                          "optional": false,
+                          "property": {
+                            "end": 60,
+                            "range": [
+                              59,
+                              60,
+                            ],
+                            "start": 59,
+                            "type": "Literal",
+                            "value": 0,
+                          },
+                          "range": [
+                            49,
+                            61,
+                          ],
+                          "start": 49,
+                          "type": "MemberExpression",
+                        },
+                        "end": 62,
+                        "range": [
+                          42,
+                          62,
+                        ],
+                        "start": 42,
+                        "type": "ReturnStatement",
+                      },
+                    ],
+                    "end": 64,
+                    "range": [
+                      40,
+                      64,
+                    ],
+                    "start": 40,
+                    "type": "BlockStatement",
+                  },
+                  "end": 64,
+                  "generator": false,
+                  "id": null,
+                  "params": [],
+                  "range": [
+                    29,
+                    64,
+                  ],
+                  "start": 29,
+                  "type": "FunctionExpression",
+                },
+              },
+            ],
+            "end": 68,
+            "range": [
+              12,
+              68,
+            ],
+            "start": 12,
+            "type": "ClassBody",
+          },
+          "decorators": [],
+          "end": 68,
+          "id": {
+            "end": 11,
+            "name": "X",
+            "range": [
+              10,
+              11,
+            ],
+            "start": 10,
+            "type": "Identifier",
+          },
+          "range": [
+            4,
+            68,
+          ],
+          "start": 4,
+          "superClass": null,
+          "type": "ClassDeclaration",
+        },
+      ],
+      "end": 70,
+      "range": [
+        0,
+        70,
+      ],
+      "start": 0,
+      "type": "BlockStatement",
+    },
+    {
+      "body": [
+        {
+          "body": {
+            "body": [
+              {
+                "computed": false,
+                "decorators": [],
+                "end": 175,
+                "key": {
+                  "end": 98,
+                  "name": "t",
+                  "range": [
+                    97,
+                    98,
+                  ],
+                  "start": 97,
+                  "type": "Identifier",
+                },
+                "range": [
+                  90,
+                  175,
+                ],
+                "start": 90,
+                "static": true,
+                "type": "PropertyDefinition",
+                "value": {
+                  "async": false,
+                  "body": {
+                    "body": [
+                      {
+                        "async": false,
+                        "body": {
+                          "body": [
+                            {
+                              "argument": {
+                                "computed": true,
+                                "end": 149,
+                                "object": {
+                                  "end": 146,
+                                  "name": "arguments",
+                                  "range": [
+                                    137,
+                                    146,
+                                  ],
+                                  "start": 137,
+                                  "type": "Identifier",
+                                },
+                                "optional": false,
+                                "property": {
+                                  "end": 148,
+                                  "range": [
+                                    147,
+                                    148,
+                                  ],
+                                  "start": 147,
+                                  "type": "Literal",
+                                  "value": 0,
+                                },
+                                "range": [
+                                  137,
+                                  149,
+                                ],
+                                "start": 137,
+                                "type": "MemberExpression",
+                              },
+                              "end": 150,
+                              "range": [
+                                130,
+                                150,
+                              ],
+                              "start": 130,
+                              "type": "ReturnStatement",
+                            },
+                          ],
+                          "end": 152,
+                          "range": [
+                            128,
+                            152,
+                          ],
+                          "start": 128,
+                          "type": "BlockStatement",
+                        },
+                        "end": 152,
+                        "generator": false,
+                        "id": {
+                          "end": 125,
+                          "name": "p",
+                          "range": [
+                            124,
+                            125,
+                          ],
+                          "start": 124,
+                          "type": "Identifier",
+                        },
+                        "params": [],
+                        "range": [
+                          115,
+                          152,
+                        ],
+                        "start": 115,
+                        "type": "FunctionDeclaration",
+                      },
+                      {
+                        "end": 153,
+                        "range": [
+                          152,
+                          153,
+                        ],
+                        "start": 152,
+                        "type": "EmptyStatement",
+                      },
+                      {
+                        "argument": {
+                          "end": 168,
+                          "name": "p",
+                          "range": [
+                            167,
+                            168,
+                          ],
+                          "start": 167,
+                          "type": "Identifier",
+                        },
+                        "end": 169,
+                        "range": [
+                          160,
+                          169,
+                        ],
+                        "start": 160,
+                        "type": "ReturnStatement",
+                      },
+                    ],
+                    "end": 175,
+                    "range": [
+                      107,
+                      175,
+                    ],
+                    "start": 107,
+                    "type": "BlockStatement",
+                  },
+                  "end": 175,
+                  "expression": false,
+                  "generator": false,
+                  "params": [],
+                  "range": [
+                    101,
+                    175,
+                  ],
+                  "start": 101,
+                  "type": "ArrowFunctionExpression",
+                },
+              },
+            ],
+            "end": 179,
+            "range": [
+              84,
+              179,
+            ],
+            "start": 84,
+            "type": "ClassBody",
+          },
+          "decorators": [],
+          "end": 179,
+          "id": {
+            "end": 83,
+            "name": "X",
+            "range": [
+              82,
+              83,
+            ],
+            "start": 82,
+            "type": "Identifier",
+          },
+          "range": [
+            76,
+            179,
+          ],
+          "start": 76,
+          "superClass": null,
+          "type": "ClassDeclaration",
+        },
+        {
+          "declarations": [
+            {
+              "end": 196,
+              "id": {
+                "end": 188,
+                "name": "p",
+                "range": [
+                  187,
+                  188,
+                ],
+                "start": 187,
+                "type": "Identifier",
+              },
+              "init": {
+                "arguments": [],
+                "callee": {
+                  "computed": false,
+                  "end": 194,
+                  "object": {
+                    "end": 192,
+                    "name": "X",
+                    "range": [
+                      191,
+                      192,
+                    ],
+                    "start": 191,
+                    "type": "Identifier",
+                  },
+                  "optional": false,
+                  "property": {
+                    "end": 194,
+                    "name": "t",
+                    "range": [
+                      193,
+                      194,
+                    ],
+                    "start": 193,
+                    "type": "Identifier",
+                  },
+                  "range": [
+                    191,
+                    194,
+                  ],
+                  "start": 191,
+                  "type": "MemberExpression",
+                },
+                "end": 196,
+                "optional": false,
+                "range": [
+                  191,
+                  196,
+                ],
+                "start": 191,
+                "type": "CallExpression",
+              },
+              "range": [
+                187,
+                196,
+              ],
+              "start": 187,
+              "type": "VariableDeclarator",
+            },
+          ],
+          "end": 197,
+          "kind": "let",
+          "range": [
+            183,
+            197,
+          ],
+          "start": 183,
+          "type": "VariableDeclaration",
+        },
+      ],
+      "end": 199,
+      "range": [
+        72,
+        199,
+      ],
+      "start": 72,
+      "type": "BlockStatement",
+    },
+  ],
+  "end": 199,
+  "range": [
+    0,
+    199,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > { class X { static p = function() { return arguments[0]; } } } 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "body": {
+            "body": [
+              {
+                "computed": false,
+                "decorators": [],
+                "end": 58,
+                "key": {
+                  "end": 20,
+                  "name": "p",
+                  "range": [
+                    19,
+                    20,
+                  ],
+                  "start": 19,
+                  "type": "Identifier",
+                },
+                "range": [
+                  12,
+                  58,
+                ],
+                "start": 12,
+                "static": true,
+                "type": "PropertyDefinition",
+                "value": {
+                  "async": false,
+                  "body": {
+                    "body": [
+                      {
+                        "argument": {
+                          "computed": true,
+                          "end": 55,
+                          "object": {
+                            "end": 52,
+                            "name": "arguments",
+                            "range": [
+                              43,
+                              52,
+                            ],
+                            "start": 43,
+                            "type": "Identifier",
+                          },
+                          "optional": false,
+                          "property": {
+                            "end": 54,
+                            "range": [
+                              53,
+                              54,
+                            ],
+                            "start": 53,
+                            "type": "Literal",
+                            "value": 0,
+                          },
+                          "range": [
+                            43,
+                            55,
+                          ],
+                          "start": 43,
+                          "type": "MemberExpression",
+                        },
+                        "end": 56,
+                        "range": [
+                          36,
+                          56,
+                        ],
+                        "start": 36,
+                        "type": "ReturnStatement",
+                      },
+                    ],
+                    "end": 58,
+                    "range": [
+                      34,
+                      58,
+                    ],
+                    "start": 34,
+                    "type": "BlockStatement",
+                  },
+                  "end": 58,
+                  "generator": false,
+                  "id": null,
+                  "params": [],
+                  "range": [
+                    23,
+                    58,
+                  ],
+                  "start": 23,
+                  "type": "FunctionExpression",
+                },
+              },
+            ],
+            "end": 60,
+            "range": [
+              10,
+              60,
+            ],
+            "start": 10,
+            "type": "ClassBody",
+          },
+          "decorators": [],
+          "end": 60,
+          "id": {
+            "end": 9,
+            "name": "X",
+            "range": [
+              8,
+              9,
+            ],
+            "start": 8,
+            "type": "Identifier",
+          },
+          "range": [
+            2,
+            60,
+          ],
+          "start": 2,
+          "superClass": null,
+          "type": "ClassDeclaration",
+        },
+      ],
+      "end": 62,
+      "range": [
+        0,
+        62,
+      ],
+      "start": 0,
+      "type": "BlockStatement",
+    },
+  ],
+  "end": 62,
+  "range": [
+    0,
+    62,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;;;;;'a'; "b"; 'c' = 39;  "d" = 42;;;;;;;  ;;;; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 26,
+            "key": {
+              "end": 25,
+              "range": [
+                22,
+                25,
+              ],
+              "start": 22,
+              "type": "Literal",
+              "value": "a",
+            },
+            "range": [
+              22,
+              26,
+            ],
+            "start": 22,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": null,
+          },
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 31,
+            "key": {
+              "end": 30,
+              "range": [
+                27,
+                30,
+              ],
+              "start": 27,
+              "type": "Literal",
+              "value": "b",
+            },
+            "range": [
+              27,
+              31,
+            ],
+            "start": 27,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": null,
+          },
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 41,
+            "key": {
+              "end": 35,
+              "range": [
+                32,
+                35,
+              ],
+              "start": 32,
+              "type": "Literal",
+              "value": "c",
+            },
+            "range": [
+              32,
+              41,
+            ],
+            "start": 32,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 40,
+              "range": [
+                38,
+                40,
+              ],
+              "start": 38,
+              "type": "Literal",
+              "value": 39,
+            },
+          },
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 52,
+            "key": {
+              "end": 46,
+              "range": [
+                43,
+                46,
+              ],
+              "start": 43,
+              "type": "Literal",
+              "value": "d",
+            },
+            "range": [
+              43,
+              52,
+            ],
+            "start": 43,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 51,
+              "range": [
+                49,
+                51,
+              ],
+              "start": 49,
+              "type": "Literal",
+              "value": 42,
+            },
+          },
+        ],
+        "end": 66,
+        "range": [
+          8,
+          66,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 66,
+      "id": {
+        "end": 7,
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        66,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 66,
+  "range": [
+    0,
+    66,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { ;;;;;;[x] = 42; [10] = "meep"; ["not initialized"];;;;;;; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": true,
+            "decorators": [],
+            "end": 25,
+            "key": {
+              "end": 18,
+              "name": "x",
+              "range": [
+                17,
+                18,
+              ],
+              "start": 17,
+              "type": "Identifier",
+            },
+            "range": [
+              16,
+              25,
+            ],
+            "start": 16,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 24,
+              "range": [
+                22,
+                24,
+              ],
+              "start": 22,
+              "type": "Literal",
+              "value": 42,
+            },
+          },
+          {
+            "computed": true,
+            "decorators": [],
+            "end": 40,
+            "key": {
+              "end": 29,
+              "range": [
+                27,
+                29,
+              ],
+              "start": 27,
+              "type": "Literal",
+              "value": 10,
+            },
+            "range": [
+              26,
+              40,
+            ],
+            "start": 26,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 39,
+              "range": [
+                33,
+                39,
+              ],
+              "start": 33,
+              "type": "Literal",
+              "value": "meep",
+            },
+          },
+          {
+            "computed": true,
+            "decorators": [],
+            "end": 61,
+            "key": {
+              "end": 59,
+              "range": [
+                42,
+                59,
+              ],
+              "start": 42,
+              "type": "Literal",
+              "value": "not initialized",
+            },
+            "range": [
+              41,
+              61,
+            ],
+            "start": 41,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": null,
+          },
+        ],
+        "end": 69,
+        "range": [
+          8,
+          69,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 69,
+      "id": {
+        "end": 7,
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        69,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 69,
+  "range": [
+    0,
+    69,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { ['a'] = 0; b; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": true,
+            "decorators": [],
+            "end": 20,
+            "key": {
+              "end": 14,
+              "range": [
+                11,
+                14,
+              ],
+              "start": 11,
+              "type": "Literal",
+              "value": "a",
+            },
+            "range": [
+              10,
+              20,
+            ],
+            "start": 10,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 19,
+              "range": [
+                18,
+                19,
+              ],
+              "start": 18,
+              "type": "Literal",
+              "value": 0,
+            },
+          },
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 23,
+            "key": {
+              "end": 22,
+              "name": "b",
+              "range": [
+                21,
+                22,
+              ],
+              "start": 21,
+              "type": "Identifier",
+            },
+            "range": [
+              21,
+              23,
+            ],
+            "start": 21,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": null,
+          },
+        ],
+        "end": 25,
+        "range": [
+          8,
+          25,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 25,
+      "id": {
+        "end": 7,
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        25,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 25,
+  "range": [
+    0,
+    25,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { a = 0; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "key": {
+              "name": "a",
+              "type": "Identifier",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "type": "Literal",
+              "value": 0,
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "id": {
+        "name": "A",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b += c } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 20,
+            "key": {
+              "end": 11,
+              "name": "a",
+              "range": [
+                10,
+                11,
+              ],
+              "start": 10,
+              "type": "Identifier",
+            },
+            "range": [
+              10,
+              20,
+            ],
+            "start": 10,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 20,
+              "left": {
+                "end": 15,
+                "name": "b",
+                "range": [
+                  14,
+                  15,
+                ],
+                "start": 14,
+                "type": "Identifier",
+              },
+              "operator": "+=",
+              "range": [
+                14,
+                20,
+              ],
+              "right": {
+                "end": 20,
+                "name": "c",
+                "range": [
+                  19,
+                  20,
+                ],
+                "start": 19,
+                "type": "Identifier",
+              },
+              "start": 14,
+              "type": "AssignmentExpression",
+            },
+          },
+        ],
+        "end": 22,
+        "range": [
+          8,
+          22,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 22,
+      "id": {
+        "end": 7,
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        22,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 22,
+  "range": [
+    0,
+    22,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b = c } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 19,
+            "key": {
+              "end": 11,
+              "name": "a",
+              "range": [
+                10,
+                11,
+              ],
+              "start": 10,
+              "type": "Identifier",
+            },
+            "range": [
+              10,
+              19,
+            ],
+            "start": 10,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 19,
+              "left": {
+                "end": 15,
+                "name": "b",
+                "range": [
+                  14,
+                  15,
+                ],
+                "start": 14,
+                "type": "Identifier",
+              },
+              "operator": "=",
+              "range": [
+                14,
+                19,
+              ],
+              "right": {
+                "end": 19,
+                "name": "c",
+                "range": [
+                  18,
+                  19,
+                ],
+                "start": 18,
+                "type": "Identifier",
+              },
+              "start": 14,
+              "type": "AssignmentExpression",
+            },
+          },
+        ],
+        "end": 21,
+        "range": [
+          8,
+          21,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 21,
+      "id": {
+        "end": 7,
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        21,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 21,
+  "range": [
+    0,
+    21,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { foo; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 14,
+            "key": {
+              "end": 13,
+              "name": "foo",
+              "range": [
+                10,
+                13,
+              ],
+              "start": 10,
+              "type": "Identifier",
+            },
+            "range": [
+              10,
+              14,
+            ],
+            "start": 10,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": null,
+          },
+        ],
+        "end": 16,
+        "range": [
+          8,
+          16,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 16,
+      "id": {
+        "end": 7,
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        16,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 16,
+  "range": [
+    0,
+    16,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { set = get; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "key": {
+              "name": "set",
+              "type": "Identifier",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "name": "get",
+              "type": "Identifier",
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "id": {
+        "name": "A",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class A { set; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 14,
+            "key": {
+              "end": 13,
+              "name": "set",
+              "range": [
+                10,
+                13,
+              ],
+              "start": 10,
+              "type": "Identifier",
+            },
+            "range": [
+              10,
+              14,
+            ],
+            "start": 10,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": null,
+          },
+        ],
+        "end": 16,
+        "range": [
+          8,
+          16,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 16,
+      "id": {
+        "end": 7,
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        16,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 16,
+  "range": [
+    0,
+    16,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class C { static x } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "end": 18,
+            "key": {
+              "end": 18,
+              "loc": {
+                "end": {
+                  "column": 18,
+                  "line": 1,
+                },
+                "start": {
+                  "column": 17,
+                  "line": 1,
+                },
+              },
+              "name": "x",
+              "range": [
+                17,
+                18,
+              ],
+              "start": 17,
+              "type": "Identifier",
+            },
+            "loc": {
+              "end": {
+                "column": 18,
+                "line": 1,
+              },
+              "start": {
+                "column": 10,
+                "line": 1,
+              },
+            },
+            "range": [
+              10,
+              18,
+            ],
+            "start": 10,
+            "static": true,
+            "type": "PropertyDefinition",
+            "value": null,
+          },
+        ],
+        "end": 20,
+        "loc": {
+          "end": {
+            "column": 20,
+            "line": 1,
+          },
+          "start": {
+            "column": 8,
+            "line": 1,
+          },
+        },
+        "range": [
+          8,
+          20,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "end": 20,
+      "id": {
+        "end": 7,
+        "loc": {
+          "end": {
+            "column": 7,
+            "line": 1,
+          },
+          "start": {
+            "column": 6,
+            "line": 1,
+          },
+        },
+        "name": "C",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "loc": {
+        "end": {
+          "column": 20,
+          "line": 1,
+        },
+        "start": {
+          "column": 0,
+          "line": 1,
+        },
+      },
+      "range": [
+        0,
+        20,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 20,
+  "loc": {
+    "end": {
+      "column": 20,
+      "line": 1,
+    },
+    "start": {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "range": [
+    0,
+    20,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class Foo { x = 1; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 18,
+            "key": {
+              "end": 13,
+              "name": "x",
+              "range": [
+                12,
+                13,
+              ],
+              "start": 12,
+              "type": "Identifier",
+            },
+            "range": [
+              12,
+              18,
+            ],
+            "start": 12,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "end": 17,
+              "range": [
+                16,
+                17,
+              ],
+              "start": 16,
+              "type": "Literal",
+              "value": 1,
+            },
+          },
+        ],
+        "end": 20,
+        "range": [
+          10,
+          20,
+        ],
+        "start": 10,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 20,
+      "id": {
+        "end": 9,
+        "name": "Foo",
+        "range": [
+          6,
+          9,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        20,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 20,
+  "range": [
+    0,
+    20,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class Some { render=( )=>{ return null; }} 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "end": 41,
+            "key": {
+              "end": 19,
+              "name": "render",
+              "range": [
+                13,
+                19,
+              ],
+              "start": 13,
+              "type": "Identifier",
+            },
+            "range": [
+              13,
+              41,
+            ],
+            "start": 13,
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "async": false,
+              "body": {
+                "body": [
+                  {
+                    "argument": {
+                      "end": 38,
+                      "range": [
+                        34,
+                        38,
+                      ],
+                      "start": 34,
+                      "type": "Literal",
+                      "value": null,
+                    },
+                    "end": 39,
+                    "range": [
+                      27,
+                      39,
+                    ],
+                    "start": 27,
+                    "type": "ReturnStatement",
+                  },
+                ],
+                "end": 41,
+                "range": [
+                  25,
+                  41,
+                ],
+                "start": 25,
+                "type": "BlockStatement",
+              },
+              "end": 41,
+              "expression": false,
+              "generator": false,
+              "params": [],
+              "range": [
+                20,
+                41,
+              ],
+              "start": 20,
+              "type": "ArrowFunctionExpression",
+            },
+          },
+        ],
+        "end": 42,
+        "range": [
+          11,
+          42,
+        ],
+        "start": 11,
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "end": 42,
+      "id": {
+        "end": 10,
+        "name": "Some",
+        "range": [
+          6,
+          10,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "range": [
+        0,
+        42,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 42,
+  "range": [
+    0,
+    42,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class Some { render=(a,b)=>{ return null; } } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "key": {
+              "name": "render",
+              "type": "Identifier",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "async": false,
+              "body": {
+                "body": [
+                  {
+                    "argument": {
+                      "type": "Literal",
+                      "value": null,
+                    },
+                    "type": "ReturnStatement",
+                  },
+                ],
+                "type": "BlockStatement",
+              },
+              "expression": false,
+              "generator": false,
+              "params": [
+                {
+                  "name": "a",
+                  "type": "Identifier",
+                },
+                {
+                  "name": "b",
+                  "type": "Identifier",
+                },
+              ],
+              "type": "ArrowFunctionExpression",
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "id": {
+        "name": "Some",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > class X { static p = eval("(function() { return arguments[0]; })(1)"); } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "decorators": [],
+            "key": {
+              "name": "p",
+              "type": "Identifier",
+            },
+            "static": true,
+            "type": "PropertyDefinition",
+            "value": {
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "value": "(function() { return arguments[0]; })(1)",
+                },
+              ],
+              "callee": {
+                "name": "eval",
+                "type": "Identifier",
+              },
+              "optional": false,
+              "type": "CallExpression",
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "decorators": [],
+      "id": {
+        "name": "X",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > const createClass = (k) => class { [k()] = 2 }; 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 46,
+          "id": {
+            "end": 17,
+            "name": "createClass",
+            "range": [
+              6,
+              17,
+            ],
+            "start": 6,
+            "type": "Identifier",
+          },
+          "init": {
+            "async": false,
+            "body": {
+              "body": {
+                "body": [
+                  {
+                    "computed": true,
+                    "decorators": [],
+                    "end": 44,
+                    "key": {
+                      "arguments": [],
+                      "callee": {
+                        "end": 37,
+                        "name": "k",
+                        "range": [
+                          36,
+                          37,
+                        ],
+                        "start": 36,
+                        "type": "Identifier",
+                      },
+                      "end": 39,
+                      "optional": false,
+                      "range": [
+                        36,
+                        39,
+                      ],
+                      "start": 36,
+                      "type": "CallExpression",
+                    },
+                    "range": [
+                      35,
+                      44,
+                    ],
+                    "start": 35,
+                    "static": false,
+                    "type": "PropertyDefinition",
+                    "value": {
+                      "end": 44,
+                      "range": [
+                        43,
+                        44,
+                      ],
+                      "start": 43,
+                      "type": "Literal",
+                      "value": 2,
+                    },
+                  },
+                ],
+                "end": 46,
+                "range": [
+                  33,
+                  46,
+                ],
+                "start": 33,
+                "type": "ClassBody",
+              },
+              "decorators": [],
+              "end": 46,
+              "id": null,
+              "range": [
+                27,
+                46,
+              ],
+              "start": 27,
+              "superClass": null,
+              "type": "ClassExpression",
+            },
+            "end": 46,
+            "expression": true,
+            "generator": false,
+            "params": [
+              {
+                "end": 22,
+                "name": "k",
+                "range": [
+                  21,
+                  22,
+                ],
+                "start": 21,
+                "type": "Identifier",
+              },
+            ],
+            "range": [
+              20,
+              46,
+            ],
+            "start": 20,
+            "type": "ArrowFunctionExpression",
+          },
+          "range": [
+            6,
+            46,
+          ],
+          "start": 6,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 47,
+      "kind": "const",
+      "range": [
+        0,
+        47,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+  ],
+  "end": 47,
+  "range": [
+    0,
+    47,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Next - Public fields (pass) > var C = class { static async #prototype() {} }; 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "end": 46,
+          "id": {
+            "end": 5,
+            "name": "C",
+            "range": [
+              4,
+              5,
+            ],
+            "start": 4,
+            "type": "Identifier",
+          },
+          "init": {
+            "body": {
+              "body": [
+                {
+                  "computed": false,
+                  "decorators": [],
+                  "end": 44,
+                  "key": {
+                    "end": 39,
+                    "name": "prototype",
+                    "range": [
+                      29,
+                      39,
+                    ],
+                    "start": 29,
+                    "type": "PrivateIdentifier",
+                  },
+                  "kind": "method",
+                  "range": [
+                    16,
+                    44,
+                  ],
+                  "start": 16,
+                  "static": true,
+                  "type": "MethodDefinition",
+                  "value": {
+                    "async": true,
+                    "body": {
+                      "body": [],
+                      "end": 44,
+                      "range": [
+                        42,
+                        44,
+                      ],
+                      "start": 42,
+                      "type": "BlockStatement",
+                    },
+                    "end": 44,
+                    "generator": false,
+                    "id": null,
+                    "params": [],
+                    "range": [
+                      39,
+                      44,
+                    ],
+                    "start": 39,
+                    "type": "FunctionExpression",
+                  },
+                },
+              ],
+              "end": 46,
+              "range": [
+                14,
+                46,
+              ],
+              "start": 14,
+              "type": "ClassBody",
+            },
+            "decorators": [],
+            "end": 46,
+            "id": null,
+            "range": [
+              8,
+              46,
+            ],
+            "start": 8,
+            "superClass": null,
+            "type": "ClassExpression",
+          },
+          "range": [
+            4,
+            46,
+          ],
+          "start": 4,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "end": 47,
+      "kind": "var",
+      "range": [
+        0,
+        47,
+      ],
+      "start": 0,
+      "type": "VariableDeclaration",
+    },
+  ],
+  "end": 47,
+  "range": [
+    0,
+    47,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { "x" = arguments; } 1`] = `
+"SyntaxError [1:16-1:25]: Unexpected eval or arguments in strict mode
+> 1 | class A { "x" = arguments; }
+    |                 ^^^^^^^^^ Unexpected eval or arguments in strict mode"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { "x" = super(); } 1`] = `
+"SyntaxError [1:21-1:22]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A { "x" = super(); }
+    |                      ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { a = 1, 2 } 1`] = `
+"SyntaxError [1:15-1:16]: Unexpected token: ','
+> 1 | class A { a = 1, 2 }
+    |                ^ Unexpected token: ','"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { a = 1, b = 2 } 1`] = `
+"SyntaxError [1:15-1:16]: Unexpected token: ','
+> 1 | class A { a = 1, b = 2 }
+    |                ^ Unexpected token: ','"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { a b } 1`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
+> 1 | class A { a b }
+    |             ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { a b } 2`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
+> 1 | class A { a b }
+    |             ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { a b() {} } 1`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
+> 1 | class A { a b() {} }
+    |             ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { a, b } 1`] = `
+"SyntaxError [1:11-1:12]: Unexpected token: ','
+> 1 | class A { a, b }
+    |            ^ Unexpected token: ','"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { a, b } 2`] = `
+"SyntaxError [1:11-1:12]: Unexpected token: ','
+> 1 | class A { a, b }
+    |            ^ Unexpected token: ','"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { static "x" = arguments; } 1`] = `
+"SyntaxError [1:23-1:32]: Unexpected eval or arguments in strict mode
+> 1 | class A { static "x" = arguments; }
+    |                        ^^^^^^^^^ Unexpected eval or arguments in strict mode"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { static "x" = arguments; } 2`] = `
+"SyntaxError [1:23-1:32]: Unexpected eval or arguments in strict mode
+> 1 | class A { static "x" = arguments; }
+    |                        ^^^^^^^^^ Unexpected eval or arguments in strict mode"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { static "x" = super(); } 1`] = `
+"SyntaxError [1:28-1:29]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A { static "x" = super(); }
+    |                             ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class A { x = typeof super(); } 1`] = `
+"SyntaxError [1:26-1:27]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A { x = typeof super(); }
+    |                           ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class C { #m = function() { return "bar"; }; Child = class extends C { access = () => super.#m; method = () => super.#m(); } } 1`] = `
+"SyntaxError [1:92-1:93]: Private fields can't be accessed on super
+> 1 | class C { #m = function() { return "bar"; }; Child = class extends C { access = () => super.#m; method = () => super.#m(); } }
+    |                                                                                             ^ Private fields can't be accessed on super"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > class C { #m = function() { return "bar"; }; Child = class extends C { access() { return super.#m; } method() { return super.#m(); } } } 1`] = `
+"SyntaxError [1:95-1:96]: Private fields can't be accessed on super
+> 1 | class C { #m = function() { return "bar"; }; Child = class extends C { access() { return super.#m; } method() { return super.#m(); } } }
+    |                                                                                                ^ Private fields can't be accessed on super"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > var C = class { x = () => arguments); } 1`] = `
+"SyntaxError [1:35-1:36]: A class field initializer or static block may not contain arguments
+> 1 | var C = class { x = () => arguments); }
+    |                                    ^ A class field initializer or static block may not contain arguments"
+`;
+
+exports[`Next - Public fields > Public fields (fail) > var C = class { x = () => eval); } 1`] = `
+"SyntaxError [1:30-1:31]: Unexpected token: ')'
+> 1 | var C = class { x = () => eval); }
+    |                               ^ Unexpected token: ')'"
+`;

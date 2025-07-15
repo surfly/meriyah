@@ -1,0 +1,2947 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Expressions - New > Expressions - New (fail) > "use strict"; new yield() 1`] = `
+"SyntaxError [1:18-1:23]: 'yield' may not be used as an identifier in this context
+> 1 | "use strict"; new yield()
+    |                   ^^^^^ 'yield' may not be used as an identifier in this context"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > (f=new.target) => {} 1`] = `
+"SyntaxError [1:7-1:13]: new.target only allowed within functions or static blocks
+> 1 | (f=new.target) => {}
+    |        ^^^^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > ++new x() 1`] = `
+"SyntaxError [1:8-1:9]: Invalid increment/decrement operand
+> 1 | ++new x()
+    |         ^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > _ => _ => _ => _ => new.target 1`] = `
+"SyntaxError [1:24-1:30]: new.target only allowed within functions or static blocks
+> 1 | _ => _ => _ => _ => new.target
+    |                         ^^^^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > _ => new.target 1`] = `
+"SyntaxError [1:9-1:15]: new.target only allowed within functions or static blocks
+> 1 | _ => new.target
+    |          ^^^^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > async () => new await x 1`] = `
+"SyntaxError [1:16-1:21]: Unexpected token
+> 1 | async () => new await x
+    |                 ^^^^^ Unexpected token"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > async () => new await x() 1`] = `
+"SyntaxError [1:16-1:21]: Unexpected token
+> 1 | async () => new await x()
+    |                 ^^^^^ Unexpected token"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > async () => new await x()() 1`] = `
+"SyntaxError [1:16-1:21]: Unexpected token
+> 1 | async () => new await x()()
+    |                 ^^^^^ Unexpected token"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > async function f(){ new await foo } 1`] = `
+"SyntaxError [1:24-1:29]: Unexpected token
+> 1 | async function f(){ new await foo }
+    |                         ^^^^^ Unexpected token"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > class x { constructor() { new super }} 1`] = `
+"SyntaxError [1:36-1:37]: Unexpected token: 'super'
+> 1 | class x { constructor() { new super }}
+    |                                     ^ Unexpected token: 'super'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > class x extends y { constructor() { new super }} 1`] = `
+"SyntaxError [1:46-1:47]: Unexpected token: 'super'
+> 1 | class x extends y { constructor() { new super }}
+    |                                               ^ Unexpected token: 'super'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > delete () => foo 1`] = `
+"SyntaxError [1:10-1:12]: \`=>\` is an invalid assignment target
+> 1 | delete () => foo
+    |           ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > delete async 
+ () => x 1`] = `
+"SyntaxError [2:4-2:6]: No line break is allowed after '=>'
+  1 | delete async 
+> 2 |  () => x
+    |     ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > delete async () 
+ => x 1`] = `
+"SyntaxError [2:1-2:3]: \`=>\` is an invalid assignment target
+  1 | delete async () 
+> 2 |  => x
+    |  ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > delete async () => x 1`] = `
+"SyntaxError [1:16-1:18]: \`=>\` is an invalid assignment target
+> 1 | delete async () => x
+    |                 ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > delete async() => foo 1`] = `
+"SyntaxError [1:15-1:17]: \`=>\` is an invalid assignment target
+> 1 | delete async() => foo
+    |                ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function *f(){ new yield } 1`] = `
+"SyntaxError [1:25-1:26]: Invalid left-hand side in assignment
+> 1 | function *f(){ new yield }
+    |                          ^ Invalid left-hand side in assignment"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function *f(){ new yield } 2`] = `
+"SyntaxError [1:25-1:26]: Invalid left-hand side in assignment
+> 1 | function *f(){ new yield }
+    |                          ^ Invalid left-hand side in assignment"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function *f(){ new yield x } 1`] = `
+"SyntaxError [1:25-1:26]: Invalid left-hand side in assignment
+> 1 | function *f(){ new yield x }
+    |                          ^ Invalid left-hand side in assignment"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function *f(){ new yield x(); } 1`] = `
+"SyntaxError [1:25-1:26]: Invalid left-hand side in assignment
+> 1 | function *f(){ new yield x(); }
+    |                          ^ Invalid left-hand side in assignment"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function f() {
+  new.target++;
+  new.target = b;
+  for (new.target in b);
+  for (new.target of b);
+} 1`] = `
+"SyntaxError [2:12-2:14]: Invalid increment/decrement operand
+  1 | function f() {
+> 2 |   new.target++;
+    |             ^^ Invalid increment/decrement operand
+  3 |   new.target = b;
+  4 |   for (new.target in b);
+  5 |   for (new.target of b);"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function f(){ ++new.target } 1`] = `
+"SyntaxError [1:27-1:28]: Invalid increment/decrement operand
+> 1 | function f(){ ++new.target }
+    |                            ^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function f(){ ++new.target } 2`] = `
+"SyntaxError [1:27-1:28]: Invalid increment/decrement operand
+> 1 | function f(){ ++new.target }
+    |                            ^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function f(){ new.foo } 1`] = `
+"SyntaxError [1:18-1:21]: new.target only allowed within functions or static blocks
+> 1 | function f(){ new.foo }
+    |                   ^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function f(){ new.foo } 2`] = `
+"SyntaxError [1:18-1:21]: new.target only allowed within functions or static blocks
+> 1 | function f(){ new.foo }
+    |                   ^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function f(){ new.target-- } 1`] = `
+"SyntaxError [1:24-1:26]: Invalid increment/decrement operand
+> 1 | function f(){ new.target-- }
+    |                         ^^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > function f(){ new.target-- } 2`] = `
+"SyntaxError [1:24-1:26]: Invalid increment/decrement operand
+> 1 | function f(){ new.target-- }
+    |                         ^^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = [delete async 
+ (x) => x] 1`] = `
+"SyntaxError [2:5-2:7]: No line break is allowed after '=>'
+  1 | let x = [delete async 
+> 2 |  (x) => x]
+    |      ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = [delete async (x) 
+ => x] 1`] = `
+"SyntaxError [2:1-2:3]: No line break is allowed after '=>'
+  1 | let x = [delete async (x) 
+> 2 |  => x]
+    |  ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = [typeof async 
+ (x) => x] 1`] = `
+"SyntaxError [2:5-2:7]: No line break is allowed after '=>'
+  1 | let x = [typeof async 
+> 2 |  (x) => x]
+    |      ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = [typeof async (x) 
+ => x] 1`] = `
+"SyntaxError [2:1-2:3]: No line break is allowed after '=>'
+  1 | let x = [typeof async (x) 
+> 2 |  => x]
+    |  ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = delete async 
+ (x) => x 1`] = `
+"SyntaxError [2:5-2:7]: No line break is allowed after '=>'
+  1 | let x = delete async 
+> 2 |  (x) => x
+    |      ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = delete async (x) 
+ => x 1`] = `
+"SyntaxError [2:1-2:3]: No line break is allowed after '=>'
+  1 | let x = delete async (x) 
+> 2 |  => x
+    |  ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = new async 
+ (x) => x 1`] = `
+"SyntaxError [2:5-2:7]: Unexpected token: '=>'
+  1 | let x = new async 
+> 2 |  (x) => x
+    |      ^^ Unexpected token: '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = new async (x) 
+ => x 1`] = `
+"SyntaxError [2:1-2:3]: Unexpected token: '=>'
+  1 | let x = new async (x) 
+> 2 |  => x
+    |  ^^ Unexpected token: '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = typeof async 
+ (x) => x 1`] = `
+"SyntaxError [2:5-2:7]: No line break is allowed after '=>'
+  1 | let x = typeof async 
+> 2 |  (x) => x
+    |      ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = typeof async (x) 
+ => x 1`] = `
+"SyntaxError [2:1-2:3]: No line break is allowed after '=>'
+  1 | let x = typeof async (x) 
+> 2 |  => x
+    |  ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > let x = typeof async (x) => x 1`] = `
+"SyntaxError [1:25-1:27]: \`=>\` is an invalid assignment target
+> 1 | let x = typeof async (x) => x
+    |                          ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new ()=>{} 1`] = `
+"SyntaxError [1:6-1:8]: \`=>\` is an invalid assignment target
+> 1 | new ()=>{}
+    |       ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new (await foo); 1`] = `
+"SyntaxError [1:11-1:14]: Expected ')'
+> 1 | new (await foo);
+    |            ^^^ Expected ')'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new (x)=>{} 1`] = `
+"SyntaxError [1:7-1:9]: \`=>\` is an invalid assignment target
+> 1 | new (x)=>{}
+    |        ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new ++x 1`] = `
+"SyntaxError [1:4-1:6]: Invalid use of \`new\` keyword on an increment/decrement expression
+> 1 | new ++x
+    |     ^^ Invalid use of \`new\` keyword on an increment/decrement expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new ++x().y 1`] = `
+"SyntaxError [1:4-1:6]: Invalid use of \`new\` keyword on an increment/decrement expression
+> 1 | new ++x().y
+    |     ^^ Invalid use of \`new\` keyword on an increment/decrement expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new ++x.y 1`] = `
+"SyntaxError [1:4-1:6]: Invalid use of \`new\` keyword on an increment/decrement expression
+> 1 | new ++x.y
+    |     ^^ Invalid use of \`new\` keyword on an increment/decrement expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new ++x.y 2`] = `
+"SyntaxError [1:4-1:6]: Invalid use of \`new\` keyword on an increment/decrement expression
+> 1 | new ++x.y
+    |     ^^ Invalid use of \`new\` keyword on an increment/decrement expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new a = b 1`] = `
+"SyntaxError [1:6-1:7]: Invalid left-hand side in assignment
+> 1 | new a = b
+    |       ^ Invalid left-hand side in assignment"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new a.async.c.(d).e.f.g[(async)](); 1`] = `
+"SyntaxError [1:14-1:15]: Dot property must be an identifier
+> 1 | new a.async.c.(d).e.f.g[(async)]();
+    |               ^ Dot property must be an identifier"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new a.b.c.(d).e.f.g[(b)](); 1`] = `
+"SyntaxError [1:10-1:11]: Dot property must be an identifier
+> 1 | new a.b.c.(d).e.f.g[(b)]();
+    |           ^ Dot property must be an identifier"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new async = async.await 1`] = `
+"SyntaxError [1:10-1:11]: Invalid left-hand side in assignment
+> 1 | new async = async.await
+    |           ^ Invalid left-hand side in assignment"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new async => x 1`] = `
+"SyntaxError [1:10-1:12]: Async arrow can not be followed by new expression
+> 1 | new async => x
+    |           ^^ Async arrow can not be followed by new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new async x => x 1`] = `
+"SyntaxError [1:12-1:14]: \`=>\` is an invalid assignment target
+> 1 | new async x => x
+    |             ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new await foo; 1`] = `
+"SyntaxError [1:10-1:13]: Unexpected token: 'identifier'
+> 1 | new await foo;
+    |           ^^^ Unexpected token: 'identifier'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new await x 1`] = `
+"SyntaxError [1:10-1:11]: Unexpected token: 'identifier'
+> 1 | new await x
+    |           ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new await x() 1`] = `
+"SyntaxError [1:10-1:11]: Unexpected token: 'identifier'
+> 1 | new await x()
+    |           ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new await x()() 1`] = `
+"SyntaxError [1:10-1:11]: Unexpected token: 'identifier'
+> 1 | new await x()()
+    |           ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new class 1`] = `
+"SyntaxError [1:4-1:9]: Expected '{'
+> 1 | new class
+    |     ^^^^^ Expected '{'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new class extends{} 1`] = `
+"SyntaxError [1:18-1:19]: Expected '{'
+> 1 | new class extends{}
+    |                   ^ Expected '{'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new delete 1`] = `
+"SyntaxError [1:4-1:10]: Invalid use of 'delete' inside new expression
+> 1 | new delete
+    |     ^^^^^^ Invalid use of 'delete' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new function 1`] = `
+"SyntaxError [1:4-1:12]: Expected '('
+> 1 | new function
+    |     ^^^^^^^^ Expected '('"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new function() 1`] = `
+"SyntaxError [1:13-1:14]: Expected '{'
+> 1 | new function()
+    |              ^ Expected '{'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new new .target 1`] = `
+"SyntaxError [1:9-1:15]: new.target only allowed within functions or static blocks
+> 1 | new new .target
+    |          ^^^^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new new 1`] = `
+"SyntaxError [1:4-1:7]: Unexpected token: 'end of source'
+> 1 | new new
+    |     ^^^ Unexpected token: 'end of source'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new super 1`] = `
+"SyntaxError [1:4-1:9]: Unexpected token: 'super'
+> 1 | new super
+    |     ^^^^^ Unexpected token: 'super'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new typeof 1`] = `
+"SyntaxError [1:4-1:10]: Invalid use of 'typeof' inside new expression
+> 1 | new typeof
+    |     ^^^^^^ Invalid use of 'typeof' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new typeof x 1`] = `
+"SyntaxError [1:4-1:10]: Invalid use of 'typeof' inside new expression
+> 1 | new typeof x
+    |     ^^^^^^ Invalid use of 'typeof' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new typeof x 2`] = `
+"SyntaxError [1:4-1:10]: Invalid use of 'typeof' inside new expression
+> 1 | new typeof x
+    |     ^^^^^^ Invalid use of 'typeof' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new typeof x() 1`] = `
+"SyntaxError [1:4-1:10]: Invalid use of 'typeof' inside new expression
+> 1 | new typeof x()
+    |     ^^^^^^ Invalid use of 'typeof' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new typeof x().y 1`] = `
+"SyntaxError [1:4-1:10]: Invalid use of 'typeof' inside new expression
+> 1 | new typeof x().y
+    |     ^^^^^^ Invalid use of 'typeof' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new typeof x.y 1`] = `
+"SyntaxError [1:4-1:10]: Invalid use of 'typeof' inside new expression
+> 1 | new typeof x.y
+    |     ^^^^^^ Invalid use of 'typeof' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new void 1`] = `
+"SyntaxError [1:4-1:8]: Invalid use of 'void' inside new expression
+> 1 | new void
+    |     ^^^^ Invalid use of 'void' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new void x 1`] = `
+"SyntaxError [1:4-1:8]: Invalid use of 'void' inside new expression
+> 1 | new void x
+    |     ^^^^ Invalid use of 'void' inside new expression"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x
+/y/ 1`] = `
+"SyntaxError [2:2-2:3]: Unexpected token: 'end of source'
+  1 | new x
+> 2 | /y/
+    |   ^ Unexpected token: 'end of source'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x() = y 1`] = `
+"SyntaxError [1:8-1:9]: Invalid left-hand side in assignment
+> 1 | new x() = y
+    |         ^ Invalid left-hand side in assignment"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x()++ 1`] = `
+"SyntaxError [1:7-1:9]: Invalid increment/decrement operand
+> 1 | new x()++
+    |        ^^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x(await foo); 1`] = `
+"SyntaxError [1:12-1:15]: Expected ')'
+> 1 | new x(await foo);
+    |             ^^^ Expected ')'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x(await foo); 2`] = `
+"SyntaxError [1:12-1:15]: Expected ')'
+> 1 | new x(await foo);
+    |             ^^^ Expected ')'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x(await foo); 3`] = `
+"SyntaxError [1:12-1:15]: Expected ')'
+> 1 | new x(await foo);
+    |             ^^^ Expected ')'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x(await foo); 4`] = `
+"SyntaxError [1:12-1:15]: Expected ')'
+> 1 | new x(await foo);
+    |             ^^^ Expected ')'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x++ 1`] = `
+"SyntaxError [1:5-1:7]: Invalid increment/decrement operand
+> 1 | new x++
+    |      ^^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x.y++ 1`] = `
+"SyntaxError [1:7-1:9]: Invalid increment/decrement operand
+> 1 | new x.y++
+    |        ^^ Invalid increment/decrement operand"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new x=>{} 1`] = `
+"SyntaxError [1:5-1:7]: \`=>\` is an invalid assignment target
+> 1 | new x=>{}
+    |      ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new.target 1`] = `
+"SyntaxError [1:4-1:10]: new.target only allowed within functions or static blocks
+> 1 | new.target
+    |     ^^^^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new.target 2`] = `
+"SyntaxError [1:4-1:10]: new.target only allowed within functions or static blocks
+> 1 | new.target
+    |     ^^^^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > new.target[await x] 1`] = `
+"SyntaxError [1:4-1:10]: new.target only allowed within functions or static blocks
+> 1 | new.target[await x]
+    |     ^^^^^^ new.target only allowed within functions or static blocks"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > typeof async 
+ () => x 1`] = `
+"SyntaxError [2:4-2:6]: No line break is allowed after '=>'
+  1 | typeof async 
+> 2 |  () => x
+    |     ^^ No line break is allowed after '=>'"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > typeof async () 
+ => x 1`] = `
+"SyntaxError [2:1-2:3]: \`=>\` is an invalid assignment target
+  1 | typeof async () 
+> 2 |  => x
+    |  ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (fail) > typeof async () => x 1`] = `
+"SyntaxError [1:16-1:18]: \`=>\` is an invalid assignment target
+> 1 | typeof async () => x
+    |                 ^^ \`=>\` is an invalid assignment target"
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > ++new x().y 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "computed": false,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "++",
+        "prefix": true,
+        "type": "UpdateExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > [...new A()] 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "elements": [
+          {
+            "argument": {
+              "arguments": [],
+              "callee": {
+                "name": "A",
+                "type": "Identifier",
+              },
+              "type": "NewExpression",
+            },
+            "type": "SpreadElement",
+          },
+        ],
+        "type": "ArrayExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > class x extends (x) {} 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "superClass": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > class x extends new A() {} 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "superClass": {
+        "arguments": [],
+        "callee": {
+          "name": "A",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > class x extends y { constructor() { new super() }} 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "key": {
+              "name": "constructor",
+              "type": "Identifier",
+            },
+            "kind": "constructor",
+            "static": false,
+            "type": "MethodDefinition",
+            "value": {
+              "async": false,
+              "body": {
+                "body": [
+                  {
+                    "expression": {
+                      "arguments": [],
+                      "callee": {
+                        "type": "Super",
+                      },
+                      "type": "NewExpression",
+                    },
+                    "type": "ExpressionStatement",
+                  },
+                ],
+                "type": "BlockStatement",
+              },
+              "generator": false,
+              "id": null,
+              "params": [],
+              "type": "FunctionExpression",
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "superClass": {
+        "name": "y",
+        "type": "Identifier",
+      },
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > class x extends y { constructor() { new super.foo }} 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "key": {
+              "name": "constructor",
+              "type": "Identifier",
+            },
+            "kind": "constructor",
+            "static": false,
+            "type": "MethodDefinition",
+            "value": {
+              "async": false,
+              "body": {
+                "body": [
+                  {
+                    "expression": {
+                      "arguments": [],
+                      "callee": {
+                        "computed": false,
+                        "object": {
+                          "type": "Super",
+                        },
+                        "optional": false,
+                        "property": {
+                          "name": "foo",
+                          "type": "Identifier",
+                        },
+                        "type": "MemberExpression",
+                      },
+                      "type": "NewExpression",
+                    },
+                    "type": "ExpressionStatement",
+                  },
+                ],
+                "type": "BlockStatement",
+              },
+              "generator": false,
+              "id": null,
+              "params": [],
+              "type": "FunctionExpression",
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "x",
+        "type": "Identifier",
+      },
+      "superClass": {
+        "name": "y",
+        "type": "Identifier",
+      },
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > delete new x() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "operator": "delete",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > delete new x().y 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "computed": false,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "delete",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > f(new /z/()) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "arguments": [],
+            "callee": {
+              "regex": {
+                "flags": "",
+                "pattern": "z",
+              },
+              "type": "Literal",
+              "value": /z/,
+            },
+            "type": "NewExpression",
+          },
+        ],
+        "callee": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > f(new /z/) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "arguments": [],
+            "callee": {
+              "regex": {
+                "flags": "",
+                "pattern": "z",
+              },
+              "type": "Literal",
+              "value": /z/,
+            },
+            "type": "NewExpression",
+          },
+        ],
+        "callee": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > f(new /z/.foo) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "arguments": [],
+            "callee": {
+              "computed": false,
+              "object": {
+                "regex": {
+                  "flags": "",
+                  "pattern": "z",
+                },
+                "type": "Literal",
+                "value": /z/,
+              },
+              "optional": false,
+              "property": {
+                "name": "foo",
+                "type": "Identifier",
+              },
+              "type": "MemberExpression",
+            },
+            "type": "NewExpression",
+          },
+        ],
+        "callee": {
+          "name": "f",
+          "type": "Identifier",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new "foo".__proto__.constructor 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "computed": false,
+            "object": {
+              "type": "Literal",
+              "value": "foo",
+            },
+            "optional": false,
+            "property": {
+              "name": "__proto__",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "constructor",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new (foo)(); 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new (foo); 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new 0x2.__proto__.constructor 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "computed": false,
+            "object": {
+              "type": "Literal",
+              "value": 2,
+            },
+            "optional": false,
+            "property": {
+              "name": "__proto__",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "constructor",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new 1..__proto__.constructor 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "computed": false,
+            "object": {
+              "type": "Literal",
+              "value": 1,
+            },
+            "optional": false,
+            "property": {
+              "name": "__proto__",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "constructor",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "Foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "Foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo(X) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "name": "Foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo(X) 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "name": "Foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo(X, Y, Z) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+          {
+            "name": "Y",
+            "type": "Identifier",
+          },
+          {
+            "name": "Z",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "name": "Foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo(X, Y, Z) 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+          {
+            "name": "Y",
+            "type": "Identifier",
+          },
+          {
+            "name": "Z",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "name": "Foo",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo.Bar 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "name": "Bar",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo.Bar() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "name": "Bar",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo.Bar(X) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": false,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "name": "Bar",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo.Bar(X) 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": false,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "name": "Bar",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo.Bar(X, Y, Z) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+          {
+            "name": "Y",
+            "type": "Identifier",
+          },
+          {
+            "name": "Z",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": false,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "name": "Bar",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo.Bar(X, Y, Z) 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+          {
+            "name": "Y",
+            "type": "Identifier",
+          },
+          {
+            "name": "Z",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": false,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "name": "Bar",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo["bar"] 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": true,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "type": "Literal",
+            "value": "bar",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo["bar"]() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": true,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "type": "Literal",
+            "value": "bar",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo["bar"]() 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": true,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "type": "Literal",
+            "value": "bar",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo["bar"](X) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": true,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "type": "Literal",
+            "value": "bar",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo["bar"](X) 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": true,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "type": "Literal",
+            "value": "bar",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo["bar"](X, Y, Z) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+          {
+            "name": "Y",
+            "type": "Identifier",
+          },
+          {
+            "name": "Z",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": true,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "type": "Literal",
+            "value": "bar",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new Foo["bar"](X, Y, Z) 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "X",
+            "type": "Identifier",
+          },
+          {
+            "name": "Y",
+            "type": "Identifier",
+          },
+          {
+            "name": "Z",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "computed": true,
+          "object": {
+            "name": "Foo",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "property": {
+            "type": "Literal",
+            "value": "bar",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new a ? b : c 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "alternate": {
+          "name": "c",
+          "type": "Identifier",
+        },
+        "consequent": {
+          "name": "b",
+          "type": "Identifier",
+        },
+        "test": {
+          "arguments": [],
+          "callee": {
+            "name": "a",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "type": "ConditionalExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new a.b.c.d 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "computed": false,
+            "object": {
+              "computed": false,
+              "object": {
+                "name": "a",
+                "type": "Identifier",
+              },
+              "optional": false,
+              "property": {
+                "name": "b",
+                "type": "Identifier",
+              },
+              "type": "MemberExpression",
+            },
+            "optional": false,
+            "property": {
+              "name": "c",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "d",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new a.b.c.d() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "computed": false,
+            "object": {
+              "computed": false,
+              "object": {
+                "name": "a",
+                "type": "Identifier",
+              },
+              "optional": false,
+              "property": {
+                "name": "b",
+                "type": "Identifier",
+              },
+              "type": "MemberExpression",
+            },
+            "optional": false,
+            "property": {
+              "name": "c",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "d",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new arguments 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "arguments",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new async (...x) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "argument": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "SpreadElement",
+          },
+        ],
+        "callee": {
+          "name": "async",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new async (x, y) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "x",
+            "type": "Identifier",
+          },
+          {
+            "name": "y",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "name": "async",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new async 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "async",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new async function(){} 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "async": true,
+          "body": {
+            "body": [],
+            "type": "BlockStatement",
+          },
+          "generator": false,
+          "id": null,
+          "params": [],
+          "type": "FunctionExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new async(x)(y) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "y",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "arguments": [
+            {
+              "name": "x",
+              "type": "Identifier",
+            },
+          ],
+          "callee": {
+            "name": "async",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new await 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "await",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new await()() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "arguments": [],
+          "callee": {
+            "name": "await",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new class extends x{} 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "body": {
+            "body": [],
+            "type": "ClassBody",
+          },
+          "id": null,
+          "superClass": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "ClassExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new class{} 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "body": {
+            "body": [],
+            "type": "ClassBody",
+          },
+          "id": null,
+          "superClass": null,
+          "type": "ClassExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new eval() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "eval",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new false.__proto__.constructor 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "computed": false,
+            "object": {
+              "type": "Literal",
+              "value": false,
+            },
+            "optional": false,
+            "property": {
+              "name": "__proto__",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "constructor",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new foo()(); 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "arguments": [],
+          "callee": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new function(){} 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "async": false,
+          "body": {
+            "body": [],
+            "type": "BlockStatement",
+          },
+          "generator": false,
+          "id": null,
+          "params": [],
+          "type": "FunctionExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new function(){}(x) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "name": "x",
+            "type": "Identifier",
+          },
+        ],
+        "callee": {
+          "async": false,
+          "body": {
+            "body": [],
+            "type": "BlockStatement",
+          },
+          "generator": false,
+          "id": null,
+          "params": [],
+          "type": "FunctionExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new let 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "name": "let",
+          "type": "Identifier",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new new A().foo 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "A",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "foo",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new new A.foo() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "arguments": [],
+          "callee": {
+            "computed": false,
+            "object": {
+              "name": "A",
+              "type": "Identifier",
+            },
+            "optional": false,
+            "property": {
+              "name": "foo",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "type": "NewExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new new x 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new this 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "type": "ThisExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new true.__proto__.constructor 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "computed": false,
+          "object": {
+            "computed": false,
+            "object": {
+              "type": "Literal",
+              "value": true,
+            },
+            "optional": false,
+            "property": {
+              "name": "__proto__",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "constructor",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "type": "NewExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x()(); 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x()(); 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [],
+        "callee": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x().y + z 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "computed": false,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "+",
+        "right": {
+          "name": "z",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x().y = z 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "computed": false,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "=",
+        "right": {
+          "name": "z",
+          "type": "Identifier",
+        },
+        "type": "AssignmentExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x().y 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "computed": false,
+        "object": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "property": {
+          "name": "y",
+          "type": "Identifier",
+        },
+        "type": "MemberExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x().y 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "computed": false,
+        "object": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "property": {
+          "name": "y",
+          "type": "Identifier",
+        },
+        "type": "MemberExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x().y++ 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "computed": false,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "++",
+        "prefix": false,
+        "type": "UpdateExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x()[y] + z 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "computed": true,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "+",
+        "right": {
+          "name": "z",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x()[y] = z 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "computed": true,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "=",
+        "right": {
+          "name": "z",
+          "type": "Identifier",
+        },
+        "type": "AssignmentExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x()[y] 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "computed": true,
+        "object": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "property": {
+          "name": "y",
+          "type": "Identifier",
+        },
+        "type": "MemberExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > new x()[y] 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "computed": true,
+        "object": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "optional": false,
+        "property": {
+          "name": "y",
+          "type": "Identifier",
+        },
+        "type": "MemberExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > typeof async () 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "arguments": [],
+          "callee": {
+            "name": "async",
+            "type": "Identifier",
+          },
+          "optional": false,
+          "type": "CallExpression",
+        },
+        "operator": "typeof",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > typeof async 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "name": "async",
+          "type": "Identifier",
+        },
+        "operator": "typeof",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > typeof async function(){} 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "async": true,
+          "body": {
+            "body": [],
+            "type": "BlockStatement",
+          },
+          "generator": false,
+          "id": null,
+          "params": [],
+          "type": "FunctionExpression",
+        },
+        "operator": "typeof",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > typeof new x() 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "arguments": [],
+          "callee": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "NewExpression",
+        },
+        "operator": "typeof",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > typeof new x().y 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "argument": {
+          "computed": false,
+          "object": {
+            "arguments": [],
+            "callee": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "type": "NewExpression",
+          },
+          "optional": false,
+          "property": {
+            "name": "y",
+            "type": "Identifier",
+          },
+          "type": "MemberExpression",
+        },
+        "operator": "typeof",
+        "prefix": true,
+        "type": "UnaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - New > Expressions - New (pass) > x({[new A()]:y}) 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "arguments": [
+          {
+            "properties": [
+              {
+                "computed": true,
+                "key": {
+                  "arguments": [],
+                  "callee": {
+                    "name": "A",
+                    "type": "Identifier",
+                  },
+                  "type": "NewExpression",
+                },
+                "kind": "init",
+                "method": false,
+                "shorthand": false,
+                "type": "Property",
+                "value": {
+                  "name": "y",
+                  "type": "Identifier",
+                },
+              },
+            ],
+            "type": "ObjectExpression",
+          },
+        ],
+        "callee": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "optional": false,
+        "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;

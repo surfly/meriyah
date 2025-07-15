@@ -1,42 +1,34 @@
-import { Token, KeywordDescTable } from './token';
-import { Errors, ParseError, report } from './errors';
-import { Node, Decorator, SourceLocation, Comment } from './estree';
+import { Errors } from './errors';
+import { type Comment } from './estree';
 import { nextToken } from './lexer/scan';
+import { type Parser } from './parser/parser';
+import { KeywordDescTable, Token } from './token';
 
 /**
  * The core context, passed around everywhere as a simple immutable bit set
  */
 export const enum Context {
   None = 0,
-  OptionsNext = 1 << 0,
-  OptionsRanges = 1 << 1,
-  OptionsLoc = 1 << 2,
-  OptionsJSX = 1 << 3,
-  OptionsLexical = 1 << 4,
-  OptionsPreserveParens = 1 << 5,
-  OptionsWebCompat = 1 << 6,
-  OptionsRaw = 1 << 7,
-  Strict = 1 << 8,
-  Module = 1 << 9, // Current code should be parsed as a module body
-  InSwitch = 1 << 10,
-  InGlobal = 1 << 11,
-  InClass = 1 << 12,
-  AllowRegExp = 1 << 13,
-  TaggedTemplate = 1 << 14,
-  InIteration = 1 << 15,
-  SuperProperty = 1 << 16,
-  SuperCall = 1 << 17,
-  InYieldContext = 1 << 18,
-  InAwaitContext = 1 << 19,
-  InReturnContext = 1 << 20,
-  InArgumentList = 1 << 21,
-  InConstructor = 1 << 22,
-  InMethodOrFunction = 1 << 23,
-  AllowNewTarget = 1 << 24,
-  DisallowIn = 1 << 25,
-  AllowEscapedKeyword = 1 << 26,
-  OptionsUniqueKeyInPattern = 1 << 27,
-  InStaticBlock = 1 << 28
+  Strict = 1 << 0,
+  Module = 1 << 1, // Current code should be parsed as a module body
+  InSwitch = 1 << 2,
+  InGlobal = 1 << 3,
+  InClass = 1 << 4,
+  AllowRegExp = 1 << 5,
+  TaggedTemplate = 1 << 6,
+  InIteration = 1 << 7,
+  SuperProperty = 1 << 8,
+  SuperCall = 1 << 9,
+  InYieldContext = 1 << 10,
+  InAwaitContext = 1 << 11,
+  InReturnContext = 1 << 12,
+  InArgumentList = 1 << 13,
+  InConstructor = 1 << 14,
+  InMethodOrFunction = 1 << 15,
+  AllowNewTarget = 1 << 16,
+  DisallowIn = 1 << 17,
+  AllowEscapedKeyword = 1 << 18,
+  InStaticBlock = 1 << 19,
 }
 
 /**
@@ -58,7 +50,7 @@ export const enum PropertyKind {
   Extends = 1 << 11,
   Literal = 1 << 12,
   PrivateField = 1 << 13,
-  GetSet = Getter | Setter
+  GetSet = Getter | Setter,
 }
 
 /**
@@ -83,7 +75,7 @@ export const enum BindingKind {
   AsyncGeneratorFunctionLexical = Async | Generator | FunctionLexical,
   CatchIdentifierOrPattern = CatchIdentifier | CatchPattern,
   LexicalOrFunction = Variable | FunctionLexical,
-  LexicalBinding = Let | Const | FunctionLexical | FunctionStatement | Class
+  LexicalBinding = Let | Const | FunctionLexical | FunctionStatement | Class,
 }
 
 /**
@@ -97,7 +89,7 @@ export const enum Origin {
   Declaration = 1 << 3,
   Arrow = 1 << 4,
   ForStatement = 1 << 5,
-  Export = 1 << 6
+  Export = 1 << 6,
 }
 
 /**
@@ -106,7 +98,7 @@ export const enum Origin {
 export const enum AssignmentKind {
   None = 0,
   Assignable = 1 << 0,
-  CannotAssign = 1 << 1
+  CannotAssign = 1 << 1,
 }
 
 /**
@@ -123,7 +115,7 @@ export const enum DestructuringKind {
   // `__proto__` is a special case and only valid to parse if destructible
   SeenProto = 1 << 6,
   Await = 1 << 7,
-  Yield = 1 << 8
+  Yield = 1 << 8,
 }
 
 /**
@@ -133,155 +125,31 @@ export const enum Flags {
   None = 0,
   NewLine = 1 << 0,
   HasConstructor = 1 << 5,
-  Octals = 1 << 6,
+  Octal = 1 << 6,
   NonSimpleParameterList = 1 << 7,
   HasStrictReserved = 1 << 8,
   StrictEvalArguments = 1 << 9,
   DisallowCall = 1 << 10,
   HasOptionalChaining = 1 << 11,
-  EightAndNine = 1 << 12
+  EightAndNine = 1 << 12,
 }
 
 export const enum HoistedClassFlags {
   None,
   Hoisted = 1 << 0,
-  Export = 1 << 1
+  Export = 1 << 1,
 }
 
 export const enum HoistedFunctionFlags {
   None,
   Hoisted = 1 << 0,
-  Export = 1 << 1
+  Export = 1 << 1,
 }
 
-/**
- * Scope kinds
- */
-export const enum ScopeKind {
-  None = 0,
-  ForStatement = 1 << 0,
-  Block = 1 << 1,
-  CatchStatement = 1 << 2,
-  SwitchStatement = 1 << 3,
-  ArgList = 1 << 4,
-  TryStatement = 1 << 5,
-  CatchBlock = 1 << 6,
-  FunctionBody = 1 << 7,
-  FunctionRoot = 1 << 8,
-  FunctionParams = 1 << 9,
-  ArrowParams = 1 << 10,
-  CatchIdentifier = 1 << 11
-}
-
-/**
- * Comment process function.
- */
-export type OnComment = (type: string, value: string, start: number, end: number, loc: SourceLocation) => any;
-
-/**
- * Function calls when semicolon inserted.
- */
-export type OnInsertedSemicolon = (pos: number) => any;
-
-/**
- * Token process function.
- */
-export type OnToken = (token: string, start: number, end: number, loc: SourceLocation) => any;
-
-/**
- * Lexical scope interface
- */
-export interface ScopeState {
-  parent: ScopeState | undefined;
-  type: ScopeKind;
-  // Some scopeError doesn't necessarily fail parsing.
-  // For example function a(dup, dup) {} is fine,
-  // But duplicated params is not allowed in strict mode,
-  // So function a(dup, dup) { "use strict" } would fail.
-  // Retain the scopeError on scope for later decision.
-  scopeError?: ScopeError | null;
-}
-
-/**
- * Lexical scope interface for private identifiers
- */
-export interface PrivateScopeState {
-  parent: PrivateScopeState | undefined;
-  refs: {
-    [name: string]: { index: number; line: number; column: number }[];
-  };
-  // Note PrivateScopeState doesn't retain a scopeError
-  // like ScopeState, because it doesn't need to.
-  // Private identifier is new in ecma, the spec for it
-  // is much more strict than other older parts of JavaScript
-  // For example class A { dup; dup; } is allowed,
-  // But class A { #dup; #dup; } is not allowed.
-}
-
-/** Scope error interface */
-export interface ScopeError {
-  type: Errors;
-  params: string[];
-  index: number;
-  line: number;
-  column: number;
-  tokenIndex: number;
-  tokenLine: number;
-  tokenColumn: number;
-}
-
-/**
- * The parser interface.
- */
-export interface ParserState {
-  source: string;
-  // End position of source, same as source.length.
-  end: number;
-
-  flags: Flags;
-
-  // Current pointer, end of current token
-  index: number;
-  line: number;
-  column: number;
-
-  // Start position of current token
-  tokenIndex: number;
-  tokenColumn: number;
-  tokenLine: number;
-
-  // Start position of whitespace/comment before current token,
-  startIndex: number;
-  startColumn: number;
-  startLine: number;
-
-  getToken(): Token;
-  setToken(token: Token, replaceLast?: boolean): Token;
-  onComment: OnComment | void;
-  onInsertedSemicolon: OnInsertedSemicolon | void;
-  onToken: OnToken | void;
-  tokenValue: any;
-  tokenRaw: string;
-  tokenRegExp: void | {
-    pattern: string;
-    flags: string;
-  };
-  sourceFile: string | void;
-  assignable: AssignmentKind | DestructuringKind;
-  destructible: AssignmentKind | DestructuringKind;
-  currentChar: number;
-  exportedNames: any;
-  exportedBindings: any;
-  comments?: Array<Comment>;
-  leadingComments?: Array<Array<Comment>>;
-  attachComments: boolean | void;
-  leadingDecorators: Decorator[];
-}
-
-export function collectLeadingComments(parser: ParserState): Array<Comment> {
+export function collectLeadingComments(parser: Parser): Array<Comment> {
   //can use a global empty array for memory optimisation
   let leadingComments: Array<Comment> = [];
-  if (parser.attachComments) {
+  if (parser.options.attachComments) {
     if (parser.comments && parser.comments.length) {
       leadingComments = parser.comments;
       parser.comments = [];
@@ -304,18 +172,18 @@ export function collectLeadingComments(parser: ParserState): Array<Comment> {
  * @param context Context masks
  */
 
-export function matchOrInsertSemicolon(parser: ParserState, context: Context): void {
+export function matchOrInsertSemicolon(parser: Parser, context: Context): void {
   if ((parser.flags & Flags.NewLine) === 0 && (parser.getToken() & Token.IsAutoSemicolon) !== Token.IsAutoSemicolon) {
-    report(parser, Errors.UnexpectedToken, KeywordDescTable[parser.getToken() & Token.Type]);
+    parser.report(Errors.UnexpectedToken, KeywordDescTable[parser.getToken() & Token.Type]);
   }
 
   if (!consumeOpt(parser, context, Token.Semicolon)) {
     // Automatic semicolon insertion has occurred
-    parser.onInsertedSemicolon?.(parser.startIndex);
+    parser.options.onInsertedSemicolon?.(parser.startIndex);
   }
 }
 
-export function isValidStrictMode(parser: ParserState, index: number, tokenIndex: number, tokenValue: string): 0 | 1 {
+export function isValidStrictMode(parser: Parser, index: number, tokenIndex: number, tokenValue: string): 0 | 1 {
   if (index - tokenIndex < 13 && tokenValue === 'use strict') {
     if ((parser.getToken() & Token.IsAutoSemicolon) === Token.IsAutoSemicolon || parser.flags & Flags.NewLine) {
       return 1;
@@ -332,7 +200,7 @@ export function isValidStrictMode(parser: ParserState, index: number, tokenIndex
  * @param context Context masks
  * @param token The type of token to consume
  */
-export function optionalBit(parser: ParserState, context: Context, t: Token): 0 | 1 {
+export function optionalBit(parser: Parser, context: Context, t: Token): 0 | 1 {
   if (parser.getToken() !== t) return 0;
   nextToken(parser, context);
   return 1;
@@ -346,7 +214,7 @@ export function optionalBit(parser: ParserState, context: Context, t: Token): 0 
  * @param context Context masks
  * @param token The type of token to consume
  */
-export function consumeOpt(parser: ParserState, context: Context, t: Token): boolean {
+export function consumeOpt(parser: Parser, context: Context, t: Token): boolean {
   if (parser.getToken() !== t) return false;
   nextToken(parser, context);
   return true;
@@ -360,8 +228,8 @@ export function consumeOpt(parser: ParserState, context: Context, t: Token): boo
  * @param context Context masks
  * @param t The type of token to consume
  */
-export function consume(parser: ParserState, context: Context, t: Token): void {
-  if (parser.getToken() !== t) report(parser, Errors.ExpectedToken, KeywordDescTable[t & Token.Type]);
+export function consume(parser: Parser, context: Context, t: Token): void {
+  if (parser.getToken() !== t) parser.report(Errors.ExpectedToken, KeywordDescTable[t & Token.Type]);
   nextToken(parser, context);
 }
 
@@ -372,14 +240,14 @@ export function consume(parser: ParserState, context: Context, t: Token): void {
  * @param parser Parser state
  * @param {*} node
  */
-export function reinterpretToPattern(state: ParserState, node: any): void {
+export function reinterpretToPattern(parser: Parser, node: any): void {
   switch (node.type) {
     case 'ArrayExpression': {
       node.type = 'ArrayPattern';
       const { elements } = node;
       for (let i = 0, n = elements.length; i < n; ++i) {
         const element = elements[i];
-        if (element) reinterpretToPattern(state, element);
+        if (element) reinterpretToPattern(parser, element);
       }
       return;
     }
@@ -387,22 +255,22 @@ export function reinterpretToPattern(state: ParserState, node: any): void {
       node.type = 'ObjectPattern';
       const { properties } = node;
       for (let i = 0, n = properties.length; i < n; ++i) {
-        reinterpretToPattern(state, properties[i]);
+        reinterpretToPattern(parser, properties[i]);
       }
       return;
     }
     case 'AssignmentExpression':
       node.type = 'AssignmentPattern';
-      if (node.operator !== '=') report(state, Errors.InvalidDestructuringTarget);
+      if (node.operator !== '=') parser.report(Errors.InvalidDestructuringTarget);
       delete node.operator;
-      reinterpretToPattern(state, node.left);
+      reinterpretToPattern(parser, node.left);
       return;
     case 'Property':
-      reinterpretToPattern(state, node.value);
+      reinterpretToPattern(parser, node.value);
       return;
     case 'SpreadElement':
       node.type = 'RestElement';
-      reinterpretToPattern(state, node.argument);
+      reinterpretToPattern(parser, node.argument);
     // No default
   }
 }
@@ -417,71 +285,71 @@ export function reinterpretToPattern(state: ParserState, node: any): void {
  */
 
 export function validateBindingIdentifier(
-  parser: ParserState,
+  parser: Parser,
   context: Context,
   kind: BindingKind,
   t: Token,
-  skipEvalArgCheck: 0 | 1
+  skipEvalArgCheck: 0 | 1,
 ): void {
   if (context & Context.Strict) {
     if ((t & Token.FutureReserved) === Token.FutureReserved) {
-      report(parser, Errors.UnexpectedStrictReserved);
+      parser.report(Errors.UnexpectedStrictReserved);
     }
 
     if (!skipEvalArgCheck && (t & Token.IsEvalOrArguments) === Token.IsEvalOrArguments) {
-      report(parser, Errors.StrictEvalArguments);
+      parser.report(Errors.StrictEvalArguments);
     }
   }
 
   if ((t & Token.Reserved) === Token.Reserved || t === Token.EscapedReserved) {
-    report(parser, Errors.KeywordNotId);
+    parser.report(Errors.KeywordNotId);
   }
 
   // The BoundNames of LexicalDeclaration and ForDeclaration must not
   // contain 'let'. (CatchParameter is the only lexical binding form
   // without this restriction.)
   if (kind & (BindingKind.Let | BindingKind.Const) && (t & Token.Type) === (Token.LetKeyword & Token.Type)) {
-    report(parser, Errors.InvalidLetConstBinding);
+    parser.report(Errors.InvalidLetConstBinding);
   }
 
   if (context & (Context.InAwaitContext | Context.Module) && t === Token.AwaitKeyword) {
-    report(parser, Errors.AwaitIdentInModuleOrAsyncFunc);
+    parser.report(Errors.AwaitIdentInModuleOrAsyncFunc);
   }
 
   if (context & (Context.InYieldContext | Context.Strict) && t === Token.YieldKeyword) {
-    report(parser, Errors.DisallowedInContext, 'yield');
+    parser.report(Errors.DisallowedInContext, 'yield');
   }
 }
 
-export function validateFunctionName(parser: ParserState, context: Context, t: Token): void {
+export function validateFunctionName(parser: Parser, context: Context, t: Token): void {
   if (context & Context.Strict) {
     if ((t & Token.FutureReserved) === Token.FutureReserved) {
-      report(parser, Errors.UnexpectedStrictReserved);
+      parser.report(Errors.UnexpectedStrictReserved);
     }
 
     if ((t & Token.IsEvalOrArguments) === Token.IsEvalOrArguments) {
-      report(parser, Errors.StrictEvalArguments);
+      parser.report(Errors.StrictEvalArguments);
     }
 
     if (t === Token.EscapedFutureReserved) {
-      report(parser, Errors.InvalidEscapedKeyword);
+      parser.report(Errors.InvalidEscapedKeyword);
     }
 
     if (t === Token.EscapedReserved) {
-      report(parser, Errors.InvalidEscapedKeyword);
+      parser.report(Errors.InvalidEscapedKeyword);
     }
   }
 
   if ((t & Token.Reserved) === Token.Reserved) {
-    report(parser, Errors.KeywordNotId);
+    parser.report(Errors.KeywordNotId);
   }
 
   if (context & (Context.InAwaitContext | Context.Module) && t === Token.AwaitKeyword) {
-    report(parser, Errors.AwaitIdentInModuleOrAsyncFunc);
+    parser.report(Errors.AwaitIdentInModuleOrAsyncFunc);
   }
 
   if (context & (Context.InYieldContext | Context.Strict) && t === Token.YieldKeyword) {
-    report(parser, Errors.DisallowedInContext, 'yield');
+    parser.report(Errors.DisallowedInContext, 'yield');
   }
 }
 
@@ -493,13 +361,13 @@ export function validateFunctionName(parser: ParserState, context: Context, t: T
  * @param t Token
  */
 
-export function isStrictReservedWord(parser: ParserState, context: Context, t: Token): boolean {
+export function isStrictReservedWord(parser: Parser, context: Context, t: Token): boolean {
   if (t === Token.AwaitKeyword) {
-    if (context & (Context.InAwaitContext | Context.Module)) report(parser, Errors.AwaitIdentInModuleOrAsyncFunc);
+    if (context & (Context.InAwaitContext | Context.Module)) parser.report(Errors.AwaitIdentInModuleOrAsyncFunc);
     parser.destructible |= DestructuringKind.Await;
   }
 
-  if (t === Token.YieldKeyword && context & Context.InYieldContext) report(parser, Errors.DisallowedInContext, 'yield');
+  if (t === Token.YieldKeyword && context & Context.InYieldContext) parser.report(Errors.DisallowedInContext, 'yield');
 
   return (
     (t & Token.Reserved) === Token.Reserved ||
@@ -526,10 +394,10 @@ export function isPropertyWithPrivateFieldKey(expr: any): boolean {
  * @param name Current label
  * @param isIterationStatement
  */
-export function isValidLabel(parser: ParserState, labels: any, name: string, isIterationStatement: 0 | 1): 0 | 1 {
+export function isValidLabel(parser: Parser, labels: any, name: string, isIterationStatement: 0 | 1): 0 | 1 {
   while (labels) {
     if (labels['$' + name]) {
-      if (isIterationStatement) report(parser, Errors.InvalidNestedStatement);
+      if (isIterationStatement) parser.report(Errors.InvalidNestedStatement);
       return 1;
     }
     if (isIterationStatement && labels.loop) isIterationStatement = 0;
@@ -540,69 +408,21 @@ export function isValidLabel(parser: ParserState, labels: any, name: string, isI
 }
 
 /**
- * Checks if current label already have been declrared, and if not
+ * Checks if current label already have been declared, and if not
  * declare it
  *
  * @param parser Parser state
  * @param labels Object holding the labels
  * @param name Current label
  */
-export function validateAndDeclareLabel(parser: ParserState, labels: any, name: string): void {
+export function validateAndDeclareLabel(parser: Parser, labels: any, name: string): void {
   let set = labels;
   while (set) {
-    if (set['$' + name]) report(parser, Errors.LabelRedeclaration, name);
+    if (set['$' + name]) parser.report(Errors.LabelRedeclaration, name);
     set = set['$'];
   }
 
   labels['$' + name] = 1;
-}
-
-export function finishNode<T extends Node>(
-  parser: ParserState,
-  context: Context,
-  start: number,
-  line: number,
-  column: number,
-  node: T
-): T {
-  if (context & Context.OptionsRanges) {
-    node.start = start;
-    node.end = parser.startIndex;
-    node.range = [start, parser.startIndex];
-  }
-
-  if (context & Context.OptionsLoc) {
-    node.loc = {
-      start: {
-        line,
-        column
-      },
-      end: {
-        line: parser.startLine,
-        column: parser.startColumn
-      }
-    };
-
-    if (parser.sourceFile) {
-      node.loc.source = parser.sourceFile;
-    }
-  }
-
-  if (parser.attachComments) {
-    // put the leading comments in AST if they are collected in the parser state
-    const leadingComments = parser.leadingComments && parser.leadingComments.pop();
-    if (leadingComments && leadingComments.length > 0) {
-      node.leadingComments = leadingComments;
-    }
-
-    // put the trailing comments in AST if they are found in the parser state
-    if (parser.comments && parser.comments.length > 0) {
-      node.trailingComments = parser.comments;
-      parser.comments = [];
-    }
-  }
-
-  return node;
 }
 
 /** @internal */
@@ -620,371 +440,6 @@ export function isEqualTagName(elementName: any): any {
   }
 }
 
-/**
- * Create a parsing scope for arrow head, and add lexical binding
- *
- * @param parser Parser state
- * @param context Context masks
- * @param value Binding name to be declared
- */
-export function createArrowHeadParsingScope(parser: ParserState, context: Context, value: string): ScopeState {
-  const scope = addChildScope(createScope(), ScopeKind.ArrowParams);
-  addBlockName(parser, context, scope, value, BindingKind.ArgumentList, Origin.None);
-  return scope;
-}
-
-/**
- * Record duplicate binding errors that may occur in a arrow head or function parameters
- *
- * @param parser Parser state
- * @param type Errors type
- */
-export function recordScopeError(parser: ParserState, type: Errors, ...params: string[]): ScopeError {
-  const { index, line, column, tokenIndex, tokenLine, tokenColumn } = parser;
-  return {
-    type,
-    params,
-    index,
-    line,
-    column,
-    tokenIndex,
-    tokenLine,
-    tokenColumn
-  };
-}
-
-/**
- * Creates a block scope
- */
-export function createScope(): ScopeState {
-  return {
-    parent: void 0,
-    type: ScopeKind.Block
-  };
-}
-
-/**
- * Inherit scope
- *
- * @param parent optional parent ScopeState
- * @param type Scope kind
- */
-export function addChildScope(parent: ScopeState | undefined, type: ScopeKind): ScopeState {
-  return {
-    parent,
-    type,
-    scopeError: void 0
-  };
-}
-
-/**
- * Inherit a private scope
- * private scope is created on class body
- *
- * @param parent optional parent PrivateScopeState
- * @return newly created PrivateScopeState
- */
-export function addChildPrivateScope(parent: PrivateScopeState | undefined): PrivateScopeState {
-  return {
-    parent,
-    refs: Object.create(null)
-  };
-}
-
-/**
- * Adds either a var binding or a block scoped binding.
- *
- * @param parser Parser state
- * @param context Context masks
- * @param scope Scope state
- * @param name Binding name
- * @param type Binding kind
- * @param origin Binding Origin
- */
-export function addVarOrBlock(
-  parser: ParserState,
-  context: Context,
-  scope: ScopeState,
-  name: string,
-  kind: BindingKind,
-  origin: Origin
-) {
-  if (kind & BindingKind.Variable) {
-    addVarName(parser, context, scope, name, kind);
-  } else {
-    addBlockName(parser, context, scope, name, kind, origin);
-  }
-  if (origin & Origin.Export) {
-    declareUnboundVariable(parser, name);
-  }
-}
-
-/**
- * Adds block scoped binding
- *
- * @param parser Parser state
- * @param context Context masks
- * @param scope Scope state
- * @param name Binding name
- * @param type Binding kind
- * @param origin Binding Origin
- */
-export function addBlockName(
-  parser: ParserState,
-  context: Context,
-  scope: any,
-  name: string,
-  kind: BindingKind,
-  origin: Origin
-) {
-  const value = (scope as any)['#' + name];
-
-  if (value && (value & BindingKind.Empty) === 0) {
-    if (kind & BindingKind.ArgumentList) {
-      scope.scopeError = recordScopeError(parser, Errors.DuplicateBinding, name);
-    } else if (
-      context & Context.OptionsWebCompat &&
-      (context & Context.Strict) === 0 &&
-      origin & Origin.BlockStatement &&
-      value === BindingKind.FunctionLexical &&
-      kind === BindingKind.FunctionLexical
-    ) {
-      // No op
-    } else {
-      report(parser, Errors.DuplicateBinding, name);
-    }
-  }
-
-  if (
-    scope.type & ScopeKind.FunctionBody &&
-    (scope as any).parent['#' + name] &&
-    ((scope as any).parent['#' + name] & BindingKind.Empty) === 0
-  ) {
-    report(parser, Errors.DuplicateBinding, name);
-  }
-
-  if (scope.type & ScopeKind.ArrowParams && value && (value & BindingKind.Empty) === 0) {
-    if (kind & BindingKind.ArgumentList) {
-      scope.scopeError = recordScopeError(parser, Errors.DuplicateBinding, name);
-    }
-  }
-
-  if (scope.type & ScopeKind.CatchBlock) {
-    if ((scope as any).parent['#' + name] & BindingKind.CatchIdentifierOrPattern)
-      report(parser, Errors.ShadowedCatchClause, name);
-  }
-
-  (scope as any)['#' + name] = kind;
-}
-
-/**
- * Adds a variable binding
- *
- * @param parser Parser state
- * @param context Context masks
- * @param scope Scope state
- * @param name Binding name
- * @param type Binding kind
- */
-export function addVarName(
-  parser: ParserState,
-  context: Context,
-  scope: ScopeState,
-  name: string,
-  kind: BindingKind
-): void {
-  let currentScope: any = scope;
-
-  while (currentScope && (currentScope.type & ScopeKind.FunctionRoot) === 0) {
-    const value: ScopeKind = currentScope['#' + name];
-
-    if (value & BindingKind.LexicalBinding) {
-      if (
-        context & Context.OptionsWebCompat &&
-        (context & Context.Strict) === 0 &&
-        ((kind & BindingKind.FunctionStatement && value & BindingKind.LexicalOrFunction) ||
-          (value & BindingKind.FunctionStatement && kind & BindingKind.LexicalOrFunction))
-      ) {
-        // No op
-      } else {
-        report(parser, Errors.DuplicateBinding, name);
-      }
-    }
-    if (currentScope === scope) {
-      if (value & BindingKind.ArgumentList && kind & BindingKind.ArgumentList) {
-        currentScope.scopeError = recordScopeError(parser, Errors.DuplicateBinding, name);
-      }
-    }
-    if (
-      value & BindingKind.CatchPattern ||
-      (value & BindingKind.CatchIdentifier && (context & Context.OptionsWebCompat) === 0)
-    ) {
-      report(parser, Errors.DuplicateBinding, name);
-    }
-
-    currentScope['#' + name] = kind;
-
-    currentScope = currentScope.parent;
-  }
-}
-
-/**
- * Adds a private identifier binding
- *
- * @param parser Parser state
- * @param scope PrivateScopeState
- * @param name Binding name
- * @param type Property kind
- */
-export function addPrivateIdentifier(
-  parser: ParserState,
-  scope: PrivateScopeState,
-  name: string,
-  kind: PropertyKind
-): void {
-  let focusKind = kind & (PropertyKind.Static | PropertyKind.GetSet);
-  // if it's not getter or setter, it should take both place in the check
-  if (!(focusKind & PropertyKind.GetSet)) focusKind |= PropertyKind.GetSet;
-  const value = (scope as any)['#' + name];
-
-  // It is a Syntax Error if PrivateBoundIdentifiers of ClassElementList
-  // contains any duplicate entries, unless the name is used once for
-  // a getter and once for a setter and in no other entries, and the getter
-  // and setter are either both static or both non-static.
-  if (
-    value !== undefined &&
-    ((value & PropertyKind.Static) !== (focusKind & PropertyKind.Static) || value & focusKind & PropertyKind.GetSet)
-  ) {
-    // Mix of static and non-static,
-    // or duplicated setter, or duplicated getter
-    report(parser, Errors.DuplicatePrivateIdentifier, name);
-  }
-
-  // Merge possible Getter and Setter
-  (scope as any)['#' + name] = value ? value | focusKind : focusKind;
-}
-
-/**
- * Adds a private identifier reference
- *
- * @param parser Parser state
- * @param scope PrivateScopeState
- * @param name Binding name
- */
-export function addPrivateIdentifierRef(parser: ParserState, scope: PrivateScopeState, name: string): void {
-  scope.refs[name] ??= [];
-  scope.refs[name].push({
-    index: parser.tokenIndex,
-    line: parser.tokenLine,
-    column: parser.tokenColumn
-  });
-}
-
-/**
- * Checks if a private identifier name is defined in current scope
- *
- * @param name private identifier name
- * @param scope current PrivateScopeState
- * @returns 0 for false, and 1 for true
- */
-function isPrivateIdentifierDefined(name: string, scope: PrivateScopeState): 0 | 1 {
-  if ((scope as any)['#' + name]) return 1;
-  if (scope.parent) return isPrivateIdentifierDefined(name, scope.parent);
-  return 0;
-}
-
-/**
- * Validates all private identifier references in current scope
- *
- * @param scope current PrivateScopeState
- */
-export function validatePrivateIdentifierRefs(scope: PrivateScopeState): void {
-  for (const name in scope.refs) {
-    if (!isPrivateIdentifierDefined(name, scope)) {
-      const { index, line, column } = scope.refs[name][0];
-      throw new ParseError(
-        index,
-        line,
-        column,
-        index + name.length,
-        line,
-        column + name.length,
-        Errors.InvalidPrivateIdentifier,
-        name
-      );
-    }
-  }
-}
-
-/**
- * Appends a name to the `ExportedNames` of the `ExportsList`, and checks
- * for duplicates
- *
- * @see [Link](https://tc39.github.io/ecma262/$sec-exports-static-semantics-exportednames)
- *
- * @param parser Parser object
- * @param name Exported name
- */
-export function declareUnboundVariable(parser: ParserState, name: string): void {
-  if (parser.exportedNames !== void 0 && name !== '') {
-    if (parser.exportedNames['#' + name]) {
-      report(parser, Errors.DuplicateExportBinding, name);
-    }
-    parser.exportedNames['#' + name] = 1;
-  }
-}
-
-/**
- * Appends a name to the `ExportedBindings` of the `ExportsList`,
- *
- * @see [Link](https://tc39.es/ecma262/$sec-exports-static-semantics-exportedbindings)
- *
- * @param parser Parser object
- * @param name Exported binding name
- */
-export function addBindingToExports(parser: ParserState, name: string): void {
-  if (parser.exportedBindings !== void 0 && name !== '') {
-    parser.exportedBindings['#' + name] = 1;
-  }
-}
-
-export function pushComment(context: Context, array: any[]): OnComment {
-  return function (type: string, value: string, start: number, end: number, loc: SourceLocation) {
-    const comment: any = {
-      type,
-      value
-    };
-
-    if (context & Context.OptionsRanges) {
-      comment.start = start;
-      comment.end = end;
-      comment.range = [start, end];
-    }
-    if (context & Context.OptionsLoc) {
-      comment.loc = loc;
-    }
-    array.push(comment);
-  };
-}
-
-export function pushToken(context: Context, array: any[]): OnToken {
-  return function (token: string, start: number, end: number, loc: SourceLocation) {
-    const tokens: any = {
-      token
-    };
-
-    if (context & Context.OptionsRanges) {
-      tokens.start = start;
-      tokens.end = end;
-      tokens.range = [start, end];
-    }
-    if (context & Context.OptionsLoc) {
-      tokens.loc = loc;
-    }
-    array.push(tokens);
-  };
-}
-
 export function isValidIdentifier(context: Context, t: Token): boolean {
   if (context & (Context.Strict | Context.InYieldContext)) {
     // Module code is also "strict mode code"
@@ -996,11 +451,17 @@ export function isValidIdentifier(context: Context, t: Token): boolean {
   return (t & Token.Contextual) === Token.Contextual || (t & Token.FutureReserved) === Token.FutureReserved;
 }
 
-export function classifyIdentifier(parser: ParserState, context: Context, t: Token): any {
+export function classifyIdentifier(parser: Parser, context: Context, t: Token): any {
   if ((t & Token.IsEvalOrArguments) === Token.IsEvalOrArguments) {
-    if (context & Context.Strict) report(parser, Errors.StrictEvalArguments);
+    if (context & Context.Strict) parser.report(Errors.StrictEvalArguments);
     parser.flags |= Flags.StrictEvalArguments;
   }
 
-  if (!isValidIdentifier(context, t)) report(parser, Errors.Unexpected);
+  if (!isValidIdentifier(context, t)) parser.report(Errors.Unexpected);
 }
+
+export type Location = {
+  readonly index: number;
+  readonly line: number;
+  readonly column: number;
+};

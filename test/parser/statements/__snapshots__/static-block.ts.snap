@@ -1,0 +1,239 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (fail) > async function t() { class A { static { await 0 } } } 1`] = `
+"SyntaxError [1:40-1:45]: cannot use "await" in static blocks
+> 1 | async function t() { class A { static { await 0 } } }
+    |                                         ^^^^^ cannot use "await" in static blocks"
+`;
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (fail) > class A { async static {} } 1`] = `
+"SyntaxError [1:23-1:24]: Unexpected token: '{'
+> 1 | class A { async static {} }
+    |                        ^ Unexpected token: '{'"
+`;
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (fail) > class A { static { super() } } 1`] = `
+"SyntaxError [1:24-1:25]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A { static { super() } }
+    |                         ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (fail) > class A { static async {} } 1`] = `
+"SyntaxError [1:23-1:24]: Invalid key token
+> 1 | class A { static async {} }
+    |                        ^ Invalid key token"
+`;
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (fail) > class A {}; class B extends A { static { super() } } 1`] = `
+"SyntaxError [1:46-1:47]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A {}; class B extends A { static { super() } }
+    |                                               ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (pass) > class A { static { this.a } } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "body": [
+              {
+                "expression": {
+                  "computed": false,
+                  "object": {
+                    "type": "ThisExpression",
+                  },
+                  "optional": false,
+                  "property": {
+                    "name": "a",
+                    "type": "Identifier",
+                  },
+                  "type": "MemberExpression",
+                },
+                "type": "ExpressionStatement",
+              },
+            ],
+            "type": "StaticBlock",
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "A",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (pass) > class A { static {} } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "body": [],
+            "end": 19,
+            "loc": {
+              "end": {
+                "column": 19,
+                "line": 1,
+              },
+              "start": {
+                "column": 10,
+                "line": 1,
+              },
+            },
+            "range": [
+              10,
+              19,
+            ],
+            "start": 10,
+            "type": "StaticBlock",
+          },
+        ],
+        "end": 21,
+        "loc": {
+          "end": {
+            "column": 21,
+            "line": 1,
+          },
+          "start": {
+            "column": 8,
+            "line": 1,
+          },
+        },
+        "range": [
+          8,
+          21,
+        ],
+        "start": 8,
+        "type": "ClassBody",
+      },
+      "end": 21,
+      "id": {
+        "end": 7,
+        "loc": {
+          "end": {
+            "column": 7,
+            "line": 1,
+          },
+          "start": {
+            "column": 6,
+            "line": 1,
+          },
+        },
+        "name": "A",
+        "range": [
+          6,
+          7,
+        ],
+        "start": 6,
+        "type": "Identifier",
+      },
+      "loc": {
+        "end": {
+          "column": 21,
+          "line": 1,
+        },
+        "start": {
+          "column": 0,
+          "line": 1,
+        },
+      },
+      "range": [
+        0,
+        21,
+      ],
+      "start": 0,
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "end": 21,
+  "loc": {
+    "end": {
+      "column": 21,
+      "line": 1,
+    },
+    "start": {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "range": [
+    0,
+    21,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Next - Class static initialization block > Next - Class static initialization block (pass) > class A {}; class B extends A { static { super.a } } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "A",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+    {
+      "type": "EmptyStatement",
+    },
+    {
+      "body": {
+        "body": [
+          {
+            "body": [
+              {
+                "expression": {
+                  "computed": false,
+                  "object": {
+                    "type": "Super",
+                  },
+                  "optional": false,
+                  "property": {
+                    "name": "a",
+                    "type": "Identifier",
+                  },
+                  "type": "MemberExpression",
+                },
+                "type": "ExpressionStatement",
+              },
+            ],
+            "type": "StaticBlock",
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "B",
+        "type": "Identifier",
+      },
+      "superClass": {
+        "name": "A",
+        "type": "Identifier",
+      },
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;

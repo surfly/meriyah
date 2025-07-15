@@ -1,11 +1,12 @@
-import { Token } from '../token';
 import { Chars } from '../chars';
-import { ParserState, Flags } from '../common';
+import { Flags } from '../common';
+import { type Parser } from '../parser/parser';
+import { Token } from '../token';
 
 export const enum LexerState {
   None = 0,
   NewLine = 1 << 0,
-  LastIsCR = 1 << 2
+  LastIsCR = 1 << 2,
 }
 
 export const enum NumberKind {
@@ -17,7 +18,7 @@ export const enum NumberKind {
   NonOctalDecimal = 1 << 5,
   Float = 1 << 6,
   ValidBigIntKind = 1 << 7,
-  DecimalNumberKind = Decimal | NonOctalDecimal
+  DecimalNumberKind = Decimal | NonOctalDecimal,
 }
 
 /**
@@ -25,7 +26,7 @@ export const enum NumberKind {
  *
  * @param parser The parser instance
  */
-export function advanceChar(parser: ParserState): number {
+export function advanceChar(parser: Parser): number {
   parser.column++;
   return (parser.currentChar = parser.source.charCodeAt(++parser.index));
 }
@@ -35,7 +36,7 @@ export function advanceChar(parser: ParserState): number {
  *
  * @param parser The parser instance
  */
-export function consumePossibleSurrogatePair(parser: ParserState): number {
+export function consumePossibleSurrogatePair(parser: Parser): number {
   // See: https://tc39.github.io/ecma262/#sec-ecmascript-language-types-string-type
   const hi = parser.currentChar;
   // Not surrogate
@@ -50,7 +51,7 @@ export function consumePossibleSurrogatePair(parser: ParserState): number {
 /**
  * Use to consume a line feed instead of `scanNewLine`.
  */
-export function consumeLineFeed(parser: ParserState, state: LexerState): void {
+export function consumeLineFeed(parser: Parser, state: LexerState): void {
   parser.currentChar = parser.source.charCodeAt(++parser.index);
   parser.flags |= Flags.NewLine;
   if ((state & LexerState.LastIsCR) === 0) {
@@ -59,7 +60,7 @@ export function consumeLineFeed(parser: ParserState, state: LexerState): void {
   }
 }
 
-export function scanNewLine(parser: ParserState): void {
+export function scanNewLine(parser: Parser): void {
   parser.flags |= Flags.NewLine;
   parser.currentChar = parser.source.charCodeAt(++parser.index);
   parser.column = 0;

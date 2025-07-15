@@ -1,14 +1,14 @@
 import { Chars } from '../chars';
-import { Context, ParserState } from '../common';
+import { Errors } from '../errors';
+import { type Parser } from '../parser/parser';
 import { Token } from '../token';
-import { advanceChar } from './common';
 import { isIdentifierPart } from './charClassifier';
-import { report, Errors } from '../errors';
+import { advanceChar } from './common';
 
 enum RegexState {
   Empty = 0,
   Escape = 0x1,
-  Class = 0x2
+  Class = 0x2,
 }
 
 enum RegexFlags {
@@ -20,7 +20,7 @@ enum RegexFlags {
   Sticky = 0b0000_1000,
   DotAll = 0b0010_0000,
   Indices = 0b0100_0000,
-  UnicodeSets = 0b1000_0000
+  UnicodeSets = 0b1000_0000,
 }
 
 /**
@@ -30,7 +30,7 @@ enum RegexFlags {
  * @param context Context masks
  */
 
-export function scanRegularExpression(parser: ParserState, context: Context): Token {
+export function scanRegularExpression(parser: Parser): Token {
   const bodyStart = parser.index;
   // Scan: ('/' | '/=') RegularExpressionBody '/' RegularExpressionFlags
   let preparseState = RegexState.Empty;
@@ -65,11 +65,11 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
       ch === Chars.LineSeparator ||
       ch === Chars.ParagraphSeparator
     ) {
-      report(parser, Errors.UnterminatedRegExp);
+      parser.report(Errors.UnterminatedRegExp);
     }
 
     if (parser.index >= parser.source.length) {
-      return report(parser, Errors.UnterminatedRegExp);
+      return parser.report(Errors.UnterminatedRegExp);
     }
   }
 
@@ -83,49 +83,49 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
   while (isIdentifierPart(char)) {
     switch (char) {
       case Chars.LowerG:
-        if (mask & RegexFlags.Global) report(parser, Errors.DuplicateRegExpFlag, 'g');
+        if (mask & RegexFlags.Global) parser.report(Errors.DuplicateRegExpFlag, 'g');
         mask |= RegexFlags.Global;
         break;
 
       case Chars.LowerI:
-        if (mask & RegexFlags.IgnoreCase) report(parser, Errors.DuplicateRegExpFlag, 'i');
+        if (mask & RegexFlags.IgnoreCase) parser.report(Errors.DuplicateRegExpFlag, 'i');
         mask |= RegexFlags.IgnoreCase;
         break;
 
       case Chars.LowerM:
-        if (mask & RegexFlags.Multiline) report(parser, Errors.DuplicateRegExpFlag, 'm');
+        if (mask & RegexFlags.Multiline) parser.report(Errors.DuplicateRegExpFlag, 'm');
         mask |= RegexFlags.Multiline;
         break;
 
       case Chars.LowerU:
-        if (mask & RegexFlags.Unicode) report(parser, Errors.DuplicateRegExpFlag, 'u');
-        if (mask & RegexFlags.UnicodeSets) report(parser, Errors.DuplicateRegExpFlag, 'vu');
+        if (mask & RegexFlags.Unicode) parser.report(Errors.DuplicateRegExpFlag, 'u');
+        if (mask & RegexFlags.UnicodeSets) parser.report(Errors.DuplicateRegExpFlag, 'vu');
         mask |= RegexFlags.Unicode;
         break;
 
       case Chars.LowerV:
-        if (mask & RegexFlags.Unicode) report(parser, Errors.DuplicateRegExpFlag, 'uv');
-        if (mask & RegexFlags.UnicodeSets) report(parser, Errors.DuplicateRegExpFlag, 'v');
+        if (mask & RegexFlags.Unicode) parser.report(Errors.DuplicateRegExpFlag, 'uv');
+        if (mask & RegexFlags.UnicodeSets) parser.report(Errors.DuplicateRegExpFlag, 'v');
         mask |= RegexFlags.UnicodeSets;
         break;
 
       case Chars.LowerY:
-        if (mask & RegexFlags.Sticky) report(parser, Errors.DuplicateRegExpFlag, 'y');
+        if (mask & RegexFlags.Sticky) parser.report(Errors.DuplicateRegExpFlag, 'y');
         mask |= RegexFlags.Sticky;
         break;
 
       case Chars.LowerS:
-        if (mask & RegexFlags.DotAll) report(parser, Errors.DuplicateRegExpFlag, 's');
+        if (mask & RegexFlags.DotAll) parser.report(Errors.DuplicateRegExpFlag, 's');
         mask |= RegexFlags.DotAll;
         break;
 
       case Chars.LowerD:
-        if (mask & RegexFlags.Indices) report(parser, Errors.DuplicateRegExpFlag, 'd');
+        if (mask & RegexFlags.Indices) parser.report(Errors.DuplicateRegExpFlag, 'd');
         mask |= RegexFlags.Indices;
         break;
 
       default:
-        report(parser, Errors.UnexpectedTokenRegExpFlag);
+        parser.report(Errors.UnexpectedTokenRegExpFlag);
     }
 
     char = advanceChar(parser);
@@ -137,7 +137,7 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
 
   parser.tokenRegExp = { pattern, flags };
 
-  if (context & Context.OptionsRaw) parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
+  if (parser.options.raw) parser.tokenRaw = parser.source.slice(parser.tokenIndex, parser.index);
 
   parser.tokenValue = validate(parser, pattern, flags);
 
@@ -152,17 +152,16 @@ export function scanRegularExpression(parser: ParserState, context: Context): To
  * @param pattern Regexp body
  * @param flags Regexp flags
  */
-function validate(parser: ParserState, pattern: string, flags: string): RegExp | null | Token {
+function validate(parser: Parser, pattern: string, flags: string): RegExp | null | Token {
   try {
     return new RegExp(pattern, flags);
   } catch {
-    try {
-      // Some JavaScript engine has not supported flag "v". They will fail.
-      new RegExp(pattern, flags);
-      // Use null as tokenValue according to ESTree spec
+    // Use null as tokenValue according to ESTree spec
+    // https://github.com/estree/estree/blob/a27003adf4fd7bfad44de9cef372a2eacd527b1c/es5.md#regexpliteral
+    if (!parser.options.validateRegex) {
       return null;
-    } catch {
-      report(parser, Errors.UnterminatedRegExp);
     }
+
+    parser.report(Errors.UnterminatedRegExp);
   }
 }

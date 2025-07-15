@@ -1,17 +1,17 @@
-import { Context } from '../../../src/common';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
 
 describe('Miscellaneous - Strict mode', () => {
-  for (const arg of [`; with (x) y;`, '"use strict"; with (x) y;', 'class X { foo() { with (x) y; } }']) {
+  for (const arg of ['; with (x) y;', '"use strict"; with (x) y;', 'class X { foo() { with (x) y; } }']) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat | Context.Strict);
+        parseSource(`${arg}`, { webcompat: true, impliedStrict: true });
       });
     });
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.Strict);
+        parseSource(`${arg}`, { impliedStrict: true });
       });
     });
   }
@@ -59,27 +59,27 @@ describe('Miscellaneous - Strict mode', () => {
     'function f(yield){ "use strict"; }',
     'f = (package) => { "use strict"; }',
     'f = (yield) => { "use strict"; }',
-    '"use strict"; "\\1";',
-    '"use strict"; "\\7";',
-    '"\\1"; "use strict";',
-    '"\\7"; "use strict";',
-    'function a() { "use strict"; "\\1";}',
-    'function a() { "use strict"; "\\7";}',
-    'function a() { "\\1"; "use strict";}',
-    'function a() { "\\7"; "use strict";}',
-    'f = () => { "use strict"; "\\1";}',
-    'f = () => { "use strict"; "\\7";}',
-    'f = () => { "\\1"; "use strict";}',
-    'f = () => { "\\7"; "use strict";}'
+    String.raw`"use strict"; "\1";`,
+    String.raw`"use strict"; "\7";`,
+    String.raw`"\1"; "use strict";`,
+    String.raw`"\7"; "use strict";`,
+    String.raw`function a() { "use strict"; "\1";}`,
+    String.raw`function a() { "use strict"; "\7";}`,
+    String.raw`function a() { "\1"; "use strict";}`,
+    String.raw`function a() { "\7"; "use strict";}`,
+    String.raw`f = () => { "use strict"; "\1";}`,
+    String.raw`f = () => { "use strict"; "\7";}`,
+    String.raw`f = () => { "\1"; "use strict";}`,
+    String.raw`f = () => { "\7"; "use strict";}`,
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat);
+        parseSource(`${arg}`, { webcompat: true });
       });
     });
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
   }
@@ -113,16 +113,16 @@ describe('Miscellaneous - Strict mode', () => {
     'function f(){ "use strict"; foo; } with (x) y;',
     'function f(){ "use strict"; foo; } function g() { with (x) y; }',
     'function g() { function f(){ "use strict"; foo; } with (x) y; }',
-    'if (x) { "use strict"; with (x) y; }'
+    'if (x) { "use strict"; with (x) y; }',
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat);
+        parseSource(`${arg}`, { webcompat: true });
       });
     });
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
   }

@@ -1,103 +1,90 @@
-import { Context } from '../../../src/common';
-import { pass, fail } from '../../test-utils';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
+import { fail, pass } from '../../test-utils';
 
-describe('Next - ImportCall', () => {
-  fail('Next - Import call (fail)', [
-    ['function failsParse() { return import.then(); }', Context.None],
-    ['import(x, y).then(z);', Context.None],
-    ['import.then(doLoad);', Context.None],
-    ['import(', Context.None],
-    ['import)', Context.None],
-    ['import()', Context.None],
-    ['import("x', Context.None],
-    ['import("x"]', Context.None],
-    ['import["x")', Context.None],
-    ['import = x', Context.None],
-    ['import[', Context.None],
-    ['import[]', Context.None],
-    ['import]', Context.None],
-    ['import[x]', Context.None],
-    ['import{', Context.None],
-    ['import[]', Context.Strict | Context.Module],
-    ['import]', Context.Strict | Context.Module],
-    ['import[x]', Context.Strict | Context.Module],
-    ['import{', Context.Strict | Context.Module],
-    ['import{x', Context.Strict | Context.Module],
-    ['import{x}', Context.None],
-    ['import(x, y)', Context.None],
-    ['import(...y)', Context.None],
-    ['import(x,)', Context.None],
-    ['import(,)', Context.None],
-    ['import(,y)', Context.None],
-    ['import(;)', Context.None],
-    ['[import]', Context.None],
-    ['{import}', Context.None],
-    ['import+', Context.None],
-    ['import = 1', Context.None],
-    ['import.wat', Context.None],
-    ['new import(x)', Context.None],
-    ['let f = () => import("", "");', Context.None],
-    ['let f = () => { import(); };', Context.None],
-    ['let f = () => { import(...[""]); }; new import(x)', Context.None],
-    ['import("")++', Context.None],
-    ['import("") -= 1;', Context.None],
-    ['(async () => await import())', Context.None],
-    ['(async () => { await import("", "") });', Context.None],
-    ['async function f() { import(...[""]); }', Context.None],
-    ['(async () => await import())', Context.None],
-    ['async function * f() { await new import("") }', Context.None],
-    ['label: { import(); };', Context.None],
-    ['do { import(...[""]); } while (false);', Context.Strict | Context.Module],
-    ['function fn() { new import(""); }', Context.None],
-    ['if (true) { import(...[""]); }', Context.None],
-    ['(async () => await import())', Context.None],
-    ['with (import(...[""])) {}', Context.None],
-    ['import();', Context.None],
-    ['import("", "");', Context.None],
-    ['import("", "");', Context.Module | Context.Strict],
-    ['import("",);', Context.None],
-    ['[import(1)] = [1];', Context.None],
-    ['[import(x).then()] = [1];', Context.None],
-    ['(a, import(foo)) => {}', Context.None],
-    ['(1, import(1)) => {}', Context.None],
-    ['({import(y=x)} = {"a": 1});', Context.None],
-    ['({import(foo)} = {"a": 1});', Context.None],
-    ['({import(1)} = {"a": 1});', Context.None],
-    ['(import(foo)) => {}', Context.None],
-    ['(import(1)) => {}', Context.None],
-    ['(import(y=x)) => {}', Context.None],
-    ['(a, import(x).then()) => {}', Context.None],
-    ['(1, import(foo)) => {}', Context.None],
-    ['function failsParse() { return import.then(); }', Context.None],
-    ['var dynImport = import; dynImport("http");', Context.None],
-    ['import()', Context.None],
-    ['import(a, b)', Context.None],
-    ['import(...[a])', Context.None],
-    ['import(source,)', Context.None],
-    ['new import(source)', Context.None],
-    ['let f = () => import("",);', Context.None],
-    ['let f = () => import("", "");', Context.None],
-    ['if (false) {} else import("", "");', Context.None],
-    ['new import(source)', Context.None],
-    ['(import(foo)) => {}', Context.None],
-    ['(import(y=x)) => {}', Context.None],
-    ['(import(import(x))) => {}', Context.None],
-    ['(1, import(x).then()) => {}', Context.None],
-    ['[import(y=x)] = [1];', Context.None],
-    ['[import(x).then()] = [1];', Context.None],
-    ['[import(import(x))] = [1];', Context.None],
-    ['import("") ++', Context.None],
-    ['import("") += 5', Context.None],
-    ['import("") -= 5', Context.None],
-    ['import("") --', Context.None],
-    ['import("") = 2', Context.None],
-    ['import("") <<= 2', Context.None],
-    ['import("") >>= 2', Context.None],
-    ['import("") >>>= 2', Context.None],
-    ['import("") **= 2', Context.None],
-    ['new import(x);', Context.None]
+describe('ImportCall', () => {
+  fail('Import call (fail)', [
+    'function failsParse() { return import.then(); }',
+    'import.then(doLoad);',
+    'import(',
+    'import)',
+    'import()',
+    'import("x',
+    'import("x"]',
+    'import["x")',
+    'import = x',
+    'import[',
+    'import[]',
+    'import]',
+    'import[x]',
+    'import{',
+    { code: 'import[]', options: { sourceType: 'module' } },
+    { code: 'import]', options: { sourceType: 'module' } },
+    { code: 'import[x]', options: { sourceType: 'module' } },
+    { code: 'import{', options: { sourceType: 'module' } },
+    { code: 'import{x', options: { sourceType: 'module' } },
+    'import{x}',
+    'import(...y)',
+    'import(,)',
+    'import(,y)',
+    'import(;)',
+    '[import]',
+    '{import}',
+    'import+',
+    'import = 1',
+    'import.wat',
+    'new import(x)',
+    'let f = () => { import(); };',
+    'let f = () => { import(...[""]); }; new import(x)',
+    'import("")++',
+    'import("") -= 1;',
+    '(async () => await import())',
+    'async function f() { import(...[""]); }',
+    '(async () => await import())',
+    'async function * f() { await new import("") }',
+    'label: { import(); };',
+    { code: 'do { import(...[""]); } while (false);', options: { sourceType: 'module' } },
+    'function fn() { new import(""); }',
+    'if (true) { import(...[""]); }',
+    '(async () => await import())',
+    'with (import(...[""])) {}',
+    'import();',
+    '[import(1)] = [1];',
+    '[import(x).then()] = [1];',
+    '(a, import(foo)) => {}',
+    '(1, import(1)) => {}',
+    '({import(y=x)} = {"a": 1});',
+    '({import(foo)} = {"a": 1});',
+    '({import(1)} = {"a": 1});',
+    '(import(foo)) => {}',
+    '(import(1)) => {}',
+    '(import(y=x)) => {}',
+    '(a, import(x).then()) => {}',
+    '(1, import(foo)) => {}',
+    'function failsParse() { return import.then(); }',
+    'var dynImport = import; dynImport("http");',
+    'import()',
+    'import(...[a])',
+    'new import(source)',
+    'new import(source)',
+    '(import(foo)) => {}',
+    '(import(y=x)) => {}',
+    '(import(import(x))) => {}',
+    '(1, import(x).then()) => {}',
+    '[import(y=x)] = [1];',
+    '[import(x).then()] = [1];',
+    '[import(import(x))] = [1];',
+    'import("") ++',
+    'import("") += 5',
+    'import("") -= 5',
+    'import("") --',
+    'import("") = 2',
+    'import("") <<= 2',
+    'import("") >>= 2',
+    'import("") >>>= 2',
+    'import("") **= 2',
+    'new import(x);',
   ]);
 
   for (const arg of [
@@ -134,7 +121,7 @@ describe('Next - ImportCall', () => {
     'function fn() { return import("foo"); }',
     'let x = 0; while (!x) { x++;  import(import(import("foo"))); };',
     'import("foo");',
-    `import('./module.js')`,
+    "import('./module.js')",
     'import(import(x))',
     'x = import(x)',
     'foo(import("foo").den());',
@@ -145,210 +132,36 @@ describe('Next - ImportCall', () => {
     'new (import(x));',
     'foo(import("foo").den());',
     'for(x of import(x)) {}',
-    'import(x).then()'
+    'import(x).then()',
+    'import(x, y).then(z);',
+    'import(x, y)',
+    'import(x,)',
+    'let f = () => import("", "");',
+    '(async () => { await import("", "") });',
+    'import("", "");',
+    'import("", "");',
+    'import("",);',
+    'import(a, b)',
+    'import(source,)',
+    'let f = () => import("",);',
+    'let f = () => import("", "");',
+    'if (false) {} else import("", "");',
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, void 0, Context.OptionsNext | Context.Module | Context.Strict);
+        parseSource(`${arg}`, { sourceType: 'module' });
       });
     });
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, void 0, Context.OptionsNext);
+        parseSource(`${arg}`);
       });
     });
   }
 
-  pass('Next - ImportCall (pass)', [
-    [
-      `import("lib.js").then(doThis);`,
-      Context.Strict | Context.Module | Context.OptionsRanges,
-      {
-        body: [
-          {
-            start: 0,
-            end: 30,
-            range: [0, 30],
-            expression: {
-              arguments: [
-                {
-                  start: 22,
-                  end: 28,
-                  range: [22, 28],
-                  name: 'doThis',
-                  type: 'Identifier'
-                }
-              ],
-              callee: {
-                computed: false,
-                start: 0,
-                end: 21,
-                range: [0, 21],
-                object: {
-                  start: 0,
-                  end: 16,
-                  range: [0, 16],
-                  source: {
-                    start: 7,
-                    end: 15,
-                    range: [7, 15],
-                    type: 'Literal',
-                    value: 'lib.js'
-                  },
-                  type: 'ImportExpression'
-                },
-                property: {
-                  start: 17,
-                  end: 21,
-                  range: [17, 21],
-                  name: 'then',
-                  type: 'Identifier'
-                },
-                type: 'MemberExpression'
-              },
-              start: 0,
-              end: 29,
-              range: [0, 29],
-              type: 'CallExpression'
-            },
-            type: 'ExpressionStatement'
-          }
-        ],
-        sourceType: 'module',
-        start: 0,
-        end: 30,
-        range: [0, 30],
-        type: 'Program'
-      }
-    ],
-    [
-      `async function bar(){ await import("./nchanged") }`,
-      Context.OptionsNext,
-      {
-        body: [
-          {
-            async: true,
-            body: {
-              body: [
-                {
-                  expression: {
-                    argument: {
-                      options: null,
-                      source: {
-                        type: 'Literal',
-                        value: './nchanged'
-                      },
-                      type: 'ImportExpression'
-                    },
-                    type: 'AwaitExpression'
-                  },
-                  type: 'ExpressionStatement'
-                }
-              ],
-              type: 'BlockStatement'
-            },
-            generator: false,
-            id: {
-              name: 'bar',
-              type: 'Identifier'
-            },
-            params: [],
-            type: 'FunctionDeclaration'
-          }
-        ],
-        sourceType: 'script',
-        type: 'Program'
-      }
-    ],
-    [
-      'function loadImport(file) { import(file).then(() => {}), console.log("Done."); }',
-      Context.OptionsNext,
-      {
-        body: [
-          {
-            async: false,
-            body: {
-              body: [
-                {
-                  expression: {
-                    expressions: [
-                      {
-                        arguments: [
-                          {
-                            async: false,
-                            body: {
-                              body: [],
-                              type: 'BlockStatement'
-                            },
-                            expression: false,
-                            params: [],
-                            type: 'ArrowFunctionExpression'
-                          }
-                        ],
-                        callee: {
-                          computed: false,
-                          object: {
-                            options: null,
-                            source: {
-                              name: 'file',
-                              type: 'Identifier'
-                            },
-                            type: 'ImportExpression'
-                          },
-                          property: {
-                            name: 'then',
-                            type: 'Identifier'
-                          },
-                          type: 'MemberExpression'
-                        },
-                        type: 'CallExpression'
-                      },
-                      {
-                        arguments: [
-                          {
-                            type: 'Literal',
-                            value: 'Done.'
-                          }
-                        ],
-                        callee: {
-                          computed: false,
-                          object: {
-                            name: 'console',
-                            type: 'Identifier'
-                          },
-                          property: {
-                            name: 'log',
-                            type: 'Identifier'
-                          },
-                          type: 'MemberExpression'
-                        },
-                        type: 'CallExpression'
-                      }
-                    ],
-                    type: 'SequenceExpression'
-                  },
-                  type: 'ExpressionStatement'
-                }
-              ],
-              type: 'BlockStatement'
-            },
-            generator: false,
-            id: {
-              name: 'loadImport',
-              type: 'Identifier'
-            },
-            params: [
-              {
-                name: 'file',
-                type: 'Identifier'
-              }
-            ],
-            type: 'FunctionDeclaration'
-          }
-        ],
-        sourceType: 'script',
-        type: 'Program'
-      }
-    ]
+  pass('ImportCall (pass)', [
+    { code: 'import("lib.js").then(doThis);', options: { sourceType: 'module', ranges: true } },
+    { code: 'async function bar(){ await import("./nchanged") }', options: { next: true } },
+    'function loadImport(file) { import(file).then(() => {}), console.log("Done."); }',
   ]);
 });

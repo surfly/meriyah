@@ -1,31 +1,32 @@
-import { Context } from '../../../src/common';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { outdent } from 'outdent';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
 
 describe('Miscellaneous - Early errors', () => {
   for (const arg of [
-    `{ a = 0 });`,
-    `(...a)`,
-    `(a, ...b)`,
-    `(((...a))`,
+    '{ a = 0 });',
+    '(...a)',
+    '(a, ...b)',
+    '(((...a))',
     '(((a, ...b)))',
     '0++',
     '({a: 0} = 0);',
-    `({a(b){}} = 0)`,
+    '({a(b){}} = 0)',
     '"use strict"; ({arguments = 1} = 2);',
-    `[0] = 0;`,
-    `0 = 0;`,
-    `({a}) = 0;`,
-    `([a]) = 0;`,
-    `({a} += 0);`,
-    `[a] *= 0;`,
-    `0 /= 0;`,
-    `[...{a: 0}] = 0;`,
-    `[...[0]] = 0;`,
-    `[...0] = 0;`,
-    'a\\u{0}',
-    'a\\u0000',
-    '\\u{0}',
+    '[0] = 0;',
+    '0 = 0;',
+    '({a}) = 0;',
+    '([a]) = 0;',
+    '({a} += 0);',
+    '[a] *= 0;',
+    '0 /= 0;',
+    '[...{a: 0}] = 0;',
+    '[...[0]] = 0;',
+    '[...0] = 0;',
+    String.raw`a\u{0}`,
+    String.raw`a\u0000`,
+    String.raw`\u{0}`,
     '[...new a] = 0;',
     'for({a: 0} in 0);',
     'for([0] in 0);',
@@ -38,14 +39,14 @@ describe('Miscellaneous - Early errors', () => {
     'function *a() { (b = yield) => {} }',
     'for(([0]) of 0);',
     'for((0) of 0);',
-    '\\u0000',
-    '\\u{0}',
-    'a\\u0000',
-    '\\u{110000}',
-    '\\u{FFFFFFF}',
-    `/./\\u{69}`,
+    String.raw`\u0000`,
+    String.raw`\u{0}`,
+    String.raw`a\u0000`,
+    String.raw`\u{110000}`,
+    String.raw`\u{FFFFFFF}`,
+    String.raw`/./\u{69}`,
     //`async function a(){ (a = await (0)) => {}; }`,
-    `async function a(b = await (0)) {}`,
+    'async function a(b = await (0)) {}',
     '(async function(b = await (0)) {})',
     '({ async a(b = await (0)) {} })',
     '(class { async constructor(){} })',
@@ -54,7 +55,7 @@ describe('Miscellaneous - Early errors', () => {
     "'use strict'; +yield;",
     "!{ get a() { 'use strict'; +let; } }",
     'class let {}',
-    'class l\\u{65}t {}',
+    String.raw`class l\u{65}t {}`,
     '(class yield {})',
     '({ a(){ super(); } });',
     '"use strict"; ([yield] = a)',
@@ -146,7 +147,7 @@ describe('Miscellaneous - Early errors', () => {
     '!class A { constructor(){} constructor(){} }',
     '!class A { constructor(){} "constructor"(){} }',
     'class A extends B { static get prototype(){} }',
-    `class A extends B { a() { function f(){ super.b(); } } }`,
+    'class A extends B { a() { function f(){ super.b(); } } }',
     'for(let [let] = 0;;);',
     '({ a = 0 });',
     '(...a)',
@@ -217,17 +218,17 @@ describe('Miscellaneous - Early errors', () => {
     'function* a(){ function* b({c = yield}){} }',
     'while(1) b: function a(){}',
     "function a() { 'use strict'; let = 1; }",
-    ` for(const a in b) d: function c(){}`,
+    ' for(const a in b) d: function c(){}',
     'class a extends b { c() { function d(c = super.e()){} } }',
     '"use strict"; (eval)=>1',
-    ` /./ii`,
-    `(a, ...b)`,
+    ' /./ii',
+    '(a, ...b)',
     ' for(const a = 1, let = 2;;);',
-    ` function a() { "use strict"; private = 1; }`,
+    ' function a() { "use strict"; private = 1; }',
     'function a(static) { "use strict"; }',
     '({ a(){ super(); } });',
     'for(const a;;);',
-    `"use strict"; for (a in let) {}`,
+    '"use strict"; for (a in let) {}',
     'function* a(){ (b = yield* c) => 1; }',
     'for({a: 0} of 0);',
     'b: break a;',
@@ -274,13 +275,15 @@ describe('Miscellaneous - Early errors', () => {
     'function* a(){ function* b(c = yield){} }',
     'function a(){ c: while(1) continue b; }',
     "function a() {'use strict'; eval = 1; }",
-    '("\\u{FFFFFFF}")',
+    String.raw`("\u{FFFFFFF}")`,
     "function a() {'use strict'; function eval() { } }",
     'for(const a;;);',
     '/[a-z]/z',
-    `var af = x
-            => x;`,
-    `"use strict"; var af = package => 1;`,
+    outdent`
+      var af = x
+      => x;
+    `,
+    '"use strict"; var af = package => 1;',
     'var af = ...x => x;',
     '"use strict"; var af = (arguments) => 1;',
     'async function a(k = super.prop) { }',
@@ -319,21 +322,21 @@ describe('Miscellaneous - Early errors', () => {
     '"use strict"; var yield;',
     'function* a(){ (b = yield c) => 1; }',
     'a: while (true) { (function () { break; }); }',
-    'for(const a;;);'
+    'for(const a;;);',
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat);
+        parseSource(`${arg}`, { webcompat: true });
       });
     });
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.Strict | Context.Module);
+        parseSource(`${arg}`, { sourceType: 'module' });
       });
     });
   }

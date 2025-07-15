@@ -1,11 +1,14 @@
-import runTest from '../../scripts/run-test262';
-import * as t from 'assert';
-
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
+import * as meriyah from '../../src/meriyah';
+import runTest from '../../test262/run-test262.mjs';
 describe('Test262', function () {
-  this.timeout(Infinity);
-
-  it('Should pass tests', async () => {
-    const exitCode = await runTest();
-    t.equal(exitCode, 0);
-  });
+  it(
+    'Should pass tests',
+    async () => {
+      const exitCode = await runTest(meriyah);
+      t.equal(exitCode, 0);
+    },
+    Infinity,
+  );
 });

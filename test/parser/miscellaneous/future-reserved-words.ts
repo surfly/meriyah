@@ -1,5 +1,5 @@
-import { Context } from '../../../src/common';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
 
 describe('Miscellaneous - Future reserved words', () => {
@@ -7,19 +7,19 @@ describe('Miscellaneous - Future reserved words', () => {
     for (const arg of ['var package = 1;', 'var private = 1;', 'var yield = 1;', 'var interface = 1;']) {
       it(`"use strict"; ${arg}`, () => {
         t.throws(() => {
-          parseSource(`"use strict"; ${arg}`, undefined, Context.None);
+          parseSource(`"use strict"; ${arg}`);
         });
       });
 
       it(`"use strict"; ${arg}`, () => {
         t.throws(() => {
-          parseSource(`"use strict"; ${arg}`, undefined, Context.OptionsWebCompat);
+          parseSource(`"use strict"; ${arg}`, { webcompat: true });
         });
       });
 
       it(`${arg}`, () => {
         t.throws(() => {
-          parseSource(`${arg}`, undefined, Context.Strict | Context.Module);
+          parseSource(`${arg}`, { sourceType: 'module' });
         });
       });
     }
@@ -33,11 +33,11 @@ describe('Miscellaneous - Future reserved words', () => {
       'var class = 1;',
       'var super = 1;',
       'var class = 1;',
-      'var class = 1;'
+      'var class = 1;',
     ]) {
       it(`${arg}`, () => {
         t.throws(() => {
-          parseSource(`${arg}`, undefined, Context.None);
+          parseSource(`${arg}`);
         });
       });
     }

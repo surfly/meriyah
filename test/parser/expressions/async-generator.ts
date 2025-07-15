@@ -1,7 +1,8 @@
-import { Context } from '../../../src/common';
-import { pass, fail } from '../../test-utils';
-import * as t from 'assert';
+import * as t from 'node:assert/strict';
+import { outdent } from 'outdent';
+import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser';
+import { fail, pass } from '../../test-utils';
 
 describe('Expressions - Async Generator', () => {
   for (const arg of [
@@ -29,41 +30,41 @@ describe('Expressions - Async Generator', () => {
     '(async function *foo([...{ x }, y] = [1, 2, 3])',
     '(async function *foo([...{ x }, y])',
     '(async function *foo([...{ x } = []] = [])',
-    '(async function *foo([...{ x } = []])'
+    '(async function *foo([...{ x } = []])',
   ]) {
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
 
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsLexical);
+        parseSource(`${arg}`, { lexical: true });
       });
     });
 
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsNext);
+        parseSource(`${arg}`, { next: true });
       });
     });
 
     it(`"use strict"; ${arg}`, () => {
       t.throws(() => {
-        parseSource(`"use strict"; ${arg}`, undefined, Context.None);
+        parseSource(`"use strict"; ${arg}`);
       });
     });
 
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.Strict | Context.Module);
+        parseSource(`${arg}`, { sourceType: 'module' });
       });
     });
 
     it(`${arg}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsWebCompat);
+        parseSource(`${arg}`, { webcompat: true });
       });
     });
   }
@@ -101,822 +102,118 @@ describe('Expressions - Async Generator', () => {
     '(async function*({}) { })',
     '(async function*({ x, }) { })',
     '(async function*({ x: y = 33 }) { })',
-    `var gen = async function *g() {
-      yield [...yield];
-    };`,
-    `var gen = async function *() {
-      yield {
-           ...yield yield,
-           ...(function(arg) {
+    outdent`
+      var gen = async function *g() {
+        yield [...yield];
+      };
+    `,
+    outdent`
+      var gen = async function *() {
+        yield {
+            ...yield yield,
+            ...(function(arg) {
               var yield = arg;
               return {...yield};
-           }(yield)),
-           ...yield,
-        }
-    };`,
-    `var gen = async function *g() {
-      return (function(arg) {
-          var yield = arg + 1;
-          return yield;
-        }(yield))
-    };
-    `
+            }(yield)),
+            ...yield,
+          }
+      };
+    `,
+    outdent`
+      var gen = async function *g() {
+        return (function(arg) {
+            var yield = arg + 1;
+            return yield;
+          }(yield))
+      };
+    `,
   ]) {
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.None);
+        parseSource(`${arg}`);
       });
     });
     it(`${arg}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, undefined, Context.OptionsLexical);
+        parseSource(`${arg}`, { lexical: true });
       });
     });
     it(`() => { ${arg} }`, () => {
       t.doesNotThrow(() => {
-        parseSource(`() => { ${arg} }`, undefined, Context.None);
+        parseSource(`() => { ${arg} }`);
       });
     });
 
     it(`function foo() { ${arg}}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`function foo() { ${arg}}`, undefined, Context.None);
+        parseSource(`function foo() { ${arg}}`);
       });
     });
 
     it(`function foo() { ${arg}}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`function foo() { ${arg}}`, undefined, Context.OptionsNext);
+        parseSource(`function foo() { ${arg}}`, { next: true });
       });
     });
   }
   fail('Expressions - Async Generator (pass)', [
-    ['(async function*(a = super()) { });', Context.None],
-    ['0, async function* g(...a,) {};', Context.None],
-    ['(async function* yield() { });', Context.None],
-    ['(async function* g() { var await; });', Context.None],
-    [
-      `"use strict";
-    async function *g() {
-    return {
-         ...(function() {
-            var yield;
-         }()),
-      }
-  };`,
-      Context.None
-    ],
-    ['(async function* g() { var yield; });', Context.None],
-    ['(async function*(a = super()) { });', Context.None],
-    ['(async function*() { } = 1);', Context.None],
-    ['(async function *() { var await; })', Context.None],
-    ['(async function*([...x, y] = [1, 2, 3]) {})', Context.None],
-    ['(async function* h([...{ x } = []]) {})', Context.None],
-    ['(async.foo6 => 1)', Context.None],
-    ['(async function* h([...{ x } = []] = []) {})', Context.None],
-    ['(async function*(x = await 1) { });', Context.None],
-    ['(async function*() { await: 1; });', Context.None],
-    ['(async function *foo(...a,) {})', Context.None],
-    ['(async function *foo([...[ x ] = []])', Context.None],
-    ['(async function *foo([...{ x } = []]) {})', Context.None],
-    ['(async function *foo([...{ x } = []] = []) {})', Context.None],
-    ['(async function *foo([...x, y]) {})', Context.None],
-    ['(async function *foo([...x = []] = []) {})', Context.None],
-    ['(async function *foo(...a,) {})', Context.None],
-    ['(async function *foo([...[x], y] = [1, 2, 3]) {})', Context.None],
-    ['(async function *foo([...{ x }, y] = [1, 2, 3])', Context.None],
-    ['(async function *foo([...{ x }, y])', Context.None],
-    ['(async function *foo([...{ x } = []] = [])', Context.None],
-    ['(async function *foo([...{ x } = []])', Context.None],
-    ['(async function* yield() { });', Context.None],
-    ['(async function* g() { var await; });', Context.None],
-    ['(async function* g() { void await; });', Context.Module | Context.Strict],
-    ['(async function* g() { void yield; });', Context.None],
-    ['0, async function* g(...x = []) {}', Context.None],
-    ['(async function *foo([...{ x } = []])', Context.None],
-    ['(async function *foo([...{ x } = []])', Context.None],
-    ['(async function *foo([...{ x } = []])', Context.None],
-    ['(async function *foo([...{ x } = []])', Context.None]
+    '(async function*(a = super()) { });',
+    '0, async function* g(...a,) {};',
+    '(async function* yield() { });',
+    '(async function* g() { var await; });',
+    outdent`
+      "use strict";
+        async function *g() {
+        return {
+             ...(function() {
+                var yield;
+             }()),
+          }
+      };
+    `,
+    '(async function* g() { var yield; });',
+    '(async function*(a = super()) { });',
+    '(async function*() { } = 1);',
+    '(async function *() { var await; })',
+    '(async function*([...x, y] = [1, 2, 3]) {})',
+    '(async function* h([...{ x } = []]) {})',
+    '(async.foo6 => 1)',
+    '(async function* h([...{ x } = []] = []) {})',
+    '(async function*(x = await 1) { });',
+    '(async function*() { await: 1; });',
+    '(async function *foo(...a,) {})',
+    '(async function *foo([...[ x ] = []])',
+    '(async function *foo([...{ x } = []]) {})',
+    '(async function *foo([...{ x } = []] = []) {})',
+    '(async function *foo([...x, y]) {})',
+    '(async function *foo([...x = []] = []) {})',
+    '(async function *foo(...a,) {})',
+    '(async function *foo([...[x], y] = [1, 2, 3]) {})',
+    '(async function *foo([...{ x }, y] = [1, 2, 3])',
+    '(async function *foo([...{ x }, y])',
+    '(async function *foo([...{ x } = []] = [])',
+    '(async function *foo([...{ x } = []])',
+    '(async function* yield() { });',
+    '(async function* g() { var await; });',
+    { code: '(async function* g() { void await; });', options: { sourceType: 'module' } },
+    '(async function* g() { void yield; });',
+    '0, async function* g(...x = []) {}',
+    '(async function *foo([...{ x } = []])',
+    '(async function *foo([...{ x } = []])',
+    '(async function *foo([...{ x } = []])',
+    '(async function *foo([...{ x } = []])',
   ]);
 
   pass('Expressions - Async Generator (pass)', [
-    [
-      '(async function* h([cls = class {}, xCls = class X {}, xCls2 = class { static name() {} }]) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'ArrayPattern',
-                  elements: [
-                    {
-                      type: 'AssignmentPattern',
-                      left: {
-                        type: 'Identifier',
-                        name: 'cls'
-                      },
-                      right: {
-                        type: 'ClassExpression',
-                        id: null,
-                        superClass: null,
-                        body: {
-                          type: 'ClassBody',
-                          body: []
-                        }
-                      }
-                    },
-                    {
-                      type: 'AssignmentPattern',
-                      left: {
-                        type: 'Identifier',
-                        name: 'xCls'
-                      },
-                      right: {
-                        type: 'ClassExpression',
-                        id: {
-                          type: 'Identifier',
-                          name: 'X'
-                        },
-                        superClass: null,
-                        body: {
-                          type: 'ClassBody',
-                          body: []
-                        }
-                      }
-                    },
-                    {
-                      type: 'AssignmentPattern',
-                      left: {
-                        type: 'Identifier',
-                        name: 'xCls2'
-                      },
-                      right: {
-                        type: 'ClassExpression',
-                        id: null,
-                        superClass: null,
-                        body: {
-                          type: 'ClassBody',
-                          body: [
-                            {
-                              type: 'MethodDefinition',
-                              kind: 'method',
-                              static: true,
-                              computed: false,
-                              key: {
-                                type: 'Identifier',
-                                name: 'name'
-                              },
-                              value: {
-                                type: 'FunctionExpression',
-                                params: [],
-                                body: {
-                                  type: 'BlockStatement',
-                                  body: []
-                                },
-                                async: false,
-                                generator: false,
-                                id: null
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
+    '(async function* h([cls = class {}, xCls = class X {}, xCls2 = class { static name() {} }]) { })',
+    '(async function* h([fn = function () {}, xFn = function x() {}] = []) { })',
+    '(async function* h([{ x, y, z } = { x: 44, y: 55, z: 66 }]) { })',
+    '(async function *([{ x }]) { })',
+    '(async function*({ w: { x, y, z } = { x: 4, y: 5, z: 6 } } = { w: undefined }) { })',
+    '(async function *foo() { }.prototype)',
+    '(async function *foo([...x] = 123) { })',
+    '(async function *foo(x, y = x, z = y) { })',
 
-              id: {
-                type: 'Identifier',
-                name: 'h'
-              }
-            }
-          }
-        ]
-      }
-    ],
-    [
-      '(async function* h([fn = function () {}, xFn = function x() {}] = []) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'AssignmentPattern',
-                  left: {
-                    type: 'ArrayPattern',
-                    elements: [
-                      {
-                        type: 'AssignmentPattern',
-                        left: {
-                          type: 'Identifier',
-                          name: 'fn'
-                        },
-                        right: {
-                          type: 'FunctionExpression',
-                          params: [],
-                          body: {
-                            type: 'BlockStatement',
-                            body: []
-                          },
-                          async: false,
-                          generator: false,
-
-                          id: null
-                        }
-                      },
-                      {
-                        type: 'AssignmentPattern',
-                        left: {
-                          type: 'Identifier',
-                          name: 'xFn'
-                        },
-                        right: {
-                          type: 'FunctionExpression',
-                          params: [],
-                          body: {
-                            type: 'BlockStatement',
-                            body: []
-                          },
-                          async: false,
-                          generator: false,
-
-                          id: {
-                            type: 'Identifier',
-                            name: 'x'
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  right: {
-                    type: 'ArrayExpression',
-                    elements: []
-                  }
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
-
-              id: {
-                type: 'Identifier',
-                name: 'h'
-              }
-            }
-          }
-        ]
-      }
-    ],
-    [
-      '(async function* h([{ x, y, z } = { x: 44, y: 55, z: 66 }]) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'ArrayPattern',
-                  elements: [
-                    {
-                      type: 'AssignmentPattern',
-                      left: {
-                        type: 'ObjectPattern',
-                        properties: [
-                          {
-                            type: 'Property',
-                            kind: 'init',
-                            key: {
-                              type: 'Identifier',
-                              name: 'x'
-                            },
-                            computed: false,
-                            value: {
-                              type: 'Identifier',
-                              name: 'x'
-                            },
-                            method: false,
-                            shorthand: true
-                          },
-                          {
-                            type: 'Property',
-                            kind: 'init',
-                            key: {
-                              type: 'Identifier',
-                              name: 'y'
-                            },
-                            computed: false,
-                            value: {
-                              type: 'Identifier',
-                              name: 'y'
-                            },
-                            method: false,
-                            shorthand: true
-                          },
-                          {
-                            type: 'Property',
-                            kind: 'init',
-                            key: {
-                              type: 'Identifier',
-                              name: 'z'
-                            },
-                            computed: false,
-                            value: {
-                              type: 'Identifier',
-                              name: 'z'
-                            },
-                            method: false,
-                            shorthand: true
-                          }
-                        ]
-                      },
-                      right: {
-                        type: 'ObjectExpression',
-                        properties: [
-                          {
-                            type: 'Property',
-                            key: {
-                              type: 'Identifier',
-                              name: 'x'
-                            },
-                            value: {
-                              type: 'Literal',
-                              value: 44
-                            },
-                            kind: 'init',
-                            computed: false,
-                            method: false,
-                            shorthand: false
-                          },
-                          {
-                            type: 'Property',
-                            key: {
-                              type: 'Identifier',
-                              name: 'y'
-                            },
-                            value: {
-                              type: 'Literal',
-                              value: 55
-                            },
-                            kind: 'init',
-                            computed: false,
-                            method: false,
-                            shorthand: false
-                          },
-                          {
-                            type: 'Property',
-                            key: {
-                              type: 'Identifier',
-                              name: 'z'
-                            },
-                            value: {
-                              type: 'Literal',
-                              value: 66
-                            },
-                            kind: 'init',
-                            computed: false,
-                            method: false,
-                            shorthand: false
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
-
-              id: {
-                type: 'Identifier',
-                name: 'h'
-              }
-            }
-          }
-        ]
-      }
-    ],
-    [
-      '(async function *([{ x }]) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'ArrayPattern',
-                  elements: [
-                    {
-                      type: 'ObjectPattern',
-                      properties: [
-                        {
-                          type: 'Property',
-                          kind: 'init',
-                          key: {
-                            type: 'Identifier',
-                            name: 'x'
-                          },
-                          computed: false,
-                          value: {
-                            type: 'Identifier',
-                            name: 'x'
-                          },
-                          method: false,
-                          shorthand: true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
-
-              id: null
-            }
-          }
-        ]
-      }
-    ],
-    [
-      '(async function*({ w: { x, y, z } = { x: 4, y: 5, z: 6 } } = { w: undefined }) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'AssignmentPattern',
-                  left: {
-                    type: 'ObjectPattern',
-                    properties: [
-                      {
-                        type: 'Property',
-                        kind: 'init',
-                        key: {
-                          type: 'Identifier',
-                          name: 'w'
-                        },
-                        computed: false,
-                        value: {
-                          type: 'AssignmentPattern',
-                          left: {
-                            type: 'ObjectPattern',
-                            properties: [
-                              {
-                                type: 'Property',
-                                kind: 'init',
-                                key: {
-                                  type: 'Identifier',
-                                  name: 'x'
-                                },
-                                computed: false,
-                                value: {
-                                  type: 'Identifier',
-                                  name: 'x'
-                                },
-                                method: false,
-                                shorthand: true
-                              },
-                              {
-                                type: 'Property',
-                                kind: 'init',
-                                key: {
-                                  type: 'Identifier',
-                                  name: 'y'
-                                },
-                                computed: false,
-                                value: {
-                                  type: 'Identifier',
-                                  name: 'y'
-                                },
-                                method: false,
-                                shorthand: true
-                              },
-                              {
-                                type: 'Property',
-                                kind: 'init',
-                                key: {
-                                  type: 'Identifier',
-                                  name: 'z'
-                                },
-                                computed: false,
-                                value: {
-                                  type: 'Identifier',
-                                  name: 'z'
-                                },
-                                method: false,
-                                shorthand: true
-                              }
-                            ]
-                          },
-                          right: {
-                            type: 'ObjectExpression',
-                            properties: [
-                              {
-                                type: 'Property',
-                                key: {
-                                  type: 'Identifier',
-                                  name: 'x'
-                                },
-                                value: {
-                                  type: 'Literal',
-                                  value: 4
-                                },
-                                kind: 'init',
-                                computed: false,
-                                method: false,
-                                shorthand: false
-                              },
-                              {
-                                type: 'Property',
-                                key: {
-                                  type: 'Identifier',
-                                  name: 'y'
-                                },
-                                value: {
-                                  type: 'Literal',
-                                  value: 5
-                                },
-                                kind: 'init',
-                                computed: false,
-                                method: false,
-                                shorthand: false
-                              },
-                              {
-                                type: 'Property',
-                                key: {
-                                  type: 'Identifier',
-                                  name: 'z'
-                                },
-                                value: {
-                                  type: 'Literal',
-                                  value: 6
-                                },
-                                kind: 'init',
-                                computed: false,
-                                method: false,
-                                shorthand: false
-                              }
-                            ]
-                          }
-                        },
-                        method: false,
-                        shorthand: false
-                      }
-                    ]
-                  },
-                  right: {
-                    type: 'ObjectExpression',
-                    properties: [
-                      {
-                        type: 'Property',
-                        key: {
-                          type: 'Identifier',
-                          name: 'w'
-                        },
-                        value: {
-                          type: 'Identifier',
-                          name: 'undefined'
-                        },
-                        kind: 'init',
-                        computed: false,
-                        method: false,
-                        shorthand: false
-                      }
-                    ]
-                  }
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
-
-              id: null
-            }
-          }
-        ]
-      }
-    ],
-    [
-      '(async function *foo() { }.prototype)',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'MemberExpression',
-              object: {
-                type: 'FunctionExpression',
-                params: [],
-                body: {
-                  type: 'BlockStatement',
-                  body: []
-                },
-                async: true,
-                generator: true,
-
-                id: {
-                  type: 'Identifier',
-                  name: 'foo'
-                }
-              },
-              computed: false,
-              property: {
-                type: 'Identifier',
-                name: 'prototype'
-              }
-            }
-          }
-        ]
-      }
-    ],
-    [
-      '(async function *foo([...x] = 123) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'AssignmentPattern',
-                  left: {
-                    type: 'ArrayPattern',
-                    elements: [
-                      {
-                        type: 'RestElement',
-                        argument: {
-                          type: 'Identifier',
-                          name: 'x'
-                        }
-                      }
-                    ]
-                  },
-                  right: {
-                    type: 'Literal',
-                    value: 123
-                  }
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
-
-              id: {
-                type: 'Identifier',
-                name: 'foo'
-              }
-            }
-          }
-        ]
-      }
-    ],
-    [
-      '(async function *foo(x, y = x, z = y) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'Identifier',
-                  name: 'x'
-                },
-                {
-                  type: 'AssignmentPattern',
-                  left: {
-                    type: 'Identifier',
-                    name: 'y'
-                  },
-                  right: {
-                    type: 'Identifier',
-                    name: 'x'
-                  }
-                },
-                {
-                  type: 'AssignmentPattern',
-                  left: {
-                    type: 'Identifier',
-                    name: 'z'
-                  },
-                  right: {
-                    type: 'Identifier',
-                    name: 'y'
-                  }
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
-
-              id: {
-                type: 'Identifier',
-                name: 'foo'
-              }
-            }
-          }
-        ]
-      }
-    ],
-
-    [
-      '(async function* h([]) { })',
-      Context.None,
-      {
-        type: 'Program',
-        sourceType: 'script',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'FunctionExpression',
-              params: [
-                {
-                  type: 'ArrayPattern',
-                  elements: []
-                }
-              ],
-              body: {
-                type: 'BlockStatement',
-                body: []
-              },
-              async: true,
-              generator: true,
-
-              id: {
-                type: 'Identifier',
-                name: 'h'
-              }
-            }
-          }
-        ]
-      }
-    ]
+    '(async function* h([]) { })',
   ]);
 });
