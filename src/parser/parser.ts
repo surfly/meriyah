@@ -212,13 +212,9 @@ export class Parser {
     const { ranges } = this.options;
     if (ranges) {
       const endIndex = end ? end.index : this.startIndex;
-      if (ranges !== 'array') {
-        node.start = start.index;
-        node.end = endIndex;
-      }
-      if (ranges !== 'properties') {
-        node.range = [start.index, endIndex];
-      }
+      if (ranges.start) node.start = start.index;
+      if (ranges.end) node.end = endIndex;
+      if (ranges.range) node.range = [start.index, endIndex];
     }
 
     if (this.options.loc) {
@@ -324,13 +320,9 @@ export class Parser {
   private cloneLocationInformation<T extends ESTree.Node>(node: T, original: T) {
     const { ranges } = this.options;
     if (ranges) {
-      if (ranges !== 'array') {
-        node.start = original.start;
-        node.end = original.end;
-      }
-      if (ranges !== 'properties') {
-        node.range = [...original.range!];
-      }
+      if (ranges.start) node.start = original.start;
+      if (ranges.end) node.end = original.end;
+      if (ranges.range) node.range = [...original.range!];
     }
 
     if (this.options.loc) {
@@ -354,13 +346,9 @@ function pushComment(comments: ESTree.Comment[], options: NormalizedOptions): On
 
     const { ranges } = options;
     if (ranges) {
-      if (ranges !== 'array') {
-        comment.start = start;
-        comment.end = end;
-      }
-      if (ranges !== 'properties') {
-        comment.range = [start, end];
-      }
+      if (ranges.start) comment.start = start;
+      if (ranges.end) comment.end = end;
+      if (ranges.range) comment.range = [start, end];
     }
     if (options.loc) {
       comment.loc = loc;
@@ -377,13 +365,9 @@ function pushToken(tokens: Token[], options: NormalizedOptions): OnToken {
 
     const { ranges } = options;
     if (ranges) {
-      if (ranges !== 'array') {
-        token.start = start;
-        token.end = end;
-      }
-      if (ranges !== 'properties') {
-        token.range = [start, end];
-      }
+      if (ranges.start) token.start = start;
+      if (ranges.end) token.end = end;
+      if (ranges.range) token.range = [start, end];
     }
 
     if (options.loc) {
