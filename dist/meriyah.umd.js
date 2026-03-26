@@ -4577,10 +4577,22 @@
       return parser.getToken();
   }
 
+  function normalizeRanges(ranges) {
+      if (!ranges)
+          return undefined;
+      if (ranges === true)
+          return { start: true, end: true, range: true };
+      return {
+          start: ranges.start ?? false,
+          end: ranges.end ?? false,
+          range: ranges.range ?? false,
+      };
+  }
   function normalizeOptions(rawOptions) {
       const options = {
           validateRegex: true,
           ...rawOptions,
+          ranges: normalizeRanges(rawOptions.ranges),
       };
       if (options.module && !options.sourceType) {
           options.sourceType = 'module';
@@ -4824,11 +4836,15 @@
           return { index: this.index, line: this.line, column: this.column };
       }
       finishNode(node, start, end) {
-          if (this.options.ranges) {
-              node.start = start.index;
+          const { ranges } = this.options;
+          if (ranges) {
               const endIndex = end ? end.index : this.startIndex;
-              node.end = endIndex;
-              node.range = [start.index, endIndex];
+              if (ranges.start)
+                  node.start = start.index;
+              if (ranges.end)
+                  node.end = endIndex;
+              if (ranges.range)
+                  node.range = [start.index, endIndex];
           }
           if (this.options.loc) {
               node.loc = {
@@ -4889,8 +4905,14 @@
           return this.cloneLocationInformation({ ...original }, original);
       }
       cloneLocationInformation(node, original) {
-          if (this.options.ranges) {
-              node.range = [...original.range];
+          const { ranges } = this.options;
+          if (ranges) {
+              if (ranges.start)
+                  node.start = original.start;
+              if (ranges.end)
+                  node.end = original.end;
+              if (ranges.range)
+                  node.range = [...original.range];
           }
           if (this.options.loc) {
               node.loc = {
@@ -4908,10 +4930,14 @@
               type,
               value,
           };
-          if (options.ranges) {
-              comment.start = start;
-              comment.end = end;
-              comment.range = [start, end];
+          const { ranges } = options;
+          if (ranges) {
+              if (ranges.start)
+                  comment.start = start;
+              if (ranges.end)
+                  comment.end = end;
+              if (ranges.range)
+                  comment.range = [start, end];
           }
           if (options.loc) {
               comment.loc = loc;
@@ -4924,10 +4950,14 @@
           const token = {
               token: type,
           };
-          if (options.ranges) {
-              token.start = start;
-              token.end = end;
-              token.range = [start, end];
+          const { ranges } = options;
+          if (ranges) {
+              if (ranges.start)
+                  token.start = start;
+              if (ranges.end)
+                  token.end = end;
+              if (ranges.range)
+                  token.range = [start, end];
           }
           if (options.loc) {
               token.loc = loc;
@@ -6928,11 +6958,16 @@
           tail,
       }, start);
       const tailSize = tail ? 1 : 2;
-      if (parser.options.ranges) {
-          node.start += 1;
-          node.range[0] += 1;
-          node.end -= tailSize;
-          node.range[1] -= tailSize;
+      const { ranges } = parser.options;
+      if (ranges) {
+          if (ranges.start)
+              node.start += 1;
+          if (ranges.end)
+              node.end -= tailSize;
+          if (ranges.range) {
+              node.range[0] += 1;
+              node.range[1] -= tailSize;
+          }
       }
       if (parser.options.loc) {
           node.loc.start.column += 1;
