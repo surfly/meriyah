@@ -7,7 +7,11 @@ export type OnComment = (type: ESTree.CommentType, value: string, start: number,
 export interface Options {
     sourceType?: SourceType;
     next?: boolean;
-    ranges?: boolean;
+    ranges?: boolean | {
+        start?: boolean;
+        end?: boolean;
+        range?: boolean;
+    };
     webcompat?: boolean;
     loc?: boolean;
     raw?: boolean;
@@ -24,8 +28,14 @@ export interface Options {
     module?: boolean;
     globalReturn?: boolean;
 }
-export type NormalizedOptions = Omit<Options, 'validateRegex' | 'onComment' | 'onToken'> & {
+export interface NormalizedRanges {
+    start: boolean;
+    end: boolean;
+    range: boolean;
+}
+export type NormalizedOptions = Omit<Options, 'validateRegex' | 'onComment' | 'onToken' | 'ranges'> & {
     validateRegex: boolean;
+    ranges?: NormalizedRanges;
     onComment?: OnComment;
     onToken?: OnToken;
 };
