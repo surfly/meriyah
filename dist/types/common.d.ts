@@ -73,10 +73,11 @@ export declare const enum Origin {
     ForStatement = 32,
     Export = 64
 }
-export declare const enum AssignmentKind {
+export declare const enum AssignmentTargetKind {
     None = 0,
-    Assignable = 1,
-    CannotAssign = 2
+    Simple = 1,
+    Invalid = 2,
+    WebCompat = 4
 }
 export declare const enum DestructuringKind {
     None = 0,
@@ -97,7 +98,8 @@ export declare const enum Flags {
     StrictEvalArguments = 512,
     DisallowCall = 1024,
     HasOptionalChaining = 2048,
-    EightAndNine = 4096
+    EightAndNine = 4096,
+    DisallowInvoke = 8192
 }
 export declare const enum HoistedClassFlags {
     None = 0,

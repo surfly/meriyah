@@ -188,3 +188,4 @@ export declare class ParseError extends SyntaxError implements _Node {
     description: string;
     constructor(start: Location, end: Location, type: Errors, ...params: string[]);
 }
+export declare const isParseError: (error: unknown) => error is ParseError;

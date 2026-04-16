@@ -1,4 +1,4 @@
-import { type AssignmentKind, type DestructuringKind, Flags, type Location } from '../common';
+import { AssignmentTargetKind, DestructuringKind, Flags, type Location } from '../common';
 import { Errors } from '../errors';
 import type * as ESTree from '../estree';
 import { type NormalizedOptions, type Options } from '../options';
@@ -30,8 +30,8 @@ export declare class Parser {
     currentChar: number;
     exportedNames: Set<string>;
     exportedBindings: Set<string>;
-    assignable: AssignmentKind | DestructuringKind;
-    destructible: AssignmentKind | DestructuringKind;
+    assignable: AssignmentTargetKind;
+    destructible: DestructuringKind;
     leadingDecorators: {
         start?: Location;
         decorators: ESTree.Decorator[];
