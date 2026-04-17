@@ -95,10 +95,11 @@ export const enum Origin {
 /**
  * Masks to track the assignment kind
  */
-export const enum AssignmentKind {
+export const enum AssignmentTargetKind {
   None = 0,
-  Assignable = 1 << 0,
-  CannotAssign = 1 << 1,
+  Simple = 1 << 0,
+  Invalid = 1 << 1,
+  WebCompat = 1 << 2,
 }
 
 /**
@@ -132,6 +133,7 @@ export const enum Flags {
   DisallowCall = 1 << 10,
   HasOptionalChaining = 1 << 11,
   EightAndNine = 1 << 12,
+  DisallowInvoke = 1 << 13,
 }
 
 export const enum HoistedClassFlags {

@@ -6,3 +6,4 @@ export declare function parseModule(source: string, options?: Omit<Options, 'sou
 export declare function parse(source: string, options?: Options): Program;
 export { type Options, version };
 export type * as ESTree from './estree';
+export { isParseError, type ParseError } from './errors';
