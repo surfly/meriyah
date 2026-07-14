@@ -1,6 +1,6 @@
-import { BindingKind, Context, type Location, Origin } from '../common';
-import { Errors } from '../errors';
-import { type Parser } from './parser';
+import { BindingKind, Context, type Location, Origin } from '../common.ts';
+import { Errors } from '../errors.ts';
+import { type Parser } from './parser.ts';
 export declare const enum ScopeKind {
     ForStatement = 1,
     Block = 2,

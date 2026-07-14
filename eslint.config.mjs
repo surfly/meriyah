@@ -84,8 +84,22 @@ export default [
 
       // `eslint-plugin-unicorn`
       'unicorn/prefer-bigint-literals': 'error',
-      'unicorn/prefer-export-from': ['error', { ignoreUsedVariables: true }],
+      'unicorn/prefer-export-from': [
+        'error',
+        {
+          checkUsedVariables: false,
+        },
+      ],
       'unicorn/template-indent': 'error',
+
+      'import-x/extensions': [
+        'error',
+        'always',
+        {
+          fix: true,
+          checkTypeImports: true,
+        },
+      ],
 
       // TODO: enable it when all problems addressed
       '@typescript-eslint/explicit-function-return-type': 0,
@@ -139,6 +153,6 @@ export default [
     },
   },
   {
-    ignores: ['dist', 'src/unicode.ts', 'test262/test262', 'coverage'],
+    ignores: ['dist', 'src/unicode.ts', 'test262/test262', 'coverage', 'test.ts'],
   },
 ];

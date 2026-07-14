@@ -1,10 +1,10 @@
 import * as t from 'node:assert/strict';
 import { describe, it } from 'vitest';
-import { Context } from '../../src/common';
-import { scanSingleToken } from '../../src/lexer/scan';
-import { Parser } from '../../src/parser/parser';
-import { Token } from '../../src/token';
-import { type Options } from './../../src/options';
+import { Context } from '../../src/common.ts';
+import { scanSingleToken } from '../../src/lexer/scan.ts';
+import { Parser } from '../../src/parser/parser.ts';
+import { Token } from '../../src/token.ts';
+import { type Options } from './../../src/options.ts';
 
 describe('Lexer - String', () => {
   const tokens: ([Context, Token, string, string] | [Context, Token, string, string, Options])[] = [
@@ -140,10 +140,14 @@ describe('Lexer - String', () => {
     [Context.None, Token.StringLiteral, String.raw`"\104"`, 'D'],
     [Context.None, Token.StringLiteral, String.raw`"\221"`, ''],
 
-    // \8 \9 are acceptable in web compatibility mode
+    // \8 \9 (NonOctalDecimalEscapeSequence) are acceptable in sloppy mode (Annex B.1.2)
     [Context.None, Token.StringLiteral, String.raw`"\8"`, '8', { webcompat: true }],
     [Context.None, Token.StringLiteral, String.raw`"\9"`, '9', { webcompat: true }],
     [Context.None, Token.StringLiteral, String.raw`"a\9999"`, 'a9999', { webcompat: true }],
+    [Context.None, Token.StringLiteral, String.raw`"\8"`, '8'],
+    [Context.None, Token.StringLiteral, String.raw`"\9"`, '9'],
+    [Context.None, Token.StringLiteral, String.raw`"\9999"`, '9999'],
+    [Context.None, Token.StringLiteral, String.raw`"\9b"`, '9b'],
 
     // Line continuation
     [Context.None, Token.StringLiteral, '"a\\\nb"', 'ab'],
@@ -206,22 +210,19 @@ describe('Lexer - String', () => {
     });
   }
 
-  fail(String.raw`fails on "\9999"`, String.raw`"\9999"`, Context.None);
   // fail('fails on "\\08"', '"\\08"', Context.Strict);
   fail(String.raw`fails on "\1"`, String.raw`"\1"`, Context.Strict);
   fail('fails on "foo', '"foo', Context.None);
   fail('fails on "foo', '"foo', Context.None);
   fail(String.raw`fails on "\u{1F_639}"`, String.raw`"\u{1F_639}"`, Context.None, { next: true });
   fail(String.raw`fails on "\u007Xvwxyz"`, String.raw`"\u007Xvwxyz"`, Context.None, { next: true });
-  //fail('fails on "abc\\u{}"', '"abc\\u{}"', Context.None, { next: true });
+  fail(String.raw`fails on "abc\u{}"`, String.raw`"abc\u{}"`, Context.None, { next: true });
   fail(String.raw`fails on "abc\u}"`, String.raw`"abc\u}"`, Context.None, { next: true });
   fail(String.raw`fails on "abc\u{`, String.raw`"abc\u{"`, Context.None, { next: true });
   fail(String.raw`fails on "\u{70bc"`, String.raw`"\u{70bc"`, Context.None, { next: true });
   fail(String.raw`fails on "\u{70"`, String.raw`"\u{70"`, Context.None, { next: true });
   fail(String.raw`fails on "\u{!"`, String.raw`"\u{!"`, Context.None);
   fail(String.raw`fails on "\u"`, String.raw`"\u"`, Context.None);
-  fail(String.raw`fails on "\8"`, String.raw`"\8"`, Context.None);
-  fail(String.raw`fails on "\9`, String.raw`"\9"`, Context.None);
   fail(String.raw`fails on "\"`, String.raw`"\"`, Context.None);
   fail(String.raw`fails on "\u{10401"`, String.raw`"\u{10401"`, Context.None);
   fail(String.raw`fails on "\u{110000}"`, String.raw`"\u{110000}"`, Context.None);
@@ -251,7 +252,6 @@ describe('Lexer - String', () => {
   fail(String.raw`fails on "\6"`, String.raw`"\6"`, Context.Strict);
   fail(String.raw`fails on "\8"`, String.raw`"\8"`, Context.Strict);
   fail(String.raw`fails on "\9b"`, String.raw`"\9b"`, Context.Strict);
-  fail(String.raw`fails on "\9b"`, String.raw`"\9b"`, Context.None);
   fail(String.raw`fails on "\1"`, String.raw`"\1"`, Context.Strict);
   fail(String.raw`fails on "\01"`, String.raw`"\01"`, Context.Strict);
   fail(String.raw`fails on "\21"`, String.raw`"\21"`, Context.Strict);

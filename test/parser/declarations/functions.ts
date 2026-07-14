@@ -1,8 +1,8 @@
 import * as t from 'node:assert/strict';
 import { outdent } from 'outdent';
 import { describe, it } from 'vitest';
-import { parseSource } from '../../../src/parser';
-import { fail, pass } from '../../test-utils';
+import { parseSource } from '../../../src/parser.ts';
+import { fail, pass } from '../../test-utils.ts';
 
 describe('Declarations - Function', () => {
   for (const arg of ['package', 'public', 'instanceof']) {
@@ -156,6 +156,8 @@ describe('Declarations - Function', () => {
     { code: 'function await() {}', options: { sourceType: 'module' } },
     { code: 'function *await() {}', options: { sourceType: 'module' } },
     'function foo(package) { "use strict"; }',
+    'function foo(package, public) { "use strict"; }',
+    'o = {foo(package){ "use strict"; }}',
     String.raw`function foo(p\x61ckage) { }`,
     String.raw`function foo(p\x61ckage) { "use strict"; }`,
     String.raw`function foo(p\141ckage) { }`,

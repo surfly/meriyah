@@ -1,6 +1,6 @@
-import { Context, type Location } from '../common';
-import { type Parser } from '../parser/parser';
-import { LexerState } from './common';
+import { Context, type Location } from '../common.ts';
+import { type Parser } from '../parser/parser.ts';
+import { LexerState } from './common.ts';
 export declare const enum CommentTypeEnum {
     Single = 0,
     Multi = 1,

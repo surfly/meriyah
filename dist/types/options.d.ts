@@ -1,5 +1,5 @@
-import type * as ESTree from './estree';
-import { type Token } from './token';
+import type * as ESTree from './estree.ts';
+import { type Token } from './token.ts';
 type OnInsertedSemicolon = (pos: number) => any;
 type SourceType = 'script' | 'module' | 'commonjs';
 export type OnToken = (token: string, start: number, end: number, loc: ESTree.SourceLocation) => any;
@@ -28,7 +28,7 @@ export interface Options {
     module?: boolean;
     globalReturn?: boolean;
 }
-export interface NormalizedRanges {
+interface NormalizedRanges {
     start: boolean;
     end: boolean;
     range: boolean;

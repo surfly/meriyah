@@ -1,6 +1,8 @@
 'use strict';
 
-var version$1 = "7.1.0";
+var version$1 = "7.1.2";
+var packageJson = {
+	version: version$1};
 
 const unicodeLookup = ((compressed, lookup) => {
     const result = new Uint32Array(69632);
@@ -1538,12 +1540,14 @@ function parseEscape(parser, context, first, isTemplate = 0) {
             const ch = advanceChar(parser);
             if (parser.currentChar === 123) {
                 let code = 0;
+                let digits = 0;
                 while ((CharTypes[advanceChar(parser)] & 64) !== 0) {
                     code = (code << 4) | toHex(parser.currentChar);
                     if (code > 1114111)
                         return -5;
+                    digits++;
                 }
-                if (parser.currentChar < 1 || parser.currentChar !== 125) {
+                if (digits === 0 || parser.currentChar < 1 || parser.currentChar !== 125) {
                     return -4;
                 }
                 return code;
@@ -1568,7 +1572,7 @@ function parseEscape(parser, context, first, isTemplate = 0) {
         }
         case 56:
         case 57:
-            if (isTemplate || !parser.options.webcompat || context & 1)
+            if (isTemplate || context & 1)
                 return -3;
             parser.flags |= 4096;
         default:
@@ -4775,6 +4779,7 @@ class Parser {
     exportedBindings = new Set();
     assignable = 0;
     destructible = 0;
+    strictReservedRange = null;
     leadingDecorators = { decorators: [] };
     comments = [];
     leadingComments = [];
@@ -4973,7 +4978,7 @@ function parseSource(source, rawOptions = {}, context = 0) {
         context |= 1;
     skipHashBang(parser);
     const scope = parser.createScopeIfLexical();
-    let body = [];
+    let body;
     let sourceType = 'script';
     if (context & 2) {
         sourceType = 'module';
@@ -5497,7 +5502,6 @@ function parseTryStatement(parser, context, scope, privateScope, labels) {
 }
 function parseCatchBlock(parser, context, scope, privateScope, labels, start) {
     let param = null;
-    let additionalScope = scope;
     collectLeadingComments(parser);
     if (consumeOpt(parser, context, 67174411)) {
         scope = scope?.createChildScope(4);
@@ -5512,7 +5516,7 @@ function parseCatchBlock(parser, context, scope, privateScope, labels, start) {
         }
         consume(parser, context | 32, 16);
     }
-    additionalScope = scope?.createChildScope(32);
+    const additionalScope = scope?.createChildScope(32);
     const body = parseBlock(parser, context, additionalScope, privateScope, { $: labels });
     return parser.finishNode({
         type: 'CatchClause',
@@ -5551,7 +5555,8 @@ function parseLetIdentOrVarDeclarationStatement(parser, context, scope, privateS
     const { tokenValue, tokenStart } = parser;
     const token = parser.getToken();
     let expr = parseIdentifier(parser, context);
-    if (parser.getToken() & (143360 | 2097152)) {
+    if (parser.getToken() & (143360 | 2097152) &&
+        (parser.getToken() & 20480) !== 20480) {
         if (expr.trailingComments) {
             parser.comments = expr.trailingComments;
         }
@@ -5682,19 +5687,14 @@ function parseForStatement(parser, context, scope, privateScope, labels) {
     if (isVarDecl) {
         if (token === 241737) {
             init = parseIdentifier(parser, context);
-            if (parser.getToken() & (143360 | 2097152)) {
-                if (parser.getToken() === 8673330) {
-                    if (context & 1)
-                        parser.report(67);
-                }
-                else {
-                    collectLeadingComments(parser);
-                    init = parser.finishNode({
-                        type: 'VariableDeclaration',
-                        kind: 'let',
-                        declarations: parseVariableDeclarationList(parser, context | 131072, scope, privateScope, 8, 32),
-                    }, tokenStart);
-                }
+            if (parser.getToken() & (143360 | 2097152) &&
+                (parser.getToken() & 20480) !== 20480) {
+                collectLeadingComments(parser);
+                init = parser.finishNode({
+                    type: 'VariableDeclaration',
+                    kind: 'let',
+                    declarations: parseVariableDeclarationList(parser, context | 131072, scope, privateScope, 8, 32),
+                }, tokenStart);
                 parser.assignable = 1;
             }
             else if (context & 1) {
@@ -5817,7 +5817,7 @@ function parseImportDeclaration(parser, context, scope) {
     const start = parser.tokenStart;
     collectLeadingComments(parser);
     nextToken(parser, context);
-    let source = null;
+    let source;
     const { tokenStart } = parser;
     let specifiers = [];
     if (parser.getToken() === 134283267) {
@@ -6411,8 +6411,12 @@ function parseFunctionBody(parser, context, scope, privateScope, origin, funcNam
             }
             if (parser.flags & 512)
                 parser.report(119);
-            if (parser.flags & 256)
+            if (parser.flags & 256) {
+                if (parser.strictReservedRange) {
+                    throw new ParseError(parser.strictReservedRange[0], parser.strictReservedRange[1], 118);
+                }
                 parser.report(118);
+            }
         }
     }
     parser.flags =
@@ -6954,6 +6958,7 @@ function parseTemplate(parser, context, privateScope) {
         consume(parser, context, 67174409);
         quasis.push(parseTemplateElement(parser, tokenValue, tokenRaw, tokenStart, true));
     }
+    parser.assignable = 2;
     return parser.finishNode({
         type: 'TemplateLiteral',
         expressions,
@@ -8078,6 +8083,7 @@ function parseMethodFormals(parser, context, scope, privateScope, kind, type, in
     consume(parser, context, 67174411);
     const params = [];
     parser.flags = (parser.flags | 128) ^ 128;
+    parser.strictReservedRange = null;
     if (parser.getToken() === 16) {
         if (kind & 512) {
             parser.report(37, 'Setter', 'one', '');
@@ -8101,6 +8107,7 @@ function parseMethodFormals(parser, context, scope, privateScope, kind, type, in
             if ((context & 1) === 0) {
                 if ((parser.getToken() & 36864) === 36864) {
                     parser.flags |= 256;
+                    parser.strictReservedRange ??= [tokenStart, parser.currentLocation];
                 }
                 if ((parser.getToken() & 537079808) === 537079808) {
                     parser.flags |= 512;
@@ -8417,6 +8424,7 @@ function parseArrowFunctionExpression(parser, context, scope, privateScope, para
 function parseFormalParametersOrFormalList(parser, context, scope, privateScope, inGroup, kind) {
     consume(parser, context, 67174411);
     parser.flags = (parser.flags | 128) ^ 128;
+    parser.strictReservedRange = null;
     const params = [];
     if (consumeOpt(parser, context, 16))
         return params;
@@ -8430,6 +8438,7 @@ function parseFormalParametersOrFormalList(parser, context, scope, privateScope,
             if ((context & 1) === 0) {
                 if ((token & 36864) === 36864) {
                     parser.flags |= 256;
+                    parser.strictReservedRange ??= [tokenStart, parser.currentLocation];
                 }
                 if ((token & 537079808) === 537079808) {
                     parser.flags |= 512;
@@ -8597,7 +8606,7 @@ function parseAsyncArrowOrCallExpression(parser, context, privateScope, callee, 
         }, start);
     }
     let destructible = 0;
-    let expr = null;
+    let expr;
     let isNonSimpleParameterList = 0;
     parser.destructible =
         (parser.destructible | 256 | 128) ^
@@ -8913,6 +8922,9 @@ function parseClassElementList(parser, context, scope, privateScope, inheritedCo
                 break;
             case 209008:
                 if (parser.getToken() !== 67174411) {
+                    if (parser.getToken() === 8391476 && parser.flags & 1) {
+                        return parsePropertyDefinition(parser, context, privateScope, key, kind, decorators, start);
+                    }
                     if ((parser.getToken() & 1073741824) === 1073741824) {
                         return parsePropertyDefinition(parser, context, privateScope, key, kind, decorators, start);
                     }
@@ -8921,6 +8933,9 @@ function parseClassElementList(parser, context, scope, privateScope, inheritedCo
                 break;
             case 209009:
                 if (parser.getToken() !== 67174411) {
+                    if (parser.getToken() === 8391476 && parser.flags & 1) {
+                        return parsePropertyDefinition(parser, context, privateScope, key, kind, decorators, start);
+                    }
                     if ((parser.getToken() & 1073741824) === 1073741824) {
                         return parsePropertyDefinition(parser, context, privateScope, key, kind, decorators, start);
                     }
@@ -9398,7 +9413,7 @@ function parseJSXExpressionContainer(parser, context, privateScope, inJSXChild, 
     const { tokenStart } = parser;
     if (parser.getToken() === 14)
         return parseJSXSpreadChild(parser, context, privateScope, start);
-    let expression = null;
+    let expression;
     if (parser.getToken() === 1074790415) {
         if (isAttr)
             parser.report(157);
@@ -9455,7 +9470,7 @@ function parseJSXIdentifier(parser, context) {
     }, start);
 }
 
-const version = version$1;
+const { version } = packageJson;
 function parseScript(source, options) {
     return parseSource(source, { ...options, sourceType: 'script' });
 }

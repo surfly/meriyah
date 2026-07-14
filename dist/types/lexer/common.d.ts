@@ -1,5 +1,5 @@
-import { type Parser } from '../parser/parser';
-import { Token } from '../token';
+import { type Parser } from '../parser/parser.ts';
+import { Token } from '../token.ts';
 export declare const enum LexerState {
     None = 0,
     NewLine = 1,

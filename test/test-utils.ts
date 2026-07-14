@@ -1,9 +1,9 @@
 import { codeFrameColumns } from '@babel/code-frame';
 import { describe, expect, it } from 'vitest';
-import { Context } from '../src/common';
-import { ParseError } from '../src/errors';
-import { type Options } from '../src/options';
-import { parseSource } from '../src/parser';
+import { Context } from '../src/common.ts';
+import { ParseError } from '../src/errors.ts';
+import { type Options } from '../src/options.ts';
+import { parseSource } from '../src/parser.ts';
 
 const IS_CI = Boolean(process.env.CI);
 // https://github.com/vitest-dev/vitest/issues/8151
@@ -17,20 +17,9 @@ const serializeParserError = (code: string, error: unknown) => {
     throw error;
   }
 
-  const {
-    message,
-    loc: { start, end },
-    description,
-  } = error;
+  const { message, loc, description } = error;
 
-  const codeFrame = codeFrameColumns(
-    code,
-    {
-      start: { line: start.line, column: start.column + 1 },
-      end: { line: end.line, column: end.column + 1 },
-    },
-    { highlightCode: false, message: description },
-  );
+  const codeFrame = codeFrameColumns(code, loc, { highlightCode: false, message: description });
 
   return `${error.name} ${message}\n${codeFrame}`;
 };
@@ -81,3 +70,23 @@ export const fail = (name: string, testCases: TestCase[]) => {
     });
   });
 };
+
+export function visitNode(node: any, fn: any) {
+  if (Array.isArray(node)) {
+    for (let i = 0; i < node.length; i++) {
+      node[i] = visitNode(node[i], fn);
+    }
+    return node;
+  }
+
+  if (typeof node?.type !== 'string') {
+    return node;
+  }
+
+  const keys = Object.keys(node);
+  for (let i = 0; i < keys.length; i++) {
+    node[keys[i]] = visitNode(node[keys[i]], fn);
+  }
+
+  return fn(node) ?? node;
+}

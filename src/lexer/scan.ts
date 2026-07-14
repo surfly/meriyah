@@ -1,10 +1,10 @@
-import { Chars } from '../chars';
-import { Context, Flags } from '../common';
-import { Errors } from '../errors';
-import { type Parser } from '../parser/parser';
-import { Token } from '../token';
-import { isIDStart } from '../unicode';
-import { CommentTypeEnum, skipMultiLineComment, skipSingleHTMLComment, skipSingleLineComment } from './comments';
+import { Chars } from '../chars.ts';
+import { Context, Flags } from '../common.ts';
+import { Errors } from '../errors.ts';
+import { type Parser } from '../parser/parser.ts';
+import { Token } from '../token.ts';
+import { isIDStart } from '../unicode.ts';
+import { CommentTypeEnum, skipMultiLineComment, skipSingleHTMLComment, skipSingleLineComment } from './comments.ts';
 import {
   advanceChar,
   consumeLineFeed,
@@ -13,12 +13,12 @@ import {
   LexerState,
   NumberKind,
   scanNewLine,
-} from './common';
-import { scanIdentifier, scanIdentifierSlowCase, scanPrivateIdentifier, scanUnicodeIdentifier } from './identifier';
-import { scanNumber } from './numeric';
-import { scanRegularExpression } from './regexp';
-import { scanString } from './string';
-import { scanTemplate } from './template';
+} from './common.ts';
+import { scanIdentifier, scanIdentifierSlowCase, scanPrivateIdentifier, scanUnicodeIdentifier } from './identifier.ts';
+import { scanNumber } from './numeric.ts';
+import { scanRegularExpression } from './regexp.ts';
+import { scanString } from './string.ts';
+import { scanTemplate } from './template.ts';
 
 /*
  * OneChar:          40,  41,  44,  58,  59,  63,  91,  93,  123, 125, 126:
@@ -277,7 +277,14 @@ export function scanSingleToken(parser: Parser, context: Context, state: LexerSt
               ) {
                 parser.column += 3;
                 parser.currentChar = source.charCodeAt((parser.index += 3));
-                state = skipSingleHTMLComment(parser, source, state, context, CommentTypeEnum.HTMLOpen, parser.tokenStart);
+                state = skipSingleHTMLComment(
+                  parser,
+                  source,
+                  state,
+                  context,
+                  CommentTypeEnum.HTMLOpen,
+                  parser.tokenStart,
+                );
                 continue;
               }
               return Token.LessThan;
@@ -382,7 +389,14 @@ export function scanSingleToken(parser: Parser, context: Context, state: LexerSt
             if ((state & LexerState.NewLine || isStartOfLine) && parser.currentChar === Chars.GreaterThan) {
               if (!parser.options.webcompat) parser.report(Errors.HtmlCommentInWebCompat);
               advanceChar(parser);
-              state = skipSingleHTMLComment(parser, source, state, context, CommentTypeEnum.HTMLClose, parser.tokenStart);
+              state = skipSingleHTMLComment(
+                parser,
+                source,
+                state,
+                context,
+                CommentTypeEnum.HTMLClose,
+                parser.tokenStart,
+              );
               continue;
             }
 

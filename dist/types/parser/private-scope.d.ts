@@ -1,5 +1,5 @@
-import { type Location, PropertyKind } from '../common';
-import { type Parser } from './parser';
+import { type Location, PropertyKind } from '../common.ts';
+import { type Parser } from './parser.ts';
 export declare class PrivateScope {
     readonly parser: Parser;
     readonly parent?: PrivateScope | undefined;

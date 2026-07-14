@@ -1,3 +1,24 @@
+## [7.1.2](https://github.com/meriyah/meriyah/compare/v7.1.1...v7.1.2) (2026-07-11)
+
+### Bug Fixes
+
+* **lexer:** reject empty unicode code point escape \u{} ([#562](https://github.com/meriyah/meriyah/issues/562)) ([6dd2bba](https://github.com/meriyah/meriyah/commit/6dd2bba7bf9375f751ee9214526e4592702dab9d))
+* **parser:** mark template literal with substitutions as invalid assignment target ([#563](https://github.com/meriyah/meriyah/issues/563)) ([addcad6](https://github.com/meriyah/meriyah/commit/addcad684d5f1e13bcaebe8e97db7ca39370f603))
+* **parser:** parse get and set fields before generators ([#576](https://github.com/meriyah/meriyah/issues/576)) ([cad0605](https://github.com/meriyah/meriyah/commit/cad06053fc9ee16a2217f84ca46d45d9b25c17e7))
+* **parser:** treat let as identifier before in and instanceof ([#577](https://github.com/meriyah/meriyah/issues/577)) ([4a08591](https://github.com/meriyah/meriyah/commit/4a085918dce320f39b535a15eafb774a0b4b90b0))
+
+## [7.1.1](https://github.com/meriyah/meriyah/compare/v7.1.0...v7.1.1) (2026-07-05)
+
+
+### Bug Fixes
+
+* **lexer:** accept \8 and \9 escapes in sloppy mode ([#559](https://github.com/meriyah/meriyah/issues/559)) ([8938494](https://github.com/meriyah/meriyah/commit/893849491bb493cd7e72280e82c4fb344915a4cb))
+* **parser:** fix for-of initializer check ([#549](https://github.com/meriyah/meriyah/issues/549)) ([72952d1](https://github.com/meriyah/meriyah/commit/72952d144b5f8a2715c72ba54c50e42e987dc4a8)), closes [#548](https://github.com/meriyah/meriyah/issues/548)
+* **parser:** fix the invoke check after arrow function when newline is involved ([#551](https://github.com/meriyah/meriyah/issues/551)) ([c6904bc](https://github.com/meriyah/meriyah/commit/c6904bce68ec824ca7dc9a42a7e5eb6352eddd47))
+* **parser:** report strict reserved parameters at their original range ([#558](https://github.com/meriyah/meriyah/issues/558)) ([842e276](https://github.com/meriyah/meriyah/commit/842e2768bf76f920a303df375e07eb6dcd085fb1)), closes [#470](https://github.com/meriyah/meriyah/issues/470)
+
+
+
 # [7.1.0](https://github.com/meriyah/meriyah/compare/v7.0.0...v7.1.0) (2026-02-04)
 
 

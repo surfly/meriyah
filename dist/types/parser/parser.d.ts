@@ -1,10 +1,10 @@
-import { AssignmentTargetKind, DestructuringKind, Flags, type Location } from '../common';
-import { Errors } from '../errors';
-import type * as ESTree from '../estree';
-import { type NormalizedOptions, type Options } from '../options';
-import { Token } from '../token';
-import { PrivateScope } from './private-scope';
-import { Scope, type ScopeKind } from './scope';
+import { AssignmentTargetKind, DestructuringKind, Flags, type Location } from '../common.ts';
+import { Errors } from '../errors.ts';
+import type * as ESTree from '../estree.ts';
+import { type NormalizedOptions, type Options } from '../options.ts';
+import { Token } from '../token.ts';
+import { PrivateScope } from './private-scope.ts';
+import { Scope, type ScopeKind } from './scope.ts';
 export declare class Parser {
     readonly source: string;
     private lastOnToken;
@@ -32,6 +32,7 @@ export declare class Parser {
     exportedBindings: Set<string>;
     assignable: AssignmentTargetKind;
     destructible: DestructuringKind;
+    strictReservedRange: [Location, Location] | null;
     leadingDecorators: {
         start?: Location;
         decorators: ESTree.Decorator[];

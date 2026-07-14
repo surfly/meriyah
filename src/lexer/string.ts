@@ -1,10 +1,10 @@
-import { Chars } from '../chars';
-import { Context, Flags } from '../common';
-import { Errors } from '../errors';
-import { type Parser } from '../parser/parser';
-import { Token } from '../token';
-import { CharFlags, CharTypes } from './charClassifier';
-import { advanceChar, toHex } from './common';
+import { Chars } from '../chars.ts';
+import { Context, Flags } from '../common.ts';
+import { Errors } from '../errors.ts';
+import { type Parser } from '../parser/parser.ts';
+import { Token } from '../token.ts';
+import { CharFlags, CharTypes } from './charClassifier.ts';
+import { advanceChar, toHex } from './common.ts';
 // Intentionally negative
 export const enum Escape {
   Empty = -1,
@@ -188,12 +188,14 @@ export function parseEscape(parser: Parser, context: Context, first: number, isT
 
       if (parser.currentChar === Chars.LeftBrace) {
         let code = 0;
+        let digits = 0;
         while ((CharTypes[advanceChar(parser)] & CharFlags.Hex) !== 0) {
           code = (code << 4) | toHex(parser.currentChar);
           if (code > Chars.NonBMPMax) return Escape.OutOfRange;
+          digits++;
         }
 
-        if (parser.currentChar < 1 || (parser.currentChar as number) !== Chars.RightBrace) {
+        if (digits === 0 || parser.currentChar < 1 || (parser.currentChar as number) !== Chars.RightBrace) {
           return Escape.InvalidHex;
         }
         return code;
@@ -218,7 +220,7 @@ export function parseEscape(parser: Parser, context: Context, first: number, isT
     // `8`, `9` (invalid escapes)
     case Chars.Eight:
     case Chars.Nine:
-      if (isTemplate || !parser.options.webcompat || context & Context.Strict) return Escape.EightOrNine;
+      if (isTemplate || context & Context.Strict) return Escape.EightOrNine;
       parser.flags |= Flags.EightAndNine;
     // fallthrough
     default:

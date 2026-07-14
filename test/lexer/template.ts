@@ -1,10 +1,10 @@
 import * as t from 'node:assert/strict';
 import { describe, it } from 'vitest';
-import { Context } from '../../src/common';
-import { scanSingleToken } from '../../src/lexer/scan';
-import { Parser } from '../../src/parser/parser';
-import { Token } from '../../src/token';
-import { type Options } from './../../src/options';
+import { Context } from '../../src/common.ts';
+import { scanSingleToken } from '../../src/lexer/scan.ts';
+import { Parser } from '../../src/parser/parser.ts';
+import { Token } from '../../src/token.ts';
+import { type Options } from './../../src/options.ts';
 
 describe('Lexer - Template', () => {
   describe('Lexer - Template Tail', () => {
@@ -166,7 +166,6 @@ describe('Lexer - Template', () => {
     });
   }
 
-  fail(String.raw`fails on "\9999"`, String.raw`"\9999"`, Context.None);
   fail('fails on "foo', '"foo', Context.None);
   fail(String.raw`fails on "\u007"`, String.raw`"\u007"`, Context.None, { next: true });
   fail(String.raw`fails on "\u007Xvwxyz"`, String.raw`"\u007Xvwxyz"`, Context.None, { next: true });
@@ -177,8 +176,6 @@ describe('Lexer - Template', () => {
   fail(String.raw`fails on "\u{70"`, String.raw`"\u{70"`, Context.None, { next: true });
   fail(String.raw`fails on "\u{!"`, String.raw`"\u{!"`, Context.None);
   fail(String.raw`fails on "\u"`, String.raw`"\u"`, Context.None);
-  fail(String.raw`fails on "\8"`, String.raw`"\8"`, Context.None);
-  fail(String.raw`fails on "\9`, String.raw`"\9"`, Context.None);
   fail(String.raw`fails on "\"`, String.raw`"\"`, Context.None);
   fail(String.raw`fails on "\u{10401"`, String.raw`"\u{10401"`, Context.None);
   fail(String.raw`fails on "\u{110000}"`, String.raw`"\u{110000}"`, Context.None);
@@ -208,7 +205,6 @@ describe('Lexer - Template', () => {
   fail(String.raw`fails on "\6"`, String.raw`"\6"`, Context.Strict);
   fail(String.raw`fails on "\8"`, String.raw`"\8"`, Context.Strict);
   fail(String.raw`fails on "\9b"`, String.raw`"\9b"`, Context.Strict);
-  fail(String.raw`fails on "\9b"`, String.raw`"\9b"`, Context.None);
   fail(String.raw`fails on "\1"`, String.raw`"\1"`, Context.Strict);
   fail(String.raw`fails on "\01"`, String.raw`"\01"`, Context.Strict);
   fail(String.raw`fails on "\21"`, String.raw`"\21"`, Context.Strict);

@@ -1,8 +1,8 @@
 import * as t from 'node:assert/strict';
 import { describe, it } from 'vitest';
-import { Context } from '../../../src/common';
-import { parseSource } from '../../../src/parser';
-import { fail, pass } from '../../test-utils';
+import { Context } from '../../../src/common.ts';
+import { parseSource } from '../../../src/parser.ts';
+import { fail, pass } from '../../test-utils.ts';
 
 describe('Expressions - Template', () => {
   for (const arg of [
@@ -423,6 +423,11 @@ describe('Expressions - Template', () => {
     '[z``] = {}',
     '[`${"a"}`] = {}',
     '[`${""}`] = {}',
+    '`${a}` = 1',
+    '`${a}` += 1',
+    '`${a}`++',
+    '`${a}`--',
+    'for (`${a}` of b);',
     '`\\7`',
     '`\\10`',
     '`\\01`',
@@ -439,6 +444,7 @@ describe('Expressions - Template', () => {
     '`\\001`',
     '`a${await foo}d`',
     '`\\u{g}`',
+    '`\\u{}`',
     '`\\u00g0`',
     '`\\ufffg${',
     '`\\uAA`',

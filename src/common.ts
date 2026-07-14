@@ -1,8 +1,8 @@
-import { Errors } from './errors';
-import { type Comment } from './estree';
-import { nextToken } from './lexer/scan';
-import { type Parser } from './parser/parser';
-import { KeywordDescTable, Token } from './token';
+import { Errors } from './errors.ts';
+import { type Comment } from './estree.ts';
+import { nextToken } from './lexer/scan.ts';
+import { type Parser } from './parser/parser.ts';
+import { KeywordDescTable, Token } from './token.ts';
 
 /**
  * The core context, passed around everywhere as a simple immutable bit set

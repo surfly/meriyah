@@ -10,7 +10,7 @@
 
 <br>
 
-## Surfly notes
+## Surfly Notes
 
 We use meriyah directly from `dist/meriyah.umd.js`.
 Therefore, after each change we need to compile updated version with `npm run bundle` and commit it.
@@ -31,6 +31,10 @@ Therefore, after each change we need to compile updated version with `npm run bu
 - No backtracking
 - Low memory usage
 
+### Not yet supported features:
+
+- [Explicit Resource Management](https://github.com/tc39/proposal-explicit-resource-management)
+
 ## ESNext Stage 3 features
 
 ### Supported stage 3 features:
@@ -38,12 +42,11 @@ Therefore, after each change we need to compile updated version with `npm run bu
 These features need to be enabled with the `next` option.
 
 - [Decorators](https://github.com/tc39/proposal-decorators)
-- [JSON Modules](https://github.com/tc39/proposal-json-modules)
 
 ### Not yet supported stage 3 features:
 
-- [Explicit resource management](https://github.com/tc39/proposal-explicit-resource-management)
-- [Source phase import](https://github.com/tc39/proposal-source-phase-imports)
+- [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports)
+- [Deferring Module Evaluation](https://github.com/tc39/proposal-defer-import-eval)
 
 ## RegExp support
 

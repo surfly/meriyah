@@ -5,7 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedParameters": true,
@@ -22,7 +22,9 @@
     "types": ["node", "./types/test262-parser-runner.d.ts"],
     "skipLibCheck": true,
     "noEmit": true,
-    "module": "esnext"
+    "module": "esnext",
+    "rewriteRelativeImportExtensions": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["src", "test"]
 }

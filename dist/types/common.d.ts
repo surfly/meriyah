@@ -1,6 +1,6 @@
-import { type Comment } from './estree';
-import { type Parser } from './parser/parser';
-import { Token } from './token';
+import { type Comment } from './estree.ts';
+import { type Parser } from './parser/parser.ts';
+import { Token } from './token.ts';
 export declare const enum Context {
     None = 0,
     Strict = 1,

@@ -1,9 +1,10 @@
 import * as t from 'node:assert/strict';
 import * as acorn from 'acorn';
 import { it } from 'vitest';
-import type * as ESTree from '../../src/estree';
-import * as meriyah from '../../src/meriyah';
+import type * as ESTree from '../../src/estree.ts';
+import * as meriyah from '../../src/meriyah.ts';
 import getTest262Fixtures, { type TestCase } from '../../test262/get-test262-fixtures.mjs';
+import { visitNode } from '../test-utils.ts';
 
 const { TEST262_FILE } = process.env;
 
@@ -12,10 +13,6 @@ const notAlignedTests = new Set([
   'language/expressions/template-literal/tv-line-continuation.js',
   'language/expressions/template-literal/tv-line-terminator-sequence.js',
   'built-ins/String/raw/special-characters.js',
-
-  // https://github.com/meriyah/meriyah/issues/475
-  'staging/sm/Function/function-name-computed-01.js',
-  'staging/sm/Function/function-name-computed-02.js',
 ]);
 
 it(
@@ -52,13 +49,11 @@ function runTest(testCase: TestCase) {
   const meriyahAst = parseMeriyah(testCase.contents, testCase.sourceType);
 
   const isNotAlignedTest = notAlignedTests.has(testCase.file);
+  let passed;
 
   try {
     t.deepEqual(meriyahAst, acornAst);
-
-    if (isNotAlignedTest) {
-      console.log(`'${testCase.file}' now have the same AST shape as Acorn, please remove from the 'notAlignedTests'.`);
-    }
+    passed = true;
   } catch (error) {
     if (isNotAlignedTest) {
       return;
@@ -70,6 +65,12 @@ function runTest(testCase: TestCase) {
       );
     console.error(testCase);
     throw error;
+  }
+
+  if (isNotAlignedTest && passed) {
+    throw new Error(
+      `'${testCase.file}' now have the same AST shape as Acorn, please remove from the 'notAlignedTests'.`,
+    );
   }
 }
 
@@ -86,6 +87,7 @@ function parseMeriyah(text: string, sourceType: 'module' | 'script') {
     raw: true,
     onComment: comments,
     preserveParens: true,
+    jsx: false,
   }) as MeriyahAst;
 
   ast.comments = comments;
@@ -172,24 +174,4 @@ function fixAcornAst(ast: acorn.Program, text: string): MeriyahAst {
 
     return node;
   });
-}
-
-function visitNode(node: any, fn: any) {
-  if (Array.isArray(node)) {
-    for (let i = 0; i < node.length; i++) {
-      node[i] = visitNode(node[i], fn);
-    }
-    return node;
-  }
-
-  if (typeof node?.type !== 'string') {
-    return node;
-  }
-
-  const keys = Object.keys(node);
-  for (let i = 0; i < keys.length; i++) {
-    node[keys[i]] = visitNode(node[keys[i]], fn);
-  }
-
-  return fn(node) ?? node;
 }
