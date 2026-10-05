@@ -1,4 +1,5 @@
 import { Errors } from './errors.ts';
+import type * as ESTree from './estree.ts';
 import { type Comment } from './estree.ts';
 import { nextToken } from './lexer/scan.ts';
 import { type Parser } from './parser/parser.ts';
@@ -29,6 +30,7 @@ export const enum Context {
   DisallowIn = 1 << 17,
   AllowEscapedKeyword = 1 << 18,
   InStaticBlock = 1 << 19,
+  InJSXTag = 1 << 20,
 }
 
 /**
@@ -233,16 +235,24 @@ export function consume(parser: Parser, context: Context, t: Token): void {
 }
 
 /**
+ * A node seen through the in-place rewrite `reinterpretToPattern` performs: the
+ * `type` discriminant is writable and the `operator` of an assignment is removable.
+ */
+type RewrittenNode = { type: ESTree.Node['type']; operator?: string };
+
+/**
  * Transforms a `LeftHandSideExpression` into a `AssignmentPattern` if possible,
  * otherwise it returns the original tree.
  *
  * @param parser Parser state
- * @param {*} node
+ * @param node Node to transform
  */
-export function reinterpretToPattern(parser: Parser, node: any): void {
+export function reinterpretToPattern(parser: Parser, node: ESTree.Node): void {
+  const rewritten: RewrittenNode = node;
+
   switch (node.type) {
     case 'ArrayExpression': {
-      node.type = 'ArrayPattern';
+      rewritten.type = 'ArrayPattern';
       const { elements } = node;
       for (let i = 0, n = elements.length; i < n; ++i) {
         const element = elements[i];
@@ -251,7 +261,7 @@ export function reinterpretToPattern(parser: Parser, node: any): void {
       return;
     }
     case 'ObjectExpression': {
-      node.type = 'ObjectPattern';
+      rewritten.type = 'ObjectPattern';
       const { properties } = node;
       for (let i = 0, n = properties.length; i < n; ++i) {
         reinterpretToPattern(parser, properties[i]);
@@ -259,16 +269,16 @@ export function reinterpretToPattern(parser: Parser, node: any): void {
       return;
     }
     case 'AssignmentExpression':
-      node.type = 'AssignmentPattern';
+      rewritten.type = 'AssignmentPattern';
       if (node.operator !== '=') parser.report(Errors.InvalidDestructuringTarget);
-      delete node.operator;
+      delete rewritten.operator;
       reinterpretToPattern(parser, node.left);
       return;
     case 'Property':
       reinterpretToPattern(parser, node.value);
       return;
     case 'SpreadElement':
-      node.type = 'RestElement';
+      rewritten.type = 'RestElement';
       reinterpretToPattern(parser, node.argument);
     // No default
   }
@@ -361,8 +371,11 @@ export function validateFunctionName(parser: Parser, context: Context, t: Token)
  */
 
 export function isStrictReservedWord(parser: Parser, context: Context, t: Token): boolean {
-  if (t === Token.AwaitKeyword) {
+  if ((t & Token.Type) === (Token.AwaitKeyword & Token.Type)) {
     if (context & (Context.InAwaitContext | Context.Module)) parser.report(Errors.AwaitIdentInModuleOrAsyncFunc);
+    if ((parser.destructible & DestructuringKind.Await) === 0) {
+      parser.firstAwaitLocation ??= { start: parser.tokenStart, end: parser.currentLocation };
+    }
     parser.destructible |= DestructuringKind.Await;
   }
 
@@ -378,11 +391,10 @@ export function isStrictReservedWord(parser: Parser, context: Context, t: Token)
 /**
  * Checks if the property has any private field key
  *
- * @param parser Parser object
- * @param context  Context masks
+ * @param expr Expression to check
  */
-export function isPropertyWithPrivateFieldKey(expr: any): boolean {
-  return !expr.property ? false : expr.property.type === 'PrivateIdentifier';
+export function isPropertyWithPrivateFieldKey(expr: ESTree.Expression): boolean {
+  return expr.type === 'MemberExpression' && expr.property.type === 'PrivateIdentifier';
 }
 
 /**
@@ -393,14 +405,26 @@ export function isPropertyWithPrivateFieldKey(expr: any): boolean {
  * @param name Current label
  * @param isIterationStatement
  */
-export function isValidLabel(parser: Parser, labels: any, name: string, isIterationStatement: 0 | 1): 0 | 1 {
+export function isValidLabel(
+  parser: Parser,
+  labels: ESTree.Labels | undefined,
+  name: string,
+  isIterationStatement: 0 | 1,
+): 0 | 1 {
+  // A `continue` may only target a label of an iteration statement it is nested in, so
+  // the label has to be declared in the label set that iteration statement was parsed
+  // with. Label sets chain outwards and the set marked `loop` is an iteration statement
+  // body, so the set right above such a set holds that statement's own labels.
+  let isIterationLabelSet: 0 | 1 = 0;
+
   while (labels) {
-    if (labels['$' + name]) {
-      if (isIterationStatement) parser.report(Errors.InvalidNestedStatement);
+    if (labels.names?.has(name)) {
+      // A label is declared at most once per chain, so this is its only declaration.
+      if (isIterationStatement && !isIterationLabelSet) parser.report(Errors.InvalidNestedStatement, name);
       return 1;
     }
-    if (isIterationStatement && labels.loop) isIterationStatement = 0;
-    labels = labels['$'];
+    isIterationLabelSet = labels.loop ? 1 : 0;
+    labels = labels.parent;
   }
 
   return 0;
@@ -414,28 +438,25 @@ export function isValidLabel(parser: Parser, labels: any, name: string, isIterat
  * @param labels Object holding the labels
  * @param name Current label
  */
-export function validateAndDeclareLabel(parser: Parser, labels: any, name: string): void {
-  let set = labels;
+export function validateAndDeclareLabel(parser: Parser, labels: ESTree.Labels, name: string): void {
+  let set: ESTree.Labels | undefined = labels;
   while (set) {
-    if (set['$' + name]) parser.report(Errors.LabelRedeclaration, name);
-    set = set['$'];
+    if (set.names?.has(name)) parser.report(Errors.LabelRedeclaration, name);
+    set = set.parent;
   }
 
-  labels['$' + name] = 1;
+  (labels.names ??= new Set()).add(name);
 }
 
 /** @internal */
-export function isEqualTagName(elementName: any): any {
+export function isEqualTagName(elementName: ESTree.JSXTagNameExpression): string {
   switch (elementName.type) {
     case 'JSXIdentifier':
       return elementName.name;
     case 'JSXNamespacedName':
-      return elementName.namespace + ':' + elementName.name;
+      return isEqualTagName(elementName.namespace) + ':' + elementName.name.name;
     case 'JSXMemberExpression':
       return isEqualTagName(elementName.object) + '.' + isEqualTagName(elementName.property);
-    /* istanbul ignore next */
-    default:
-    // ignore
   }
 }
 
@@ -450,7 +471,7 @@ export function isValidIdentifier(context: Context, t: Token): boolean {
   return (t & Token.Contextual) === Token.Contextual || (t & Token.FutureReserved) === Token.FutureReserved;
 }
 
-export function classifyIdentifier(parser: Parser, context: Context, t: Token): any {
+export function classifyIdentifier(parser: Parser, context: Context, t: Token): void {
   if ((t & Token.IsEvalOrArguments) === Token.IsEvalOrArguments) {
     if (context & Context.Strict) parser.report(Errors.StrictEvalArguments);
     parser.flags |= Flags.StrictEvalArguments;

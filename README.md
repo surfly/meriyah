@@ -5,6 +5,7 @@
 <p align="center">
     <a href="https://www.npmjs.com/package/meriyah"><img src="https://img.shields.io/npm/v/meriyah.svg?style=flat-square" alt="Meriyah NPM"/></a>
     <a href="https://github.com/meriyah/meriyah/actions/workflows/node.js.yml?query=branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/meriyah/meriyah/node.js.yml?branch=main&label=test&style=flat-square" alt="Node.js CI"/></a>
+    <a href="https://app.codecov.io/gh/meriyah/meriyah"><img src="https://img.shields.io/codecov/c/github/meriyah/meriyah?style=flat-square" alt="Coverage"/></a>
     <a href="https://github.com/meriyah/meriyah/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/meriyah/meriyah.svg?style=flat-square" alt="License" /></a>
 </p>
 
@@ -31,10 +32,6 @@ Therefore, after each change we need to compile updated version with `npm run bu
 - No backtracking
 - Low memory usage
 
-### Not yet supported features:
-
-- [Explicit Resource Management](https://github.com/tc39/proposal-explicit-resource-management)
-
 ## ESNext Stage 3 features
 
 ### Supported stage 3 features:
@@ -42,9 +39,6 @@ Therefore, after each change we need to compile updated version with `npm run bu
 These features need to be enabled with the `next` option.
 
 - [Decorators](https://github.com/tc39/proposal-decorators)
-
-### Not yet supported stage 3 features:
-
 - [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports)
 - [Deferring Module Evaluation](https://github.com/tc39/proposal-defer-import-eval)
 

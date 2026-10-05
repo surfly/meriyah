@@ -5,7 +5,7 @@ import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
 describe('Expressions - Async function', () => {
-  for (const arg of [
+  for (const text of [
     '(async function () { var await; });',
     '(async function () { void await; });',
     '(async function () { await: ; });',
@@ -67,50 +67,44 @@ describe('Expressions - Async function', () => {
         function f() {})
     `,
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(`"use strict"; ${text}`, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { next: true });
+        parseSource(`"use strict"; ${text}`);
       });
     });
 
-    it(`"use strict"; ${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`"use strict"; ${arg}`);
+        parseSource(text, { webcompat: true });
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { webcompat: true });
+        parseSource(text, { lexical: true });
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { lexical: true });
+        parseSource(text, { webcompat: true, lexical: true });
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { webcompat: true, lexical: true });
-      });
-    });
-
-    it(`${arg}`, () => {
-      t.throws(() => {
-        parseSource(`${arg}`, { sourceType: 'module' });
+        parseSource(text, { sourceType: 'module' });
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     '(async function foo() { }.prototype)',
     '(async function foo(x, y = x, z = y) { })',
     '(async function foo(x = y, y) { })',
@@ -158,26 +152,26 @@ describe('Expressions - Async function', () => {
     'a = (async package => { })',
     String.raw`a = (async p\u0061ckage => { })`,
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { webcompat: true });
-      });
-    });
-
-    it(`() => { ${arg} }`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`() => { ${arg} }`);
+        parseSource(text, { webcompat: true });
       });
     });
 
-    it(`function foo() { ${arg}}`, () => {
+    it(`() => { ${text} }`, () => {
       t.doesNotThrow(() => {
-        parseSource(`function foo() { ${arg}}`);
+        parseSource(`() => { ${text} }`);
+      });
+    });
+
+    it(`function foo() { ${text}}`, () => {
+      t.doesNotThrow(() => {
+        parseSource(`function foo() { ${text}}`);
       });
     });
   }

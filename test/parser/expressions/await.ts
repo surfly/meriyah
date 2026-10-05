@@ -5,7 +5,33 @@ import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
 describe('Expressions - Await', () => {
-  for (const arg of [
+  it('allows await identifiers followed by division or templates in ordinary parameters', () => {
+    for (const source of [
+      'function f(a = await / x) {}',
+      'function f(a = await / x / g) {}',
+      'function f(a = await`x`) {}',
+      '(function (a = await / x) {})',
+      '({ f(a = await / x) {} })',
+      'class C { f(a = await / x) {} }',
+    ]) {
+      for (const lexical of [false, true]) {
+        t.doesNotThrow(() => parseSource(source, { lexical }));
+      }
+    }
+    for (const source of [
+      'async function f(a = await / x / g) {}',
+      'async (a = await / x / g) => {}',
+      'async function f(a = await 1) {}',
+      'async function f(a = await (x)) {}',
+    ]) {
+      t.throws(() => parseSource(source), /Await expression not allowed in formal parameter/);
+    }
+    for (const source of ['function f(a = await / x / g) {}', 'function f(a = await (x)) {}']) {
+      t.throws(() => parseSource(source, { module: true }), /Await expression not allowed in formal parameter/);
+    }
+  });
+
+  for (const text of [
     'await;',
     'class await {}',
     'function await(yield) {}',
@@ -43,30 +69,43 @@ describe('Expressions - Await', () => {
     'async function a() { await from }',
     'async function a() { await get }',
     'async function a() { await set }',
+    'async function a() { await constructor }',
+    'async function a() { await accessor }',
     'async function a() { await of }',
     'async function a() { await target }',
     'async function a() { await meta }',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { lexical: true });
+        parseSource(text, { lexical: true });
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { webcompat: true });
+        parseSource(text, { webcompat: true });
       });
     });
   }
 
-  for (const arg of [
+  it('keeps constructor and accessor class-body forms unchanged', () => {
+    for (const { code, options } of [
+      { code: 'class C { constructor() {} }', options: {} },
+      { code: 'class C{accessor x=1}', options: { next: true } },
+      { code: 'class C{accessor}', options: {} },
+      { code: 'class C{accessor=1}', options: {} },
+    ]) {
+      t.doesNotThrow(() => parseSource(code, options));
+    }
+  });
+
+  for (const text of [
     '[await]',
     '[await] = []',
     '[await = 1]',
@@ -120,44 +159,38 @@ describe('Expressions - Await', () => {
     'const { [f]: ...await f } = {};',
     'x = await',
   ]) {
-    it(`async function f( ${arg}) {}`, () => {
+    it(`async function f( ${text}) {}`, () => {
       t.throws(() => {
-        parseSource(`async function f( ${arg}) {}`);
+        parseSource(`async function f( ${text}) {}`);
       });
     });
 
-    it(`async function f( ${arg}) {}`, () => {
+    it(`async function f( ${text}) {}`, () => {
       t.throws(() => {
-        parseSource(`async function f( ${arg}) {}`, { lexical: true });
+        parseSource(`async function f( ${text}) {}`, { lexical: true });
       });
     });
 
-    it(`'use strict'; function f() { ${arg}) }`, () => {
+    it(`'use strict'; function f() { ${text}) }`, () => {
       t.throws(() => {
-        parseSource(`'use strict'; function f() { ${arg}) }`);
+        parseSource(`'use strict'; function f() { ${text}) }`);
       });
     });
 
-    it(`let f = () => {${arg})`, () => {
+    it(`let f = () => {${text})`, () => {
       t.throws(() => {
-        parseSource(`let f = () => {${arg})`);
+        parseSource(`let f = () => {${text})`);
       });
     });
 
-    it(`let f = () => {${arg})`, () => {
+    it(`'use strict'; async function* f() {${text})`, () => {
       t.throws(() => {
-        parseSource(`let f = () => {${arg})`, { next: true });
-      });
-    });
-
-    it(`'use strict'; async function* f() {${arg})`, () => {
-      t.throws(() => {
-        parseSource(`let f = () => {${arg})`);
+        parseSource(`let f = () => {${text})`);
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     'async function f(await) {}',
     'async function f(...await) {}',
     'async function f(await = 1) {}',
@@ -222,32 +255,32 @@ describe('Expressions - Await', () => {
     '(class { static async method({ await = 1 }) {} })',
     '(class { static async method({ } = await) {} })',
   ]) {
-    it(`async function f() { ${arg} }`, () => {
+    it(`async function f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function f() { ${arg} }`);
+        parseSource(`async function f() { ${text} }`);
       });
     });
 
-    it(`"use strict"; async function f() { ${arg} }`, () => {
+    it(`"use strict"; async function f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`"use strict"; async function f() { ${arg} }`);
+        parseSource(`"use strict"; async function f() { ${text} }`);
       });
     });
 
-    it(`var await; var f = (async function() { ${arg} });`, () => {
+    it(`var await; var f = (async function() { ${text} });`, () => {
       t.throws(() => {
-        parseSource(`var await; var f = (async function() { ${arg} });`);
+        parseSource(`var await; var f = (async function() { ${text} });`);
       });
     });
 
-    it(`"use strict"; var await; var f = (async function() { ${arg} });`, () => {
+    it(`"use strict"; var await; var f = (async function() { ${text} });`, () => {
       t.throws(() => {
-        parseSource(`"use strict"; var await; var f = (async function() { ${arg} });`);
+        parseSource(`"use strict"; var await; var f = (async function() { ${text} });`);
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     'await',
     'var f = await => 42;',
     'var { await } = 1;',
@@ -268,44 +301,38 @@ describe('Expressions - Await', () => {
     'var e = [await];',
     'var e = {await};',
   ]) {
-    it(`async function f() { ${arg} }`, () => {
+    it(`async function f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function f() { ${arg} }`);
+        parseSource(`async function f() { ${text} }`);
       });
     });
 
-    it(`'use strict'; async function f() { ${arg} }`, () => {
+    it(`'use strict'; async function f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function f() { ${arg} }`);
+        parseSource(`async function f() { ${text} }`);
       });
     });
 
-    it(`'use strict'; async function f() { ${arg} }`, () => {
+    it(`'use strict'; var f = async function() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function f() { ${arg} }`, { next: true });
+        parseSource(`'use strict'; var f = async function() { ${text} }`);
       });
     });
 
-    it(`'use strict'; var f = async function() { ${arg} }`, () => {
+    it(`'use strict'; var f = async() => { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`'use strict'; var f = async function() { ${arg} }`);
+        parseSource(`'use strict'; var f = async() => { ${text} }`);
       });
     });
 
-    it(`'use strict'; var f = async() => { ${arg} }`, () => {
+    it(`'use strict'; var O = { async method() {${text} }`, () => {
       t.throws(() => {
-        parseSource(`'use strict'; var f = async() => { ${arg} }`);
-      });
-    });
-
-    it(`'use strict'; var O = { async method() {${arg} }`, () => {
-      t.throws(() => {
-        parseSource(`'use strict'; var O = { async method() { ${arg} }`);
+        parseSource(`'use strict'; var O = { async method() { ${text} }`);
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     'var [await f] = [];',
     'let [await f] = [];',
     'const [await f] = [];',
@@ -331,51 +358,51 @@ describe('Expressions - Await', () => {
     'let { [f]: ...await f } = {};',
     'const { [f]: ...await f } = {};',
   ]) {
-    it(`let f = () => { ${arg} }`, () => {
+    it(`let f = () => { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`let f = () => { ${arg} }`);
+        parseSource(`let f = () => { ${text} }`);
       });
     });
 
-    it(`let f = () => { ${arg} }`, () => {
+    it(`let f = () => { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`let f = () => { ${arg} }`, { sourceType: 'module' });
+        parseSource(`let f = () => { ${text} }`, { sourceType: 'module' });
       });
     });
 
-    it(`'use strict'; async function* f() { ${arg} }`, () => {
+    it(`'use strict'; async function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`'use strict'; async function* f() { ${arg} }`);
+        parseSource(`'use strict'; async function* f() { ${text} }`);
       });
     });
 
-    it(`function* f() { ${arg} }`, () => {
+    it(`function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`function* f() { ${arg} }`);
+        parseSource(`function* f() { ${text} }`);
       });
     });
 
-    it(`let f = async() => { ${arg} }`, () => {
+    it(`let f = async() => { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`let f = async() => { ${arg} }`);
+        parseSource(`let f = async() => { ${text} }`);
       });
     });
 
-    it(`async function* f() { ${arg} }`, () => {
+    it(`async function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function* f() { ${arg} }`);
+        parseSource(`async function* f() { ${text} }`);
       });
     });
 
-    it(`async function* f() { ${arg} }`, () => {
+    it(`async function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function* f() { ${arg} }`, { sourceType: 'module' });
+        parseSource(`async function* f() { ${text} }`, { sourceType: 'module' });
       });
     });
 
-    it(`'use strict'; async function f() { ${arg} }`, () => {
+    it(`'use strict'; async function f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`'use strict'; async function f() { ${arg} }`);
+        parseSource(`'use strict'; async function f() { ${text} }`);
       });
     });
   }
@@ -606,9 +633,22 @@ describe('Expressions - Await', () => {
     'async () => { (a, await) => { }; }',
     'async () => { (x, y, z = await 0) => { }; }',
     'async function af() { (b = (c = await => {}) => {}) => {}; }',
+    'async function f(){ (a = await 1, b = yield) => 1; }',
+    'async function f(){ (a = yield, b = await 1) => 1; }',
+    'async function f(){ ([a = yield, b = await 1]) => 1; }',
+    'async function f(){ async (a = await 1, b = yield) => 1; }',
+    'async function f(){ async ([a = yield, b = await 1]) => 1; }',
+    'async function f(){ (a = await 1, b = (c) => 1) => 1; }',
+    'async function f(){ async (a = await 1, b = (c) => 1) => 1; }',
+    'async ({x} = await bar);',
+    { code: '(a = await 1, b = (c) => 1) => 1', options: { sourceType: 'module' } },
+
+    // `await` starts an await expression here, so `/` opens a regular expression that is never closed
+    { code: 'await/x', options: { sourceType: 'module' } },
+    'async function f(){ await/x }',
   ]);
 
-  for (const arg of [
+  for (const text of [
     'var [await f] = [];',
     'let [await f] = [];',
     'const [await f] = [];',
@@ -634,50 +674,50 @@ describe('Expressions - Await', () => {
     'let { [f]: ...await f } = {};',
     'const { [f]: ...await f } = {};',
   ]) {
-    it(`let f = () => { ${arg} }`, () => {
+    it(`let f = () => { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`let f = () => { ${arg} }`);
+        parseSource(`let f = () => { ${text} }`);
       });
     });
 
-    it(`'use strict'; async function* f() { ${arg} }`, () => {
+    it(`'use strict'; async function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`'use strict'; async function* f() { ${arg} }`);
+        parseSource(`'use strict'; async function* f() { ${text} }`);
       });
     });
 
-    it(`function* f() { ${arg} }`, () => {
+    it(`function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`function* f() { ${arg} }`, { webcompat: true });
+        parseSource(`function* f() { ${text} }`, { webcompat: true });
       });
     });
 
-    it(`let f = async() => { ${arg} }`, () => {
+    it(`let f = async() => { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`let f = async() => { ${arg} }`, { webcompat: true });
+        parseSource(`let f = async() => { ${text} }`, { webcompat: true });
       });
     });
 
-    it(`async function* f() { ${arg} }`, () => {
+    it(`async function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function* f() { ${arg} }`);
+        parseSource(`async function* f() { ${text} }`);
       });
     });
 
-    it(`async function* f() { ${arg} }`, () => {
+    it(`async function* f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`async function* f() { ${arg} }`, { sourceType: 'module' });
+        parseSource(`async function* f() { ${text} }`, { sourceType: 'module' });
       });
     });
 
-    it(`'use strict'; async function f() { ${arg} }`, () => {
+    it(`'use strict'; async function f() { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`'use strict'; async function f() { ${arg} }`, { webcompat: true });
+        parseSource(`'use strict'; async function f() { ${text} }`, { webcompat: true });
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     'var asyncFn = async function() { await 1; };',
     'var asyncFn = async function withName() { await 1; };',
     "var asyncFn = async () => await 'test';",
@@ -744,33 +784,33 @@ describe('Expressions - Await', () => {
       }
     `,
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`"use strict"; ${arg}`, () => {
+    it(`"use strict"; ${text}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`"use strict"; ${arg}`);
+        parseSource(`"use strict"; ${text}`);
       });
     });
 
-    it(`"use strict"; ${arg}`, () => {
+    it(`"use strict"; ${text}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`"use strict"; ${arg}`, { webcompat: true });
+        parseSource(`"use strict"; ${text}`, { webcompat: true });
       });
     });
 
-    it(`"use strict"; var O = { *method() {${arg}}`, () => {
+    it(`"use strict"; var O = { *method() {${text}}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`function f() {${arg}}`);
+        parseSource(`function f() {${text}}`);
       });
     });
 
-    it(`"use strict"; function* g() {${arg}}`, () => {
+    it(`"use strict"; function* g() {${text}}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`"use strict"; function* g() {${arg}}`);
+        parseSource(`"use strict"; function* g() {${text}}`);
       });
     });
   }
@@ -826,5 +866,26 @@ describe('Expressions - Await', () => {
     'let o = {*f(await){}}',
     { code: 'foo[await 1]', options: { sourceType: 'module' } },
     { code: 'foo(await bar)', options: { sourceType: 'module' } },
+
+    // `await` is a plain identifier here, so `/` is division
+    { code: 'await/x', options: { ranges: true } },
+    'await \n / x',
+    'await/x/g',
+    'x = await/2/g',
+    'function f(){ await/x }',
+    'function* g(){ await/x }',
+    'let x = await/2',
+    'var await; await/x',
+    'label: await/x',
+    'a.await/2/g',
+    { code: 'x.await/2/g', options: { sourceType: 'module' } },
+    'async function f(){ x.await/2/g }',
+    { code: 'await/x', options: { sourceType: 'commonjs' } },
+    '"use strict"; await/x',
+
+    // `await` starts an await expression here, so `/` opens a regular expression
+    { code: 'y = await/x/g', options: { sourceType: 'module' } },
+    'async function f(){ await/x/g }',
+    'async () => await/x/g',
   ]);
 });

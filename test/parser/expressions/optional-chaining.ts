@@ -5,7 +5,7 @@ import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
 describe('Optional chaining', () => {
-  for (const arg of [
+  for (const text of [
     'func?.()',
     'obj?.prop',
     String.raw`obj?.def\u{61}ult`,
@@ -17,6 +17,10 @@ describe('Optional chaining', () => {
     'a?.b.c(++x).d',
     'a?.b[3].c?.(x).d',
     '(a?.b).c',
+    '(a?.b).c = d',
+    '(a?.b).c++',
+    '(a?.b)[c] = d',
+    '(a?.b)[c]++',
     'delete a?.b',
     'func?.(a, b)',
     'a?.func?.()',
@@ -259,24 +263,14 @@ describe('Optional chaining', () => {
     String.raw`x?.prot\u0065cted`,
     'class C { #m = 1; static m(obj) { return obj?.#m; } }',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { lexical: true });
+        parseSource(text, { lexical: true });
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { webcompat: true });
-      });
-    });
-    it(`${arg}`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`${arg}`, { next: true, lexical: true });
-      });
-    });
-    it(`${arg}`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`${arg}`, { next: true, webcompat: true });
+        parseSource(text, { webcompat: true });
       });
     });
   }
@@ -343,6 +337,10 @@ describe('Optional chaining', () => {
     'const o = { tag() {} }; o?.tag``;',
     'a.?2.?n',
     'obj?.a = 33;',
+    'a?.b.c = d',
+    'a?.b.c++',
+    'a?.b[c] = d',
+    'a?.b[c]++',
     'a.? (?) [?]',
     'a.?2.3',
     '{a: 44}?.a',

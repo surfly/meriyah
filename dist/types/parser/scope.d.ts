@@ -27,12 +27,12 @@ export declare class Scope {
     variableBindings: Map<string, BindingKind>;
     constructor(parser: Parser, type?: ScopeKind, parent?: Scope | undefined);
     createChildScope(type?: ScopeKind): Scope;
-    addVarOrBlock(context: Context, name: string, kind: BindingKind, origin: Origin): void;
-    addVarName(context: Context, name: string, kind: BindingKind): void;
+    addVarOrBlock(context: Context, name: string, kind: BindingKind, tokenStart: Location, tokenEnd: Location, origin: Origin): void;
+    addVarName(context: Context, name: string, kind: BindingKind, tokenStart: Location, tokenEnd: Location): void;
     hasVariable(name: string): boolean;
-    addBlockName(context: Context, name: string, kind: BindingKind, origin: Origin): void;
-    recordScopeError(type: Errors, ...params: string[]): void;
+    addBlockName(context: Context, name: string, kind: BindingKind, tokenStart: Location, tokenEnd: Location, origin?: Origin): void;
+    recordScopeError(type: Errors, tokenStart: Location, tokenEnd: Location, ...params: string[]): void;
     reportScopeError(): void;
 }
-export declare function createArrowHeadParsingScope(parser: Parser, context: Context, value: string): Scope;
+export declare function createArrowHeadParsingScope(parser: Parser, context: Context, value: string, tokenStart: Location, tokenEnd: Location): Scope;
 export {};

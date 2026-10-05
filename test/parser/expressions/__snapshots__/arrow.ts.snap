@@ -1141,33 +1141,33 @@ exports[`Expressions - Arrow > Expressions - Array (fail) > (foo ? bar : baz, a)
 `;
 
 exports[`Expressions - Arrow > Expressions - Array (fail) > (function *g([x = class extends (a ? null : yield) { }] = [null]) { }); 1`] = `
-"SyntaxError [1:49-1:50]: Yield expression not allowed in formal parameter
+"SyntaxError [1:44-1:49]: Yield expression not allowed in formal parameter
 > 1 | (function *g([x = class extends (a ? null : yield) { }] = [null]) { });
-    |                                                  ^ Yield expression not allowed in formal parameter"
+    |                                             ^^^^^ Yield expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Arrow > Expressions - Array (fail) > (function *g(x = class { [y = (yield, 1)]() { } }) { }); 1`] = `
-"SyntaxError [1:36-1:37]: Yield expression not allowed in formal parameter
+"SyntaxError [1:31-1:36]: Yield expression not allowed in formal parameter
 > 1 | (function *g(x = class { [y = (yield, 1)]() { } }) { });
-    |                                     ^ Yield expression not allowed in formal parameter"
+    |                                ^^^^^ Yield expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Arrow > Expressions - Array (fail) > (function *g(x = class extends (yield) { }) { }); 1`] = `
-"SyntaxError [1:37-1:38]: Yield expression not allowed in formal parameter
+"SyntaxError [1:32-1:37]: Yield expression not allowed in formal parameter
 > 1 | (function *g(x = class extends (yield) { }) { });
-    |                                      ^ Yield expression not allowed in formal parameter"
+    |                                 ^^^^^ Yield expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Arrow > Expressions - Array (fail) > (function *g(z = ( [x=(yield)]) => {}) { }); 1`] = `
-"SyntaxError [1:28-1:29]: Yield expression not allowed in formal parameter
+"SyntaxError [1:23-1:28]: Yield expression not allowed in formal parameter
 > 1 | (function *g(z = ( [x=(yield)]) => {}) { });
-    |                             ^ Yield expression not allowed in formal parameter"
+    |                        ^^^^^ Yield expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Arrow > Expressions - Array (fail) > (function *g(z = ( x=yield) => {}) { }); 1`] = `
-"SyntaxError [1:26-1:27]: Yield expression not allowed in formal parameter
+"SyntaxError [1:21-1:26]: Yield expression not allowed in formal parameter
 > 1 | (function *g(z = ( x=yield) => {}) { });
-    |                           ^ Yield expression not allowed in formal parameter"
+    |                      ^^^^^ Yield expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Arrow > Expressions - Array (fail) > (if) => {} 1`] = `
@@ -2612,6 +2612,50 @@ exports[`Expressions - Arrow > Expressions - Arrow (pass) > () => bar 1`] = `
         "generator": false,
         "params": [],
         "type": "ArrowFunctionExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Arrow > Expressions - Arrow (pass) > ()=>{}
+[a]=b 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "async": false,
+        "body": {
+          "body": [],
+          "type": "BlockStatement",
+        },
+        "expression": false,
+        "generator": false,
+        "params": [],
+        "type": "ArrowFunctionExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+    {
+      "expression": {
+        "left": {
+          "elements": [
+            {
+              "name": "a",
+              "type": "Identifier",
+            },
+          ],
+          "type": "ArrayPattern",
+        },
+        "operator": "=",
+        "right": {
+          "name": "b",
+          "type": "Identifier",
+        },
+        "type": "AssignmentExpression",
       },
       "type": "ExpressionStatement",
     },
@@ -8446,6 +8490,67 @@ exports[`Expressions - Arrow > Expressions - Arrow (pass) > bar ? ( (x, y) => (u
   ],
   "sourceType": "script",
   "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Arrow > Expressions - Arrow (pass) > class A {
+  ["1"] = ()=>{}
+  ["2"] = 3;
+}; 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": true,
+            "key": {
+              "type": "Literal",
+              "value": "1",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "async": false,
+              "body": {
+                "body": [],
+                "type": "BlockStatement",
+              },
+              "expression": false,
+              "generator": false,
+              "params": [],
+              "type": "ArrowFunctionExpression",
+            },
+          },
+          {
+            "computed": true,
+            "key": {
+              "type": "Literal",
+              "value": "2",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "type": "Literal",
+              "value": 3,
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "A",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+    {
+      "type": "EmptyStatement",
+    },
+  ],
+  "sourceType": "script",
   "type": "Program",
 }
 `;

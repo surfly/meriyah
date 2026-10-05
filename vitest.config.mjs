@@ -2,19 +2,26 @@ import { defineConfig } from 'vitest/config';
 
 const IS_CI = Boolean(process.env.CI);
 const SHOULD_RUN_PRODUCTION_TEST = IS_CI || Boolean(process.env.PRODUCTION_TEST);
-const SHOULD_RUN_TEST262 = IS_CI || Boolean(process.env.SHOULD_RUN_TEST262) || Boolean(process.env.TEST262_FILE);
+const SHOULD_RUN_CONFORMANCE_TEST =
+  IS_CI || Boolean(process.env.TEST262) || Boolean(process.env.TEST262_FILE) || Boolean(process.env.TEST_JSX_FILE);
 
 export default defineConfig({
   test: {
     include: ['test/**/*.ts'],
     exclude: [
       'test/test-utils.ts',
+      // Type-only test, checked by `npm run lint:types`
+      'test/estree-compat.ts',
       // Skip production test on local by default
       ...(SHOULD_RUN_PRODUCTION_TEST ? [] : ['test/production/production-tests.ts']),
-      // Skip test 262 on local by default
-      ...(SHOULD_RUN_TEST262
+      // Skip conformance test on local by default
+      ...(SHOULD_RUN_CONFORMANCE_TEST
         ? []
-        : ['test/test262-parser-tests/parser-tests.ts', 'test/test262-parser-tests/ast-alignment-test.ts']),
+        : [
+            'test/conformance/test262-parser-tests.ts',
+            'test/conformance/ast-alignment-test.ts',
+            'test/conformance/jsx-ast-alignment-test.ts',
+          ]),
     ],
     watch: false,
     coverage: {

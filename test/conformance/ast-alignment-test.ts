@@ -8,12 +8,19 @@ import { visitNode } from '../test-utils.ts';
 
 const { TEST262_FILE } = process.env;
 
-const notAlignedTests = new Set([
-  // https://github.com/meriyah/meriyah/issues/460
-  'language/expressions/template-literal/tv-line-continuation.js',
-  'language/expressions/template-literal/tv-line-terminator-sequence.js',
-  'built-ins/String/raw/special-characters.js',
-]);
+const notAlignedTests = new Set<string>();
+
+// `runTest` silently skips every fixture Acorn cannot parse, so a `parseAcorn`
+// that stopped working would skip all of them and this test would pass while
+// comparing nothing. The number of fixtures is checked as well, because a ratio
+// on its own is vacuously true when there are none to compare. Acorn parses
+// nearly every fixture, but both numbers move with the test262 pin, with
+// `test262/unsupported-features.txt` and with `test262/whitelist.txt`, so these
+// are floors rather than exact counts.
+const MINIMUM_FIXTURE_COUNT = 40_000;
+const MINIMUM_COMPARED_RATIO = 0.9;
+
+let comparedCount = 0;
 
 it(
   'AST alignment with Acorn',
@@ -28,8 +35,22 @@ it(
       t.equal(tests.length, 1);
     }
 
+    comparedCount = 0;
     for (const testCase of tests) {
       runTest(testCase);
+    }
+
+    if (!TEST262_FILE) {
+      t.ok(
+        tests.length >= MINIMUM_FIXTURE_COUNT,
+        `Loaded ${tests.length} test262 fixtures, expected at least ${MINIMUM_FIXTURE_COUNT}. ` +
+          'Nothing is compared when the fixtures are missing, so this has to be checked separately from the ratio below.',
+      );
+      t.ok(
+        comparedCount >= tests.length * MINIMUM_COMPARED_RATIO,
+        `Compared ${comparedCount} of ${tests.length} test262 fixtures against Acorn, expected at least ${MINIMUM_COMPARED_RATIO * 100}%. ` +
+          'Fixtures Acorn cannot parse are skipped, so a drop means Acorn is no longer parsing them and this test is comparing nothing.',
+      );
     }
   },
   Infinity,
@@ -46,31 +67,31 @@ function runTest(testCase: TestCase) {
     throw error;
   }
 
+  comparedCount++;
+
   const meriyahAst = parseMeriyah(testCase.contents, testCase.sourceType);
 
-  const isNotAlignedTest = notAlignedTests.has(testCase.file);
-  let passed;
+  if (notAlignedTests.has(testCase.file)) {
+    try {
+      t.notDeepEqual(meriyahAst, acornAst);
+    } catch {
+      throw new Error(
+        `'${testCase.file}' now have the same AST shape as Acorn, please remove from the 'notAlignedTests'.`,
+      );
+    }
+
+    return;
+  }
 
   try {
     t.deepEqual(meriyahAst, acornAst);
-    passed = true;
   } catch (error) {
-    if (isNotAlignedTest) {
-      return;
-    }
-
     if (!TEST262_FILE)
       console.log(
         `Test faild, use this commmand to debug\n$ TEST262_FILE=${testCase.file} npx vitest test/test262-parser-tests/ast-alignment-test.ts`,
       );
     console.error(testCase);
     throw error;
-  }
-
-  if (isNotAlignedTest && passed) {
-    throw new Error(
-      `'${testCase.file}' now have the same AST shape as Acorn, please remove from the 'notAlignedTests'.`,
-    );
   }
 }
 
@@ -159,6 +180,12 @@ function fixAcornAst(ast: acorn.Program, text: string): MeriyahAst {
         // Not in ESTree
         if (node.id === null) {
           delete node.id;
+        }
+        return node;
+      case 'ImportDeclaration':
+      case 'ImportExpression':
+        if (!('phase' in node)) {
+          node.phase = null;
         }
         return node;
       case 'ClassExpression':

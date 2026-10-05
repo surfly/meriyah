@@ -1,4 +1,4 @@
-import { type Comment } from './estree.ts';
+import type * as ESTree from './estree.ts';
 import { type Parser } from './parser/parser.ts';
 import { Token } from './token.ts';
 export declare const enum Context {
@@ -22,7 +22,8 @@ export declare const enum Context {
     AllowNewTarget = 65536,
     DisallowIn = 131072,
     AllowEscapedKeyword = 262144,
-    InStaticBlock = 524288
+    InStaticBlock = 524288,
+    InJSXTag = 1048576
 }
 export declare const enum PropertyKind {
     None = 0,
@@ -117,15 +118,15 @@ export declare function isValidStrictMode(parser: Parser, index: number, tokenIn
 export declare function optionalBit(parser: Parser, context: Context, t: Token): 0 | 1;
 export declare function consumeOpt(parser: Parser, context: Context, t: Token): boolean;
 export declare function consume(parser: Parser, context: Context, t: Token): void;
-export declare function reinterpretToPattern(parser: Parser, node: any): void;
+export declare function reinterpretToPattern(parser: Parser, node: ESTree.Node): void;
 export declare function validateBindingIdentifier(parser: Parser, context: Context, kind: BindingKind, t: Token, skipEvalArgCheck: 0 | 1): void;
 export declare function validateFunctionName(parser: Parser, context: Context, t: Token): void;
 export declare function isStrictReservedWord(parser: Parser, context: Context, t: Token): boolean;
-export declare function isPropertyWithPrivateFieldKey(expr: any): boolean;
-export declare function isValidLabel(parser: Parser, labels: any, name: string, isIterationStatement: 0 | 1): 0 | 1;
-export declare function validateAndDeclareLabel(parser: Parser, labels: any, name: string): void;
+export declare function isPropertyWithPrivateFieldKey(expr: ESTree.Expression): boolean;
+export declare function isValidLabel(parser: Parser, labels: ESTree.Labels | undefined, name: string, isIterationStatement: 0 | 1): 0 | 1;
+export declare function validateAndDeclareLabel(parser: Parser, labels: ESTree.Labels, name: string): void;
 export declare function isValidIdentifier(context: Context, t: Token): boolean;
-export declare function classifyIdentifier(parser: Parser, context: Context, t: Token): any;
+export declare function classifyIdentifier(parser: Parser, context: Context, t: Token): void;
 export type Location = {
     readonly index: number;
     readonly line: number;

@@ -13,7 +13,7 @@ export default [
   ...tseslint.configs.recommended,
   eslintPluginInternal,
   {
-    languageOptions: { globals: { ...globals.builtin } },
+    languageOptions: { globals: { ...globals.builtin, ...globals['shared-node-browser'] } },
     plugins: {
       '@stylistic': eslintPluginStylistic,
       'import-x': eslintPluginImportX,
@@ -90,7 +90,9 @@ export default [
           checkUsedVariables: false,
         },
       ],
+      'unicorn/prefer-string-replace-all': 'error',
       'unicorn/template-indent': 'error',
+      'unicorn/no-useless-template-literals': 'error',
 
       'import-x/extensions': [
         'error',
@@ -150,6 +152,12 @@ export default [
       'import-x/default': 0,
       'import-x/no-named-as-default': 0,
       'import-x/no-named-as-default-member': 0,
+    },
+  },
+  {
+    files: ['test262/run-test262-cli.mjs'],
+    rules: {
+      'n/no-missing-import': 0,
     },
   },
   {

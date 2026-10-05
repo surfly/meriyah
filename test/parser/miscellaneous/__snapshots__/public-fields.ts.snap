@@ -1,6 +1,150 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Next - Public fields > Next - Public fields (pass) > {
+exports[`Public fields > Public fields (fail) > (async () => class { x = await 1 }) 1`] = `
+"SyntaxError [1:25-1:30]: Await is only valid in async functions
+> 1 | (async () => class { x = await 1 })
+    |                          ^^^^^ Await is only valid in async functions"
+`;
+
+exports[`Public fields > Public fields (fail) > async () => class { x = await 1 }; 1`] = `
+"SyntaxError [1:24-1:29]: Await is only valid in async functions
+> 1 | async () => class { x = await 1 };
+    |                         ^^^^^ Await is only valid in async functions"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { "x" = arguments; } 1`] = `
+"SyntaxError [1:16-1:25]: Unexpected eval or arguments in strict mode
+> 1 | class A { "x" = arguments; }
+    |                 ^^^^^^^^^ Unexpected eval or arguments in strict mode"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { "x" = super(); } 1`] = `
+"SyntaxError [1:21-1:22]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A { "x" = super(); }
+    |                      ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { a = 1, 2 } 1`] = `
+"SyntaxError [1:15-1:16]: Unexpected token: ','
+> 1 | class A { a = 1, 2 }
+    |                ^ Unexpected token: ','"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { a = 1, b = 2 } 1`] = `
+"SyntaxError [1:15-1:16]: Unexpected token: ','
+> 1 | class A { a = 1, b = 2 }
+    |                ^ Unexpected token: ','"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { a b } 1`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
+> 1 | class A { a b }
+    |             ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { a b } 2`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
+> 1 | class A { a b }
+    |             ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { a b() {} } 1`] = `
+"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
+> 1 | class A { a b() {} }
+    |             ^ Unexpected token: 'identifier'"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { a, b } 1`] = `
+"SyntaxError [1:11-1:12]: Unexpected token: ','
+> 1 | class A { a, b }
+    |            ^ Unexpected token: ','"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { a, b } 2`] = `
+"SyntaxError [1:11-1:12]: Unexpected token: ','
+> 1 | class A { a, b }
+    |            ^ Unexpected token: ','"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { static "x" = arguments; } 1`] = `
+"SyntaxError [1:23-1:32]: Unexpected eval or arguments in strict mode
+> 1 | class A { static "x" = arguments; }
+    |                        ^^^^^^^^^ Unexpected eval or arguments in strict mode"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { static "x" = arguments; } 2`] = `
+"SyntaxError [1:23-1:32]: Unexpected eval or arguments in strict mode
+> 1 | class A { static "x" = arguments; }
+    |                        ^^^^^^^^^ Unexpected eval or arguments in strict mode"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { static "x" = super(); } 1`] = `
+"SyntaxError [1:28-1:29]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A { static "x" = super(); }
+    |                             ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Public fields > Public fields (fail) > class A { x = typeof super(); } 1`] = `
+"SyntaxError [1:26-1:27]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
+> 1 | class A { x = typeof super(); }
+    |                           ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
+`;
+
+exports[`Public fields > Public fields (fail) > class C { #m = function() { return "bar"; }; Child = class extends C { access = () => super.#m; method = () => super.#m(); } } 1`] = `
+"SyntaxError [1:92-1:93]: Private fields can't be accessed on super
+> 1 | class C { #m = function() { return "bar"; }; Child = class extends C { access = () => super.#m; method = () => super.#m(); } }
+    |                                                                                             ^ Private fields can't be accessed on super"
+`;
+
+exports[`Public fields > Public fields (fail) > class C { #m = function() { return "bar"; }; Child = class extends C { access() { return super.#m; } method() { return super.#m(); } } } 1`] = `
+"SyntaxError [1:95-1:96]: Private fields can't be accessed on super
+> 1 | class C { #m = function() { return "bar"; }; Child = class extends C { access() { return super.#m; } method() { return super.#m(); } } }
+    |                                                                                                ^ Private fields can't be accessed on super"
+`;
+
+exports[`Public fields > Public fields (fail) > class C { static x = await 1 } 1`] = `
+"SyntaxError [1:21-1:26]: Await is only valid in async functions
+> 1 | class C { static x = await 1 }
+    |                      ^^^^^ Await is only valid in async functions"
+`;
+
+exports[`Public fields > Public fields (fail) > class C { x = () => await 1 } 1`] = `
+"SyntaxError [1:20-1:25]: Await is only valid in async functions
+> 1 | class C { x = () => await 1 }
+    |                     ^^^^^ Await is only valid in async functions"
+`;
+
+exports[`Public fields > Public fields (fail) > class C { x = (await 1) } 1`] = `
+"SyntaxError [1:15-1:20]: Await is only valid in async functions
+> 1 | class C { x = (await 1) }
+    |                ^^^^^ Await is only valid in async functions"
+`;
+
+exports[`Public fields > Public fields (fail) > class C { x = await 1 } 1`] = `
+"SyntaxError [1:14-1:19]: Await is only valid in async functions
+> 1 | class C { x = await 1 }
+    |               ^^^^^ Await is only valid in async functions"
+`;
+
+exports[`Public fields > Public fields (fail) > class C { x = class { y = await 1 } } 1`] = `
+"SyntaxError [1:26-1:31]: Await is only valid in async functions
+> 1 | class C { x = class { y = await 1 } }
+    |                           ^^^^^ Await is only valid in async functions"
+`;
+
+exports[`Public fields > Public fields (fail) > var C = class { x = () => arguments); } 1`] = `
+"SyntaxError [1:35-1:36]: A class field initializer or static block may not contain arguments
+> 1 | var C = class { x = () => arguments); }
+    |                                    ^ A class field initializer or static block may not contain arguments"
+`;
+
+exports[`Public fields > Public fields (fail) > var C = class { x = () => eval); } 1`] = `
+"SyntaxError [1:30-1:31]: Unexpected token: ')'
+> 1 | var C = class { x = () => eval); }
+    |                               ^ Unexpected token: ')'"
+`;
+
+exports[`Public fields > Public fields (pass) > {
   class X {
     static p = function() { return arguments[0]; }
   }
@@ -25,7 +169,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > {
             "body": [
               {
                 "computed": false,
-                "decorators": [],
                 "end": 64,
                 "key": {
                   "end": 26,
@@ -118,7 +261,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > {
             "start": 12,
             "type": "ClassBody",
           },
-          "decorators": [],
           "end": 68,
           "id": {
             "end": 11,
@@ -154,7 +296,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > {
             "body": [
               {
                 "computed": false,
-                "decorators": [],
                 "end": 175,
                 "key": {
                   "end": 98,
@@ -308,7 +449,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > {
             "start": 84,
             "type": "ClassBody",
           },
-          "decorators": [],
           "end": 179,
           "id": {
             "end": 83,
@@ -422,7 +562,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > {
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > { class X { static p = function() { return arguments[0]; } } } 1`] = `
+exports[`Public fields > Public fields (pass) > { class X { static p = function() { return arguments[0]; } } } 1`] = `
 {
   "body": [
     {
@@ -432,7 +572,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > { class X { static
             "body": [
               {
                 "computed": false,
-                "decorators": [],
                 "end": 58,
                 "key": {
                   "end": 20,
@@ -525,7 +664,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > { class X { static
             "start": 10,
             "type": "ClassBody",
           },
-          "decorators": [],
           "end": 60,
           "id": {
             "end": 9,
@@ -566,7 +704,57 @@ exports[`Next - Public fields > Next - Public fields (pass) > { class X { static
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;;;;;'a'; "b"; 'c' = 39;  "d" = 42;;;;;;;  ;;;; } 1`] = `
+exports[`Public fields > Public fields (pass) > async function g() { return class { x = await }; } 1`] = `
+{
+  "body": [
+    {
+      "async": true,
+      "body": {
+        "body": [
+          {
+            "argument": {
+              "body": {
+                "body": [
+                  {
+                    "computed": false,
+                    "key": {
+                      "name": "x",
+                      "type": "Identifier",
+                    },
+                    "static": false,
+                    "type": "PropertyDefinition",
+                    "value": {
+                      "name": "await",
+                      "type": "Identifier",
+                    },
+                  },
+                ],
+                "type": "ClassBody",
+              },
+              "id": null,
+              "superClass": null,
+              "type": "ClassExpression",
+            },
+            "type": "ReturnStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "g",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Public fields > Public fields (pass) > class A {  ;;;; ;;;;;;'a'; "b"; 'c' = 39;  "d" = 42;;;;;;;  ;;;; } 1`] = `
 {
   "body": [
     {
@@ -574,7 +762,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "end": 26,
             "key": {
               "end": 25,
@@ -597,7 +784,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;
           },
           {
             "computed": false,
-            "decorators": [],
             "end": 31,
             "key": {
               "end": 30,
@@ -620,7 +806,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;
           },
           {
             "computed": false,
-            "decorators": [],
             "end": 41,
             "key": {
               "end": 35,
@@ -652,7 +837,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;
           },
           {
             "computed": false,
-            "decorators": [],
             "end": 52,
             "key": {
               "end": 46,
@@ -691,7 +875,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;
         "start": 8,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 66,
       "id": {
         "end": 7,
@@ -723,7 +906,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A {  ;;;; ;;
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { ;;;;;;[x] = 42; [10] = "meep"; ["not initialized"];;;;;;; } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { ;;;;;;[x] = 42; [10] = "meep"; ["not initialized"];;;;;;; } 1`] = `
 {
   "body": [
     {
@@ -731,7 +914,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ;;;;;;[x
         "body": [
           {
             "computed": true,
-            "decorators": [],
             "end": 25,
             "key": {
               "end": 18,
@@ -763,7 +945,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ;;;;;;[x
           },
           {
             "computed": true,
-            "decorators": [],
             "end": 40,
             "key": {
               "end": 29,
@@ -795,7 +976,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ;;;;;;[x
           },
           {
             "computed": true,
-            "decorators": [],
             "end": 61,
             "key": {
               "end": 59,
@@ -825,7 +1005,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ;;;;;;[x
         "start": 8,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 69,
       "id": {
         "end": 7,
@@ -857,7 +1036,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ;;;;;;[x
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { ['a'] = 0; b; } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { ['a'] = 0; b; } 1`] = `
 {
   "body": [
     {
@@ -865,7 +1044,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ['a'] = 
         "body": [
           {
             "computed": true,
-            "decorators": [],
             "end": 20,
             "key": {
               "end": 14,
@@ -897,7 +1075,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ['a'] = 
           },
           {
             "computed": false,
-            "decorators": [],
             "end": 23,
             "key": {
               "end": 22,
@@ -927,7 +1104,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ['a'] = 
         "start": 8,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 25,
       "id": {
         "end": 7,
@@ -959,7 +1135,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { ['a'] = 
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { a = 0; } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { a = 0; } 1`] = `
 {
   "body": [
     {
@@ -967,7 +1143,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = 0; }
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "key": {
               "name": "a",
               "type": "Identifier",
@@ -982,7 +1157,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = 0; }
         ],
         "type": "ClassBody",
       },
-      "decorators": [],
       "id": {
         "name": "A",
         "type": "Identifier",
@@ -996,7 +1170,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = 0; }
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b += c } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { a = b += c } 1`] = `
 {
   "body": [
     {
@@ -1004,7 +1178,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b +=
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "end": 20,
             "key": {
               "end": 11,
@@ -1063,7 +1236,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b +=
         "start": 8,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 22,
       "id": {
         "end": 7,
@@ -1095,7 +1267,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b +=
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b = c } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { a = b = c } 1`] = `
 {
   "body": [
     {
@@ -1103,7 +1275,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b = 
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "end": 19,
             "key": {
               "end": 11,
@@ -1162,7 +1333,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b = 
         "start": 8,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 21,
       "id": {
         "end": 7,
@@ -1194,7 +1364,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { a = b = 
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { foo; } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { foo; } 1`] = `
 {
   "body": [
     {
@@ -1202,7 +1372,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { foo; } 1
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "end": 14,
             "key": {
               "end": 13,
@@ -1232,7 +1401,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { foo; } 1
         "start": 8,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 16,
       "id": {
         "end": 7,
@@ -1264,7 +1432,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { foo; } 1
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { set = get; } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { set = get; } 1`] = `
 {
   "body": [
     {
@@ -1272,7 +1440,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { set = ge
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "key": {
               "name": "set",
               "type": "Identifier",
@@ -1287,7 +1454,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { set = ge
         ],
         "type": "ClassBody",
       },
-      "decorators": [],
       "id": {
         "name": "A",
         "type": "Identifier",
@@ -1301,7 +1467,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { set = ge
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class A { set; } 1`] = `
+exports[`Public fields > Public fields (pass) > class A { set; } 1`] = `
 {
   "body": [
     {
@@ -1309,7 +1475,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { set; } 1
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "end": 14,
             "key": {
               "end": 13,
@@ -1339,7 +1504,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { set; } 1
         "start": 8,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 16,
       "id": {
         "end": 7,
@@ -1371,7 +1535,45 @@ exports[`Next - Public fields > Next - Public fields (pass) > class A { set; } 1
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class C { static x } 1`] = `
+exports[`Public fields > Public fields (pass) > class C { [await 1] = 1 } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": true,
+            "key": {
+              "argument": {
+                "type": "Literal",
+                "value": 1,
+              },
+              "type": "AwaitExpression",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "type": "Literal",
+              "value": 1,
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "C",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Public fields > Public fields (pass) > class C { static x } 1`] = `
 {
   "body": [
     {
@@ -1499,7 +1701,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class C { static x
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class Foo { x = 1; } 1`] = `
+exports[`Public fields > Public fields (pass) > class C { x = 1 }; await 1; 1`] = `
 {
   "body": [
     {
@@ -1507,7 +1709,126 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Foo { x = 1;
         "body": [
           {
             "computed": false,
-            "decorators": [],
+            "key": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "type": "Literal",
+              "value": 1,
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "C",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+    {
+      "type": "EmptyStatement",
+    },
+    {
+      "expression": {
+        "argument": {
+          "type": "Literal",
+          "value": 1,
+        },
+        "type": "AwaitExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Public fields > Public fields (pass) > class C { x = async () => await 1 } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
+            "key": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "static": false,
+            "type": "PropertyDefinition",
+            "value": {
+              "async": true,
+              "body": {
+                "argument": {
+                  "type": "Literal",
+                  "value": 1,
+                },
+                "type": "AwaitExpression",
+              },
+              "expression": true,
+              "generator": false,
+              "params": [],
+              "type": "ArrowFunctionExpression",
+            },
+          },
+        ],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "C",
+        "type": "Identifier",
+      },
+      "superClass": null,
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Public fields > Public fields (pass) > class C extends (await 1) {} 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [],
+        "type": "ClassBody",
+      },
+      "id": {
+        "name": "C",
+        "type": "Identifier",
+      },
+      "superClass": {
+        "argument": {
+          "type": "Literal",
+          "value": 1,
+        },
+        "type": "AwaitExpression",
+      },
+      "type": "ClassDeclaration",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
+exports[`Public fields > Public fields (pass) > class Foo { x = 1; } 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "body": [
+          {
+            "computed": false,
             "end": 18,
             "key": {
               "end": 13,
@@ -1546,7 +1867,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Foo { x = 1;
         "start": 10,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 20,
       "id": {
         "end": 9,
@@ -1578,7 +1898,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Foo { x = 1;
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class Some { render=( )=>{ return null; }} 1`] = `
+exports[`Public fields > Public fields (pass) > class Some { render=( )=>{ return null; }} 1`] = `
 {
   "body": [
     {
@@ -1586,7 +1906,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Some { rende
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "end": 41,
             "key": {
               "end": 19,
@@ -1658,7 +1977,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Some { rende
         "start": 11,
         "type": "ClassBody",
       },
-      "decorators": [],
       "end": 42,
       "id": {
         "end": 10,
@@ -1690,7 +2008,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Some { rende
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class Some { render=(a,b)=>{ return null; } } 1`] = `
+exports[`Public fields > Public fields (pass) > class Some { render=(a,b)=>{ return null; } } 1`] = `
 {
   "body": [
     {
@@ -1698,7 +2016,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Some { rende
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "key": {
               "name": "render",
               "type": "Identifier",
@@ -1737,7 +2054,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Some { rende
         ],
         "type": "ClassBody",
       },
-      "decorators": [],
       "id": {
         "name": "Some",
         "type": "Identifier",
@@ -1751,7 +2067,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class Some { rende
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > class X { static p = eval("(function() { return arguments[0]; })(1)"); } 1`] = `
+exports[`Public fields > Public fields (pass) > class X { static p = eval("(function() { return arguments[0]; })(1)"); } 1`] = `
 {
   "body": [
     {
@@ -1759,7 +2075,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class X { static p
         "body": [
           {
             "computed": false,
-            "decorators": [],
             "key": {
               "name": "p",
               "type": "Identifier",
@@ -1784,7 +2099,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > class X { static p
         ],
         "type": "ClassBody",
       },
-      "decorators": [],
       "id": {
         "name": "X",
         "type": "Identifier",
@@ -1798,7 +2112,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > class X { static p
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > const createClass = (k) => class { [k()] = 2 }; 1`] = `
+exports[`Public fields > Public fields (pass) > const createClass = (k) => class { [k()] = 2 }; 1`] = `
 {
   "body": [
     {
@@ -1822,7 +2136,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > const createClass 
                 "body": [
                   {
                     "computed": true,
-                    "decorators": [],
                     "end": 44,
                     "key": {
                       "arguments": [],
@@ -1872,7 +2185,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > const createClass 
                 "start": 33,
                 "type": "ClassBody",
               },
-              "decorators": [],
               "end": 46,
               "id": null,
               "range": [
@@ -1934,7 +2246,7 @@ exports[`Next - Public fields > Next - Public fields (pass) > const createClass 
 }
 `;
 
-exports[`Next - Public fields > Next - Public fields (pass) > var C = class { static async #prototype() {} }; 1`] = `
+exports[`Public fields > Public fields (pass) > var C = class { static async #prototype() {} }; 1`] = `
 {
   "body": [
     {
@@ -1956,7 +2268,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > var C = class { st
               "body": [
                 {
                   "computed": false,
-                  "decorators": [],
                   "end": 44,
                   "key": {
                     "end": 39,
@@ -2009,7 +2320,6 @@ exports[`Next - Public fields > Next - Public fields (pass) > var C = class { st
               "start": 14,
               "type": "ClassBody",
             },
-            "decorators": [],
             "end": 46,
             "id": null,
             "range": [
@@ -2047,106 +2357,4 @@ exports[`Next - Public fields > Next - Public fields (pass) > var C = class { st
   "start": 0,
   "type": "Program",
 }
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { "x" = arguments; } 1`] = `
-"SyntaxError [1:16-1:25]: Unexpected eval or arguments in strict mode
-> 1 | class A { "x" = arguments; }
-    |                 ^^^^^^^^^ Unexpected eval or arguments in strict mode"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { "x" = super(); } 1`] = `
-"SyntaxError [1:21-1:22]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
-> 1 | class A { "x" = super(); }
-    |                      ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { a = 1, 2 } 1`] = `
-"SyntaxError [1:15-1:16]: Unexpected token: ','
-> 1 | class A { a = 1, 2 }
-    |                ^ Unexpected token: ','"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { a = 1, b = 2 } 1`] = `
-"SyntaxError [1:15-1:16]: Unexpected token: ','
-> 1 | class A { a = 1, b = 2 }
-    |                ^ Unexpected token: ','"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { a b } 1`] = `
-"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
-> 1 | class A { a b }
-    |             ^ Unexpected token: 'identifier'"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { a b } 2`] = `
-"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
-> 1 | class A { a b }
-    |             ^ Unexpected token: 'identifier'"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { a b() {} } 1`] = `
-"SyntaxError [1:12-1:13]: Unexpected token: 'identifier'
-> 1 | class A { a b() {} }
-    |             ^ Unexpected token: 'identifier'"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { a, b } 1`] = `
-"SyntaxError [1:11-1:12]: Unexpected token: ','
-> 1 | class A { a, b }
-    |            ^ Unexpected token: ','"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { a, b } 2`] = `
-"SyntaxError [1:11-1:12]: Unexpected token: ','
-> 1 | class A { a, b }
-    |            ^ Unexpected token: ','"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { static "x" = arguments; } 1`] = `
-"SyntaxError [1:23-1:32]: Unexpected eval or arguments in strict mode
-> 1 | class A { static "x" = arguments; }
-    |                        ^^^^^^^^^ Unexpected eval or arguments in strict mode"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { static "x" = arguments; } 2`] = `
-"SyntaxError [1:23-1:32]: Unexpected eval or arguments in strict mode
-> 1 | class A { static "x" = arguments; }
-    |                        ^^^^^^^^^ Unexpected eval or arguments in strict mode"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { static "x" = super(); } 1`] = `
-"SyntaxError [1:28-1:29]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
-> 1 | class A { static "x" = super(); }
-    |                             ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class A { x = typeof super(); } 1`] = `
-"SyntaxError [1:26-1:27]: Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass
-> 1 | class A { x = typeof super(); }
-    |                           ^ Calls to super must be in the "constructor" method of a class expression or class declaration that has a superclass"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class C { #m = function() { return "bar"; }; Child = class extends C { access = () => super.#m; method = () => super.#m(); } } 1`] = `
-"SyntaxError [1:92-1:93]: Private fields can't be accessed on super
-> 1 | class C { #m = function() { return "bar"; }; Child = class extends C { access = () => super.#m; method = () => super.#m(); } }
-    |                                                                                             ^ Private fields can't be accessed on super"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > class C { #m = function() { return "bar"; }; Child = class extends C { access() { return super.#m; } method() { return super.#m(); } } } 1`] = `
-"SyntaxError [1:95-1:96]: Private fields can't be accessed on super
-> 1 | class C { #m = function() { return "bar"; }; Child = class extends C { access() { return super.#m; } method() { return super.#m(); } } }
-    |                                                                                                ^ Private fields can't be accessed on super"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > var C = class { x = () => arguments); } 1`] = `
-"SyntaxError [1:35-1:36]: A class field initializer or static block may not contain arguments
-> 1 | var C = class { x = () => arguments); }
-    |                                    ^ A class field initializer or static block may not contain arguments"
-`;
-
-exports[`Next - Public fields > Public fields (fail) > var C = class { x = () => eval); } 1`] = `
-"SyntaxError [1:30-1:31]: Unexpected token: ')'
-> 1 | var C = class { x = () => eval); }
-    |                               ^ Unexpected token: ')'"
 `;

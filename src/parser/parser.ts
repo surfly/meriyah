@@ -1,8 +1,15 @@
 import { AssignmentTargetKind, DestructuringKind, Flags, type Location } from '../common.ts';
 import { Errors, ParseError } from '../errors.ts';
 import type * as ESTree from '../estree.ts';
+import { Features } from '../features.ts';
 import { convertTokenType } from '../lexer/index.ts';
-import { type NormalizedOptions, normalizeOptions, type OnComment, type OnToken, type Options } from '../options.ts';
+import {
+  type InternalOptions,
+  type NormalizedOptions,
+  normalizeOptions,
+  type OnComment,
+  type OnToken,
+} from '../options.ts';
 import { Token } from '../token.ts';
 import { PrivateScope } from './private-scope.ts';
 import { Scope, type ScopeKind } from './scope.ts';
@@ -17,10 +24,17 @@ export class Parser {
    * The mutable parser flags, in case any flags need passed by reference.
    */
   flags = Flags.None;
+
+  /**
+   * Optional syntax features
+   */
+  features = Features.None;
+
   /**
    * The current index
    */
   index = 0;
+
   /**
    * Beginning of current line
    */
@@ -119,6 +133,16 @@ export class Parser {
   strictReservedRange: [Location, Location] | null = null;
 
   /**
+   * Location of the first 'await' keyword seen. Used to report deferred errors in async arrow parameters.
+   */
+  firstAwaitLocation: { start: Location; end: Location } | null = null;
+
+  /**
+   * Location of the first 'yield' keyword seen. Used to report deferred errors in arrow parameters.
+   */
+  firstYieldLocation: { start: Location; end: Location } | null = null;
+
+  /**
    * Holds leading decorators before "export" or "class" keywords
    */
   leadingDecorators: {
@@ -141,11 +165,12 @@ export class Parser {
      * The source code to be parsed
      */
     public readonly source: string,
-    rawOptions: Options = {},
+    rawOptions: InternalOptions = {},
   ) {
     this.end = source.length;
     this.currentChar = source.charCodeAt(0);
     this.options = normalizeOptions(rawOptions);
+    this.features = this.options.features;
 
     // Accepts either a callback function to be invoked or an array to collect comments (as the node is constructed)
     if (Array.isArray(this.options.onComment)) {
@@ -209,6 +234,14 @@ export class Parser {
       index: this.tokenIndex,
       line: this.tokenLine,
       column: this.tokenColumn,
+    };
+  }
+
+  get startPosition(): Location {
+    return {
+      index: this.startIndex,
+      line: this.startLine,
+      column: this.startColumn,
     };
   }
 
@@ -318,30 +351,11 @@ export class Parser {
   }
 
   cloneIdentifier(original: ESTree.Identifier): ESTree.Identifier {
-    return this.cloneLocationInformation({ ...original }, original);
+    return structuredClone(original);
   }
 
   cloneStringLiteral(original: ESTree.StringLiteral): ESTree.StringLiteral {
-    return this.cloneLocationInformation({ ...original }, original);
-  }
-
-  private cloneLocationInformation<T extends ESTree.Node>(node: T, original: T) {
-    const { ranges } = this.options;
-    if (ranges) {
-      if (ranges.start) node.start = original.start;
-      if (ranges.end) node.end = original.end;
-      if (ranges.range) node.range = [...original.range!];
-    }
-
-    if (this.options.loc) {
-      node.loc = {
-        ...original.loc,
-        start: { ...original.loc!.start },
-        end: { ...original.loc!.end },
-      };
-    }
-
-    return node;
+    return structuredClone(original);
   }
 }
 

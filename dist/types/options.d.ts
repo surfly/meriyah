@@ -33,11 +33,15 @@ interface NormalizedRanges {
     end: boolean;
     range: boolean;
 }
-export type NormalizedOptions = Omit<Options, 'validateRegex' | 'onComment' | 'onToken' | 'ranges'> & {
+export type InternalOptions = Options & {
+    features?: number;
+};
+export type NormalizedOptions = Omit<Options, 'validateRegex' | 'onComment' | 'onToken' | 'ranges' | 'next' | 'module' | 'globalReturn'> & {
     validateRegex: boolean;
     ranges?: NormalizedRanges;
     onComment?: OnComment;
     onToken?: OnToken;
+    features: number;
 };
-export declare function normalizeOptions(rawOptions: Options): NormalizedOptions;
+export declare function normalizeOptions(rawOptions: InternalOptions): NormalizedOptions;
 export {};

@@ -1,7 +1,8 @@
 import { AssignmentTargetKind, DestructuringKind, Flags, type Location } from '../common.ts';
 import { Errors } from '../errors.ts';
 import type * as ESTree from '../estree.ts';
-import { type NormalizedOptions, type Options } from '../options.ts';
+import { Features } from '../features.ts';
+import { type InternalOptions, type NormalizedOptions } from '../options.ts';
 import { Token } from '../token.ts';
 import { PrivateScope } from './private-scope.ts';
 import { Scope, type ScopeKind } from './scope.ts';
@@ -11,6 +12,7 @@ export declare class Parser {
     options: NormalizedOptions;
     token: Token;
     flags: Flags;
+    features: Features;
     index: number;
     line: number;
     column: number;
@@ -33,16 +35,25 @@ export declare class Parser {
     assignable: AssignmentTargetKind;
     destructible: DestructuringKind;
     strictReservedRange: [Location, Location] | null;
+    firstAwaitLocation: {
+        start: Location;
+        end: Location;
+    } | null;
+    firstYieldLocation: {
+        start: Location;
+        end: Location;
+    } | null;
     leadingDecorators: {
         start?: Location;
         decorators: ESTree.Decorator[];
     };
     comments: Array<ESTree.Comment>;
     leadingComments: Array<Array<ESTree.Comment>>;
-    constructor(source: string, rawOptions?: Options);
+    constructor(source: string, rawOptions?: InternalOptions);
     getToken(): Token;
     setToken(value: Token, replaceLast?: boolean): Token;
     get tokenStart(): Location;
+    get startPosition(): Location;
     get currentLocation(): Location;
     finishNode<T extends ESTree.Node>(node: T, start: Location, end: Location | void): T;
     addBindingToExports(name: string): void;
@@ -53,5 +64,4 @@ export declare class Parser {
     createPrivateScopeIfLexical(parent?: PrivateScope): PrivateScope | undefined;
     cloneIdentifier(original: ESTree.Identifier): ESTree.Identifier;
     cloneStringLiteral(original: ESTree.StringLiteral): ESTree.StringLiteral;
-    private cloneLocationInformation;
 }

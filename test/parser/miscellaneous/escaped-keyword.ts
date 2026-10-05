@@ -5,7 +5,7 @@ import { parseSource } from '../../../src/parser.ts';
 import { fail } from '../../test-utils.ts';
 
 describe('Miscellaneous - Escaped keywords', () => {
-  for (const arg of [
+  for (const text of [
     String.raw`(\u0069mplements = 1);`,
     String.raw`var impl\u0065ments = 1;`,
     String.raw`var { impl\u0065ments  } = {};`,
@@ -105,23 +105,33 @@ describe('Miscellaneous - Escaped keywords', () => {
     String.raw`var y = { c\u0061tch: x } = { catch: 42 };`,
     String.raw`var y = { \u0063onst: x } = { const: 42 };`,
     String.raw`var y = { \u0064ebugger: x } = { debugger: 42 };`,
+    String.raw`var aw\u{61}it = 1;`,
+    String.raw`(aw\u{61}it) => {}`,
+    String.raw`(a = aw\u{61}it) => {}`,
+    String.raw`async (aw\u{61}it);`,
+    String.raw`async (a = aw\u{61}it => {});`,
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
   }
 
-  for (const arg of [String.raw`obj.bre\u0061k = 42;`, String.raw`for (\u0061sync of [7]);`]) {
-    it(`${arg}`, () => {
+  for (const text of [String.raw`obj.bre\u0061k = 42;`, String.raw`for (\u0061sync of [7]);`]) {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { sourceType: 'module' });
+        parseSource(text, { sourceType: 'module' });
       });
     });
   }
   //
   fail('Miscellaneous - Escaped identifiers (failures)', [
+    String.raw`async (a = aw\u{61}it => {}) => {}`,
+    String.raw`async (a = aw\u0061it => {}) => {}`,
+    String.raw`async (aw\u{61}it) => {}`,
+    String.raw`async (a = aw\u{61}it) => {}`,
+    String.raw`async aw\u{61}it => {}`,
     String.raw`(x === n\u0075ll);`,
     String.raw`var x = n\u0075ll;`,
     { code: String.raw`var x = { interf\u0061ce } = { interface: 42 };`, options: { sourceType: 'module' } },

@@ -54,6 +54,12 @@ exports[`Expressions - Await > Expressions - Await (fail) > ({x} = await bar) =>
     |              ^^^ Expected ')'"
 `;
 
+exports[`Expressions - Await > Expressions - Await (fail) > (a = await 1, b = (c) => 1) => 1 1`] = `
+"SyntaxError [1:5-1:10]: Await expression not allowed in formal parameter
+> 1 | (a = await 1, b = (c) => 1) => 1
+    |      ^^^^^ Await expression not allowed in formal parameter"
+`;
+
 exports[`Expressions - Await > Expressions - Await (fail) > (async function(await b){}) 1`] = `
 "SyntaxError [1:16-1:21]: cannot use "await" as identifier inside an async function
 > 1 | (async function(await b){})
@@ -145,9 +151,9 @@ exports[`Expressions - Await > Expressions - Await (fail) > async () => { (a, aw
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async () => { (x, y, z = await 0) => { }; } 1`] = `
-"SyntaxError [1:34-1:36]: Await expression not allowed in formal parameter
+"SyntaxError [1:25-1:30]: Await expression not allowed in formal parameter
 > 1 | async () => { (x, y, z = await 0) => { }; }
-    |                                   ^^ Await expression not allowed in formal parameter"
+    |                          ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async () => { await => { }; } 1`] = `
@@ -192,16 +198,22 @@ exports[`Expressions - Await > Expressions - Await (fail) > async ({x} = await b
     |                    ^^^ Expected ')'"
 `;
 
+exports[`Expressions - Await > Expressions - Await (fail) > async ({x} = await bar); 1`] = `
+"SyntaxError [1:19-1:22]: Expected ')'
+> 1 | async ({x} = await bar);
+    |                    ^^^ Expected ')'"
+`;
+
 exports[`Expressions - Await > Expressions - Await (fail) > async (a, await) => { } 1`] = `
-"SyntaxError [1:17-1:19]: Await expression not allowed in formal parameter
+"SyntaxError [1:10-1:15]: Await expression not allowed in formal parameter
 > 1 | async (a, await) => { }
-    |                  ^^ Await expression not allowed in formal parameter"
+    |           ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async (a, await) => { } 2`] = `
-"SyntaxError [1:17-1:19]: Await expression not allowed in formal parameter
+"SyntaxError [1:10-1:15]: Await expression not allowed in formal parameter
 > 1 | async (a, await) => { }
-    |                  ^^ Await expression not allowed in formal parameter"
+    |           ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async (a, b = await 1) => {} 1`] = `
@@ -211,9 +223,9 @@ exports[`Expressions - Await > Expressions - Await (fail) > async (a, b = await 
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async (await) => x 1`] = `
-"SyntaxError [1:14-1:16]: Await expression not allowed in formal parameter
+"SyntaxError [1:7-1:12]: Await expression not allowed in formal parameter
 > 1 | async (await) => x
-    |               ^^ Await expression not allowed in formal parameter"
+    |        ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async (foo = [{m: 5 + t(await bar)}]) => {} 1`] = `
@@ -295,69 +307,69 @@ exports[`Expressions - Await > Expressions - Await (fail) > async function *f(fo
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){     ({g} = [{m: 5 + t(await bar)}]) => {}     } 1`] = `
-"SyntaxError [1:56-1:58]: Await expression not allowed in formal parameter
+"SyntaxError [1:42-1:47]: Await expression not allowed in formal parameter
 > 1 | async function a(){     ({g} = [{m: 5 + t(await bar)}]) => {}     }
-    |                                                         ^^ Await expression not allowed in formal parameter"
+    |                                           ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){     (foo = [{m: 5 + t(await bar)}]) => {}     } 1`] = `
-"SyntaxError [1:56-1:58]: Await expression not allowed in formal parameter
+"SyntaxError [1:42-1:47]: Await expression not allowed in formal parameter
 > 1 | async function a(){     (foo = [{m: 5 + t(await bar)}]) => {}     }
-    |                                                         ^^ Await expression not allowed in formal parameter"
+    |                                           ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){     async ([y] = [{m: 5 + t(await bar)}]) => {}     } 1`] = `
-"SyntaxError [1:62-1:64]: Await expression not allowed in formal parameter
+"SyntaxError [1:48-1:53]: Await expression not allowed in formal parameter
 > 1 | async function a(){     async ([y] = [{m: 5 + t(await bar)}]) => {}     }
-    |                                                               ^^ Await expression not allowed in formal parameter"
+    |                                                 ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){     async ({g} = [{m: 5 + t(await bar)}]) => {}     } 1`] = `
-"SyntaxError [1:62-1:64]: Await expression not allowed in formal parameter
+"SyntaxError [1:48-1:53]: Await expression not allowed in formal parameter
 > 1 | async function a(){     async ({g} = [{m: 5 + t(await bar)}]) => {}     }
-    |                                                               ^^ Await expression not allowed in formal parameter"
+    |                                                 ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){     async (foo = [{m: 5 + t(await bar)}]) => {}     } 1`] = `
-"SyntaxError [1:62-1:64]: Await expression not allowed in formal parameter
+"SyntaxError [1:48-1:53]: Await expression not allowed in formal parameter
 > 1 | async function a(){     async (foo = [{m: 5 + t(await bar)}]) => {}     }
-    |                                                               ^^ Await expression not allowed in formal parameter"
+    |                                                 ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){ ([v] = await bar) => {}     } 1`] = `
-"SyntaxError [1:38-1:40]: Await expression not allowed in formal parameter
+"SyntaxError [1:27-1:32]: Await expression not allowed in formal parameter
 > 1 | async function a(){ ([v] = await bar) => {}     }
-    |                                       ^^ Await expression not allowed in formal parameter"
+    |                            ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){ ({r} = await bar) => {}     } 1`] = `
-"SyntaxError [1:38-1:40]: Await expression not allowed in formal parameter
+"SyntaxError [1:27-1:32]: Await expression not allowed in formal parameter
 > 1 | async function a(){ ({r} = await bar) => {}     }
-    |                                       ^^ Await expression not allowed in formal parameter"
+    |                            ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){ (foo = await bar) => {}     } 1`] = `
-"SyntaxError [1:38-1:40]: Await expression not allowed in formal parameter
+"SyntaxError [1:27-1:32]: Await expression not allowed in formal parameter
 > 1 | async function a(){ (foo = await bar) => {}     }
-    |                                       ^^ Await expression not allowed in formal parameter"
+    |                            ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){ async ([v] = await bar) => {}     } 1`] = `
-"SyntaxError [1:44-1:46]: Await expression not allowed in formal parameter
+"SyntaxError [1:33-1:38]: Await expression not allowed in formal parameter
 > 1 | async function a(){ async ([v] = await bar) => {}     }
-    |                                             ^^ Await expression not allowed in formal parameter"
+    |                                  ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){ async ({r} = await bar) => {}     } 1`] = `
-"SyntaxError [1:44-1:46]: Await expression not allowed in formal parameter
+"SyntaxError [1:33-1:38]: Await expression not allowed in formal parameter
 > 1 | async function a(){ async ({r} = await bar) => {}     }
-    |                                             ^^ Await expression not allowed in formal parameter"
+    |                                  ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function a(){ async (foo = await bar) => {}     } 1`] = `
-"SyntaxError [1:44-1:46]: Await expression not allowed in formal parameter
+"SyntaxError [1:33-1:38]: Await expression not allowed in formal parameter
 > 1 | async function a(){ async (foo = await bar) => {}     }
-    |                                             ^^ Await expression not allowed in formal parameter"
+    |                                  ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function af() { (b = (c = await => {}) => {}) => {}; } 1`] = `
@@ -373,9 +385,9 @@ exports[`Expressions - Await > Expressions - Await (fail) > async function af() 
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function af() { var a = (x = await 0) => { }; } 1`] = `
-"SyntaxError [1:44-1:46]: Await expression not allowed in formal parameter
+"SyntaxError [1:35-1:40]: Await expression not allowed in formal parameter
 > 1 | async function af() { var a = (x = await 0) => { }; }
-    |                                             ^^ Await expression not allowed in formal parameter"
+    |                                    ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function af() { var a = (x, await, y) => { }; } 1`] = `
@@ -385,9 +397,9 @@ exports[`Expressions - Await > Expressions - Await (fail) > async function af() 
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function af() { var a = (x, y = await 0, z = 0) => { }; } 1`] = `
-"SyntaxError [1:54-1:56]: Await expression not allowed in formal parameter
+"SyntaxError [1:38-1:43]: Await expression not allowed in formal parameter
 > 1 | async function af() { var a = (x, y = await 0, z = 0) => { }; }
-    |                                                       ^^ Await expression not allowed in formal parameter"
+    |                                       ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function af() { var a = (x, y, await) => { }; } 1`] = `
@@ -468,6 +480,30 @@ exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ 
     |                             ^^^^^ cannot use "await" as identifier inside an async function"
 `;
 
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ ([a = yield, b = await 1]) => 1; } 1`] = `
+"SyntaxError [1:37-1:42]: Await expression not allowed in formal parameter
+> 1 | async function f(){ ([a = yield, b = await 1]) => 1; }
+    |                                      ^^^^^ Await expression not allowed in formal parameter"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ (a = await 1, b = (c) => 1) => 1; } 1`] = `
+"SyntaxError [1:25-1:30]: Await expression not allowed in formal parameter
+> 1 | async function f(){ (a = await 1, b = (c) => 1) => 1; }
+    |                          ^^^^^ Await expression not allowed in formal parameter"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ (a = await 1, b = yield) => 1; } 1`] = `
+"SyntaxError [1:25-1:30]: Await expression not allowed in formal parameter
+> 1 | async function f(){ (a = await 1, b = yield) => 1; }
+    |                          ^^^^^ Await expression not allowed in formal parameter"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ (a = yield, b = await 1) => 1; } 1`] = `
+"SyntaxError [1:36-1:41]: Await expression not allowed in formal parameter
+> 1 | async function f(){ (a = yield, b = await 1) => 1; }
+    |                                     ^^^^^ Await expression not allowed in formal parameter"
+`;
+
 exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ (fail = class A {[await foo](){}; "x"(){}}) => {}    } 1`] = `
 "SyntaxError [1:64-1:66]: Await expression not allowed in formal parameter
 > 1 | async function f(){ (fail = class A {[await foo](){}; "x"(){}}) => {}    }
@@ -475,21 +511,39 @@ exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ 
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ (fail = class A extends (await foo) {}) => fail    } 1`] = `
-"SyntaxError [1:60-1:62]: Await expression not allowed in formal parameter
+"SyntaxError [1:45-1:50]: Await expression not allowed in formal parameter
 > 1 | async function f(){ (fail = class A extends (await foo) {}) => fail    }
-    |                                                             ^^ Await expression not allowed in formal parameter"
+    |                                              ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ (fail = class A extends await foo {}) => fail    } 1`] = `
-"SyntaxError [1:58-1:60]: Await expression not allowed in formal parameter
+"SyntaxError [1:44-1:49]: Await expression not allowed in formal parameter
 > 1 | async function f(){ (fail = class A extends await foo {}) => fail    }
-    |                                                           ^^ Await expression not allowed in formal parameter"
+    |                                             ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ (fail = class extends await foo {}) => fail    } 1`] = `
-"SyntaxError [1:56-1:58]: Await expression not allowed in formal parameter
+"SyntaxError [1:42-1:47]: Await expression not allowed in formal parameter
 > 1 | async function f(){ (fail = class extends await foo {}) => fail    }
-    |                                                         ^^ Await expression not allowed in formal parameter"
+    |                                           ^^^^^ Await expression not allowed in formal parameter"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ async ([a = yield, b = await 1]) => 1; } 1`] = `
+"SyntaxError [1:43-1:48]: Await expression not allowed in formal parameter
+> 1 | async function f(){ async ([a = yield, b = await 1]) => 1; }
+    |                                            ^^^^^ Await expression not allowed in formal parameter"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ async (a = await 1, b = (c) => 1) => 1; } 1`] = `
+"SyntaxError [1:31-1:36]: Await expression not allowed in formal parameter
+> 1 | async function f(){ async (a = await 1, b = (c) => 1) => 1; }
+    |                                ^^^^^ Await expression not allowed in formal parameter"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ async (a = await 1, b = yield) => 1; } 1`] = `
+"SyntaxError [1:31-1:36]: Await expression not allowed in formal parameter
+> 1 | async function f(){ async (a = await 1, b = yield) => 1; }
+    |                                ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ async function f(){   (a= {[await foo](){}, "x"(){}} ) => a    }    } 1`] = `
@@ -504,6 +558,12 @@ exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ 
   1 | async function f(){ await foo
 > 2 | /foo/ }
     |       ^ Unexpected token: '}'"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ await/x } 1`] = `
+"SyntaxError [1:25-1:29]: Unterminated regular expression
+> 1 | async function f(){ await/x }
+    |                          ^^^^ Unterminated regular expression"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async function f(){ let y = x => await x; } 1`] = `
@@ -729,21 +789,21 @@ exports[`Expressions - Await > Expressions - Await (fail) > async function x({aw
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async(a = (await) => {}) => {}; 1`] = `
-"SyntaxError [1:25-1:27]: Await expression not allowed in formal parameter
+"SyntaxError [1:11-1:16]: Await expression not allowed in formal parameter
 > 1 | async(a = (await) => {}) => {};
-    |                          ^^ Await expression not allowed in formal parameter"
+    |            ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async(a = await => {}) => {}; 1`] = `
-"SyntaxError [1:23-1:25]: Await expression not allowed in formal parameter
+"SyntaxError [1:10-1:15]: Await expression not allowed in formal parameter
 > 1 | async(a = await => {}) => {};
-    |                        ^^ Await expression not allowed in formal parameter"
+    |           ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > async(e=await)=>l 1`] = `
-"SyntaxError [1:14-1:16]: Await expression not allowed in formal parameter
+"SyntaxError [1:8-1:13]: Await expression not allowed in formal parameter
 > 1 | async(e=await)=>l
-    |               ^^ Await expression not allowed in formal parameter"
+    |         ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > await => 1; 1`] = `
@@ -792,6 +852,12 @@ exports[`Expressions - Await > Expressions - Await (fail) > await.b[c] => async 
 "SyntaxError [1:11-1:13]: Unexpected token: '=>'
 > 1 | await.b[c] => async
     |            ^^ Unexpected token: '=>'"
+`;
+
+exports[`Expressions - Await > Expressions - Await (fail) > await/x 1`] = `
+"SyntaxError [1:5-1:7]: Unterminated regular expression
+> 1 | await/x
+    |      ^^ Unterminated regular expression"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > await; 1`] = `
@@ -945,9 +1011,9 @@ exports[`Expressions - Await > Expressions - Await (fail) > function () { a = as
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > function *f(){  async (await) => x  } 1`] = `
-"SyntaxError [1:30-1:32]: Await expression not allowed in formal parameter
+"SyntaxError [1:23-1:28]: Await expression not allowed in formal parameter
 > 1 | function *f(){  async (await) => x  }
-    |                               ^^ Await expression not allowed in formal parameter"
+    |                        ^^^^^ Await expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > function *f(){  foo(await)  } 1`] = `
@@ -1029,9 +1095,9 @@ exports[`Expressions - Await > Expressions - Await (fail) > function method() { 
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > function* wrap() { async(a = yield b) => a }; 1`] = `
-"SyntaxError [1:38-1:40]: Yield expression not allowed in formal parameter
+"SyntaxError [1:29-1:34]: Yield expression not allowed in formal parameter
 > 1 | function* wrap() { async(a = yield b) => a };
-    |                                       ^^ Yield expression not allowed in formal parameter"
+    |                              ^^^^^ Yield expression not allowed in formal parameter"
 `;
 
 exports[`Expressions - Await > Expressions - Await (fail) > let f = () => (y=await foo) => y; 1`] = `
@@ -1282,6 +1348,38 @@ exports[`Expressions - Await > Expressions - Await (fail) > x = { async f(await)
 "SyntaxError [1:14-1:19]: cannot use "await" as identifier inside an async function
 > 1 | x = { async f(await){} }
     |               ^^^^^ cannot use "await" as identifier inside an async function"
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > "use strict"; await/x 1`] = `
+{
+  "body": [
+    {
+      "directive": "use strict",
+      "expression": {
+        "type": "Literal",
+        "value": "use strict",
+      },
+      "type": "ExpressionStatement",
+    },
+    {
+      "expression": {
+        "left": {
+          "name": "await",
+          "type": "Identifier",
+        },
+        "operator": "/",
+        "right": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
 `;
 
 exports[`Expressions - Await > Expressions - Await (pass) > (async function f(){ await 
@@ -1597,6 +1695,77 @@ exports[`Expressions - Await > Expressions - Await (pass) > (function call(foo=a
   ],
   "sourceType": "script",
   "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > a.await/2/g 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "left": {
+            "computed": false,
+            "object": {
+              "name": "a",
+              "type": "Identifier",
+            },
+            "optional": false,
+            "property": {
+              "name": "await",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "operator": "/",
+          "right": {
+            "type": "Literal",
+            "value": 2,
+          },
+          "type": "BinaryExpression",
+        },
+        "operator": "/",
+        "right": {
+          "name": "g",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > async () => await/x/g 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "async": true,
+        "body": {
+          "argument": {
+            "regex": {
+              "flags": "g",
+              "pattern": "x",
+            },
+            "type": "Literal",
+            "value": /x/g,
+          },
+          "type": "AwaitExpression",
+        },
+        "expression": true,
+        "generator": false,
+        "params": [],
+        "type": "ArrowFunctionExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
   "type": "Program",
 }
 `;
@@ -2103,6 +2272,44 @@ exports[`Expressions - Await > Expressions - Await (pass) > async function f(){ 
 }
 `;
 
+exports[`Expressions - Await > Expressions - Await (pass) > async function f(){ await/x/g } 1`] = `
+{
+  "body": [
+    {
+      "async": true,
+      "body": {
+        "body": [
+          {
+            "expression": {
+              "argument": {
+                "regex": {
+                  "flags": "g",
+                  "pattern": "x",
+                },
+                "type": "Literal",
+                "value": /x/g,
+              },
+              "type": "AwaitExpression",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
 exports[`Expressions - Await > Expressions - Await (pass) > async function f(){ if (await 
  x) {} } 1`] = `
 {
@@ -2183,6 +2390,62 @@ exports[`Expressions - Await > Expressions - Await (pass) > async function f(){ 
 }
 `;
 
+exports[`Expressions - Await > Expressions - Await (pass) > async function f(){ x.await/2/g } 1`] = `
+{
+  "body": [
+    {
+      "async": true,
+      "body": {
+        "body": [
+          {
+            "expression": {
+              "left": {
+                "left": {
+                  "computed": false,
+                  "object": {
+                    "name": "x",
+                    "type": "Identifier",
+                  },
+                  "optional": false,
+                  "property": {
+                    "name": "await",
+                    "type": "Identifier",
+                  },
+                  "type": "MemberExpression",
+                },
+                "operator": "/",
+                "right": {
+                  "type": "Literal",
+                  "value": 2,
+                },
+                "type": "BinaryExpression",
+              },
+              "operator": "/",
+              "right": {
+                "name": "g",
+                "type": "Identifier",
+              },
+              "type": "BinaryExpression",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
 exports[`Expressions - Await > Expressions - Await (pass) > async function foo(){} 1`] = `
 {
   "body": [
@@ -2199,6 +2462,31 @@ exports[`Expressions - Await > Expressions - Await (pass) > async function foo()
       },
       "params": [],
       "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > await 
+ / x 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "name": "await",
+          "type": "Identifier",
+        },
+        "operator": "/",
+        "right": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
     },
   ],
   "sourceType": "script",
@@ -2309,6 +2597,116 @@ exports[`Expressions - Await > Expressions - Await (pass) > await() 1`] = `
         },
         "optional": false,
         "type": "CallExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > await/x 1`] = `
+{
+  "body": [
+    {
+      "end": 7,
+      "expression": {
+        "end": 7,
+        "left": {
+          "end": 5,
+          "name": "await",
+          "range": [
+            0,
+            5,
+          ],
+          "start": 0,
+          "type": "Identifier",
+        },
+        "operator": "/",
+        "range": [
+          0,
+          7,
+        ],
+        "right": {
+          "end": 7,
+          "name": "x",
+          "range": [
+            6,
+            7,
+          ],
+          "start": 6,
+          "type": "Identifier",
+        },
+        "start": 0,
+        "type": "BinaryExpression",
+      },
+      "range": [
+        0,
+        7,
+      ],
+      "start": 0,
+      "type": "ExpressionStatement",
+    },
+  ],
+  "end": 7,
+  "range": [
+    0,
+    7,
+  ],
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > await/x 2`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "name": "await",
+          "type": "Identifier",
+        },
+        "operator": "/",
+        "right": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > await/x/g 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "left": {
+            "name": "await",
+            "type": "Identifier",
+          },
+          "operator": "/",
+          "right": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "BinaryExpression",
+        },
+        "operator": "/",
+        "right": {
+          "name": "g",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
       },
       "type": "ExpressionStatement",
     },
@@ -3052,6 +3450,45 @@ exports[`Expressions - Await > Expressions - Await (pass) > function *f(await){}
 }
 `;
 
+exports[`Expressions - Await > Expressions - Await (pass) > function f(){ await/x } 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "expression": {
+              "left": {
+                "name": "await",
+                "type": "Identifier",
+              },
+              "operator": "/",
+              "right": {
+                "name": "x",
+                "type": "Identifier",
+              },
+              "type": "BinaryExpression",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": false,
+      "id": {
+        "name": "f",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
 exports[`Expressions - Await > Expressions - Await (pass) > function f(foo = await){} 1`] = `
 {
   "body": [
@@ -3115,6 +3552,76 @@ exports[`Expressions - Await > Expressions - Await (pass) > function f(x = await
         },
       ],
       "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > function* g(){ await/x } 1`] = `
+{
+  "body": [
+    {
+      "async": false,
+      "body": {
+        "body": [
+          {
+            "expression": {
+              "left": {
+                "name": "await",
+                "type": "Identifier",
+              },
+              "operator": "/",
+              "right": {
+                "name": "x",
+                "type": "Identifier",
+              },
+              "type": "BinaryExpression",
+            },
+            "type": "ExpressionStatement",
+          },
+        ],
+        "type": "BlockStatement",
+      },
+      "generator": true,
+      "id": {
+        "name": "g",
+        "type": "Identifier",
+      },
+      "params": [],
+      "type": "FunctionDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > label: await/x 1`] = `
+{
+  "body": [
+    {
+      "body": {
+        "expression": {
+          "left": {
+            "name": "await",
+            "type": "Identifier",
+          },
+          "operator": "/",
+          "right": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "type": "BinaryExpression",
+        },
+        "type": "ExpressionStatement",
+      },
+      "label": {
+        "name": "label",
+        "type": "Identifier",
+      },
+      "type": "LabeledStatement",
     },
   ],
   "sourceType": "script",
@@ -3327,6 +3834,40 @@ exports[`Expressions - Await > Expressions - Await (pass) > let o = {f(foo = awa
               },
             ],
             "type": "ObjectExpression",
+          },
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > let x = await/2 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "x",
+            "type": "Identifier",
+          },
+          "init": {
+            "left": {
+              "name": "await",
+              "type": "Identifier",
+            },
+            "operator": "/",
+            "right": {
+              "type": "Literal",
+              "value": 2,
+            },
+            "type": "BinaryExpression",
           },
           "type": "VariableDeclarator",
         },
@@ -3716,6 +4257,84 @@ exports[`Expressions - Await > Expressions - Await (pass) > o = {f(await){}} 1`]
 }
 `;
 
+exports[`Expressions - Await > Expressions - Await (pass) > var await; await/x 1`] = `
+{
+  "body": [
+    {
+      "declarations": [
+        {
+          "id": {
+            "name": "await",
+            "type": "Identifier",
+          },
+          "init": null,
+          "type": "VariableDeclarator",
+        },
+      ],
+      "kind": "var",
+      "type": "VariableDeclaration",
+    },
+    {
+      "expression": {
+        "left": {
+          "name": "await",
+          "type": "Identifier",
+        },
+        "operator": "/",
+        "right": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > x = await/2/g 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "name": "x",
+          "type": "Identifier",
+        },
+        "operator": "=",
+        "right": {
+          "left": {
+            "left": {
+              "name": "await",
+              "type": "Identifier",
+            },
+            "operator": "/",
+            "right": {
+              "type": "Literal",
+              "value": 2,
+            },
+            "type": "BinaryExpression",
+          },
+          "operator": "/",
+          "right": {
+            "name": "g",
+            "type": "Identifier",
+          },
+          "type": "BinaryExpression",
+        },
+        "type": "AssignmentExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
+
 exports[`Expressions - Await > Expressions - Await (pass) > x = function f(foo = await){} 1`] = `
 {
   "body": [
@@ -3762,6 +4381,47 @@ exports[`Expressions - Await > Expressions - Await (pass) > x = function f(foo =
 }
 `;
 
+exports[`Expressions - Await > Expressions - Await (pass) > x.await/2/g 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "left": {
+            "computed": false,
+            "object": {
+              "name": "x",
+              "type": "Identifier",
+            },
+            "optional": false,
+            "property": {
+              "name": "await",
+              "type": "Identifier",
+            },
+            "type": "MemberExpression",
+          },
+          "operator": "/",
+          "right": {
+            "type": "Literal",
+            "value": 2,
+          },
+          "type": "BinaryExpression",
+        },
+        "operator": "/",
+        "right": {
+          "name": "g",
+          "type": "Identifier",
+        },
+        "type": "BinaryExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "module",
+  "type": "Program",
+}
+`;
+
 exports[`Expressions - Await > Expressions - Await (pass) > y = async x => await x 1`] = `
 {
   "body": [
@@ -3797,6 +4457,37 @@ exports[`Expressions - Await > Expressions - Await (pass) > y = async x => await
     },
   ],
   "sourceType": "script",
+  "type": "Program",
+}
+`;
+
+exports[`Expressions - Await > Expressions - Await (pass) > y = await/x/g 1`] = `
+{
+  "body": [
+    {
+      "expression": {
+        "left": {
+          "name": "y",
+          "type": "Identifier",
+        },
+        "operator": "=",
+        "right": {
+          "argument": {
+            "regex": {
+              "flags": "g",
+              "pattern": "x",
+            },
+            "type": "Literal",
+            "value": /x/g,
+          },
+          "type": "AwaitExpression",
+        },
+        "type": "AssignmentExpression",
+      },
+      "type": "ExpressionStatement",
+    },
+  ],
+  "sourceType": "module",
   "type": "Program",
 }
 `;

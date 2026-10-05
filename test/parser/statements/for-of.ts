@@ -5,7 +5,7 @@ import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
 describe('Statements - For of', () => {
-  for (const arg of [
+  for (const text of [
     'for(var [] = 0 of {});',
     'for(var [,] = 0 of {});',
     'for(var [a] = 0 of {});',
@@ -77,16 +77,17 @@ describe('Statements - For of', () => {
     'for(f() = 0 of {});',
     'for(({a}) of 0);',
     'for(([a]) of 0);',
+    'for (async of x);',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { lexical: true });
+        parseSource(text, { lexical: true });
       });
     });
   }
@@ -203,7 +204,7 @@ describe('Statements - For of', () => {
     'for (let [...{ x } = []] of [[]]) {}',
   ]);
 
-  for (const arg of [
+  for (const text of [
     'for({a=0} of b);',
     'for ({[a]: ""[b]} of c) {}',
     'for ({[a]: ""[b] = c} of d) {}',
@@ -444,52 +445,42 @@ describe('Statements - For of', () => {
     'for (var { cover = (function () {}), a = (0, function() {})  } of [{}]) {}',
     'for(x of ~y);',
     'for(x of~y);',
+    'for ((async) of x);',
+    String.raw`for (\u0061sync of x);`,
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { webcompat: true });
+        parseSource(text, { webcompat: true });
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { next: true, webcompat: true });
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(`${text} ${text}`);
       });
     });
 
-    it(`${arg}`, () => {
+    it(`async(); ${text}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { next: true });
+        parseSource(`async(); ${text}`);
       });
     });
 
-    it(`${arg}`, () => {
+    it(`function foo() { ${text} }`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg} ${arg}`);
-      });
-    });
-
-    it(`async(); ${arg}`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`async(); ${arg}`);
-      });
-    });
-
-    it(`function foo() { ${arg} }`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`function foo() { ${arg} }`);
+        parseSource(`function foo() { ${text} }`);
       });
     });
   }

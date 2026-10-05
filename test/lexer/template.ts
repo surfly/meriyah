@@ -25,8 +25,9 @@ describe('Lexer - Template', () => {
       [Context.None, Token.TemplateSpan, '``', ''],
       [Context.None, Token.TemplateSpan, '`123`', '123'],
       [Context.None, Token.TemplateSpan, '`true`', 'true'],
-      [Context.None, Token.TemplateSpan, '`\n\r`', '\n\r'],
-      [Context.None, Token.TemplateSpan, '`\r\n`', '\r\n'],
+      // ECMA-262 TV of LineTerminatorSequence maps <CR> and <CR><LF> to <LF>.
+      [Context.None, Token.TemplateSpan, '`\n\r`', '\n\n'],
+      [Context.None, Token.TemplateSpan, '`\r\n`', '\n'],
       [Context.None, Token.TemplateSpan, '`$$$a}`', '$$$a}'],
 
       // Russian letters
@@ -167,13 +168,13 @@ describe('Lexer - Template', () => {
   }
 
   fail('fails on "foo', '"foo', Context.None);
-  fail(String.raw`fails on "\u007"`, String.raw`"\u007"`, Context.None, { next: true });
-  fail(String.raw`fails on "\u007Xvwxyz"`, String.raw`"\u007Xvwxyz"`, Context.None, { next: true });
+  fail(String.raw`fails on "\u007"`, String.raw`"\u007"`, Context.None);
+  fail(String.raw`fails on "\u007Xvwxyz"`, String.raw`"\u007Xvwxyz"`, Context.None);
   // fail('fails on "abc\\u{}"', '"abc\\u{}"', Context.OptionsNext);
   // fail('fails on "abc\\u}"', '"abc\\u}"', Context.OptionsNext);
   // fail('fails on "abc\\u{', '"abc\\u{"', Context.OptionsNext);
-  fail(String.raw`fails on "\u{70bc"`, String.raw`"\u{70bc"`, Context.None, { next: true });
-  fail(String.raw`fails on "\u{70"`, String.raw`"\u{70"`, Context.None, { next: true });
+  fail(String.raw`fails on "\u{70bc"`, String.raw`"\u{70bc"`, Context.None);
+  fail(String.raw`fails on "\u{70"`, String.raw`"\u{70"`, Context.None);
   fail(String.raw`fails on "\u{!"`, String.raw`"\u{!"`, Context.None);
   fail(String.raw`fails on "\u"`, String.raw`"\u"`, Context.None);
   fail(String.raw`fails on "\"`, String.raw`"\"`, Context.None);

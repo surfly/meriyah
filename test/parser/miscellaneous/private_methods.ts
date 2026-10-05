@@ -1,10 +1,11 @@
 import * as t from 'node:assert/strict';
 import { outdent } from 'outdent';
 import { describe, it } from 'vitest';
+import { Features } from '../../../src/features.ts';
 import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
-describe('Next - Private methods', () => {
+describe('Private methods', () => {
   fail('Private methods (fail)', [
     'class A { #a b() {} }',
     'class A { #a b }',
@@ -71,7 +72,7 @@ describe('Next - Private methods', () => {
     { code: 'class A extends B { #x() {} method() { super.#x() }  }', options: { lexical: true } },
   ]);
 
-  for (const arg of [
+  for (const text of [
     '#a : 0',
     '#a =',
     '#*a = 0',
@@ -119,32 +120,32 @@ describe('Next - Private methods', () => {
     '#x = super();',
     String.raw`#\u0000;`,
   ]) {
-    it(`class C { ${arg} }`, () => {
+    it(`class C { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`class C { ${arg} }`);
+        parseSource(`class C { ${text} }`);
       });
     });
 
-    it(`class C extends Base { ${arg} }`, () => {
+    it(`class C extends Base { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`class C extends Base { ${arg} }`);
+        parseSource(`class C extends Base { ${text} }`);
       });
     });
 
-    it(`(class C { ${arg} })`, () => {
+    it(`(class C { ${text} })`, () => {
       t.throws(() => {
-        parseSource(`(class C { ${arg} })`);
+        parseSource(`(class C { ${text} })`);
       });
     });
 
-    it(`(class C extends Base { ${arg} })`, () => {
+    it(`(class C extends Base { ${text} })`, () => {
       t.throws(() => {
-        parseSource(`(class C extends Base { ${arg} })`);
+        parseSource(`(class C extends Base { ${text} })`);
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     '#a = 0;',
     '#a = 0; #b;',
     '#a = 0; b;',
@@ -216,31 +217,31 @@ describe('Next - Private methods', () => {
     String.raw`static #\u{61}bc=2`,
     'static #\\u{61} = 2;\n',
   ]) {
-    it(`class C { ${arg} }`, () => {
+    it(`class C { ${text} }`, () => {
       t.doesNotThrow(() => {
-        parseSource(`class C { ${arg} }`);
+        parseSource(`class C { ${text} }`);
       });
     });
 
-    it(`class C extends Base { ${arg} }`, () => {
+    it(`class C extends Base { ${text} }`, () => {
       t.doesNotThrow(() => {
-        parseSource(`class C extends Base { ${arg} }`);
+        parseSource(`class C extends Base { ${text} }`);
       });
     });
 
-    it(`(class C { ${arg} })`, () => {
+    it(`(class C { ${text} })`, () => {
       t.doesNotThrow(() => {
-        parseSource(`(class C { ${arg} })`);
+        parseSource(`(class C { ${text} })`);
       });
     });
 
-    it(`(class C extends Base { ${arg} })`, () => {
+    it(`(class C extends Base { ${text} })`, () => {
       t.doesNotThrow(() => {
-        parseSource(`(class C extends Base { ${arg} })`);
+        parseSource(`(class C extends Base { ${text} })`);
       });
     });
   }
-  for (const arg of [
+  for (const text of [
     '{ class C { #a() { class B { #a() {  } } new B; } } new C; }',
     '{ class A { #a() { class C extends A { #c() { } } new C; } } new A; }',
     '{ const C = class { #a() { } } }',
@@ -281,13 +282,13 @@ describe('Next - Private methods', () => {
       }
     `,
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
   }
-  pass('Next - Private methods (pass)', [
+  pass('Private methods (pass)', [
     'class A { #key; }',
     'class A { static async #_(value) { return await value;} }',
     { code: 'class A { #a; #b; }', options: { ranges: true } },
@@ -388,7 +389,6 @@ describe('Next - Private methods', () => {
     `,
     'class A { #key() {} }',
     'class A { #yield\n = 0; }',
-    'class A { #foo() { #bar } }',
     'class A { static #key; }',
     'class A { static #foo(bar) {} }',
     'class A { m() {} #a; }',
@@ -479,6 +479,6 @@ describe('Next - Private methods', () => {
     { code: 'class C { async #m() {} }', options: { ranges: true, loc: true } },
     { code: 'class C { * \n#m(v) {} }', options: { ranges: true, loc: true } },
     { code: 'class C { async * \n#m() {} }', options: { ranges: true, loc: true } },
-    { code: 'class C { accessor #x = 1 }', options: { ranges: true, loc: true, next: true } },
+    { code: 'class C { accessor #x = 1 }', options: { ranges: true, loc: true, features: Features.Decorators } },
   ]);
 });

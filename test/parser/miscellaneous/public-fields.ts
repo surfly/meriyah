@@ -4,34 +4,41 @@ import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
-describe('Next - Public fields', () => {
+describe('Public fields', () => {
   fail('Public fields (fail)', [
-    { code: 'class A { "x" = arguments; }', options: { webcompat: true, next: true } },
-    { code: 'class A { "x" = super(); }', options: { webcompat: true, next: true } },
-    { code: 'class A { x = typeof super(); }', options: { webcompat: true, next: true } },
-    { code: 'class A { static "x" = super(); }', options: { webcompat: true, next: true } },
-    { code: 'class A { static "x" = arguments; }', options: { webcompat: true, next: true } },
-    { code: 'var C = class { x = () => arguments); }', options: { webcompat: true, next: true } },
-    { code: 'var C = class { x = () => eval); }', options: { webcompat: true, next: true } },
-    { code: 'class A { static "x" = arguments; }', options: { webcompat: true, next: true } },
+    { code: 'class A { "x" = arguments; }', options: { webcompat: true } },
+    { code: 'class A { "x" = super(); }', options: { webcompat: true } },
+    { code: 'class A { x = typeof super(); }', options: { webcompat: true } },
+    { code: 'class A { static "x" = super(); }', options: { webcompat: true } },
+    { code: 'class A { static "x" = arguments; }', options: { webcompat: true } },
+    { code: 'var C = class { x = () => arguments); }', options: { webcompat: true } },
+    { code: 'var C = class { x = () => eval); }', options: { webcompat: true } },
+    { code: 'class A { static "x" = arguments; }', options: { webcompat: true } },
     {
       code: 'class C { #m = function() { return "bar"; }; Child = class extends C { access() { return super.#m; } method() { return super.#m(); } } }',
-      options: { webcompat: true, next: true },
+      options: { webcompat: true },
     },
     {
       code: 'class C { #m = function() { return "bar"; }; Child = class extends C { access = () => super.#m; method = () => super.#m(); } }',
-      options: { webcompat: true, next: true },
+      options: { webcompat: true },
     },
     'class A { a, b }',
-    { code: 'class A { a, b }', options: { next: true } },
+    { code: 'class A { a, b }' },
     'class A { a b }',
-    { code: 'class A { a b }', options: { next: true } },
-    { code: 'class A { a b() {} }', options: { next: true } },
-    { code: 'class A { a = 1, 2 }', options: { next: true } },
-    { code: 'class A { a = 1, b = 2 }', options: { next: true } },
+    { code: 'class A { a b }' },
+    { code: 'class A { a b() {} }' },
+    { code: 'class A { a = 1, 2 }' },
+    { code: 'class A { a = 1, b = 2 }' },
+    { code: 'class C { x = await 1 }', options: { sourceType: 'module' } },
+    { code: 'class C { static x = await 1 }', options: { sourceType: 'module' } },
+    { code: 'class C { x = (await 1) }', options: { sourceType: 'module' } },
+    { code: 'class C { x = () => await 1 }', options: { sourceType: 'module' } },
+    { code: 'class C { x = class { y = await 1 } }', options: { sourceType: 'module' } },
+    { code: 'async () => class { x = await 1 };', options: { sourceType: 'module' } },
+    { code: '(async () => class { x = await 1 })', options: { sourceType: 'module' } },
   ]);
 
-  for (const arg of [
+  for (const text of [
     'static a : 0',
     'static a =',
     'static constructor',
@@ -61,14 +68,14 @@ describe('Next - Public fields', () => {
     '{ something.#x }',
     'class C { x = () => arguments; }',
   ]) {
-    it(`class C { ${arg} }`, () => {
+    it(`class C { ${text} }`, () => {
       t.throws(() => {
-        parseSource(`class C { ${arg} }`, { next: true });
+        parseSource(`class C { ${text} }`);
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     'a = 0;',
     'a = (1, 2)',
     'a = 0; b;',
@@ -126,6 +133,8 @@ describe('Next - Public fields', () => {
     'async;\n a;',
     'await;',
     'await = 0;',
+    'x = await;',
+    'static x = await;',
     'await;\n a;',
     '\nx;\ny;\n\n',
     "static ['constructor'];",
@@ -184,27 +193,32 @@ describe('Next - Public fields', () => {
       getx() { this.#x = 'foo'; ;({ x: this.x = this.#x, y: this.#x, z: this.z = this.#x } = props) }
     `,
   ]) {
-    it(`class C { ${arg} }`, () => {
+    it(`class C { ${text} }`, () => {
       t.doesNotThrow(() => {
-        parseSource(`class C { ${arg} }`, { next: true });
+        parseSource(`class C { ${text} }`);
       });
     });
   }
 
-  pass('Next - Public fields (pass)', [
-    { code: 'var C = class { static async #prototype() {} };', options: { next: true, ranges: true } },
-    { code: 'class Foo { x = 1; }', options: { next: true, ranges: true } },
-    { code: 'class A { set; }', options: { next: true, ranges: true } },
-    { code: 'class A { set = get; }', options: { next: true } },
-    { code: 'const createClass = (k) => class { [k()] = 2 };', options: { next: true, ranges: true } },
-    { code: 'class A { a = 0; }', options: { next: true } },
+  pass('Public fields (pass)', [
+    { code: 'class C { [await 1] = 1 }', options: { sourceType: 'module' } },
+    { code: 'class C extends (await 1) {}', options: { sourceType: 'module' } },
+    { code: 'class C { x = async () => await 1 }', options: { sourceType: 'module' } },
+    { code: 'class C { x = 1 }; await 1;', options: { sourceType: 'module' } },
+    { code: 'async function g() { return class { x = await }; }' },
+    { code: 'var C = class { static async #prototype() {} };', options: { ranges: true } },
+    { code: 'class Foo { x = 1; }', options: { ranges: true } },
+    { code: 'class A { set; }', options: { ranges: true } },
+    { code: 'class A { set = get; }' },
+    { code: 'const createClass = (k) => class { [k()] = 2 };', options: { ranges: true } },
+    { code: 'class A { a = 0; }' },
     {
       code: 'class A { ;;;;;;[x] = 42; [10] = "meep"; ["not initialized"];;;;;;; }',
-      options: { next: true, ranges: true },
+      options: { ranges: true },
     },
-    { code: '{ class X { static p = function() { return arguments[0]; } } }', options: { next: true, ranges: true } },
-    { code: "class A { ['a'] = 0; b; }", options: { next: true, ranges: true } },
-    { code: 'class Some { render=( )=>{ return null; }}', options: { next: true, ranges: true } },
+    { code: '{ class X { static p = function() { return arguments[0]; } } }', options: { ranges: true } },
+    { code: "class A { ['a'] = 0; b; }", options: { ranges: true } },
+    { code: 'class Some { render=( )=>{ return null; }}', options: { ranges: true } },
     {
       code: outdent`
         {
@@ -224,17 +238,17 @@ describe('Next - Public fields', () => {
           let p = X.t();
         }
       `,
-      options: { next: true, ranges: true },
+      options: { ranges: true },
     },
-    { code: 'class X { static p = eval("(function() { return arguments[0]; })(1)"); }', options: { next: true } },
-    { code: 'class Some { render=(a,b)=>{ return null; } }', options: { next: true } },
+    { code: 'class X { static p = eval("(function() { return arguments[0]; })(1)"); }' },
+    { code: 'class Some { render=(a,b)=>{ return null; } }' },
     {
       code: 'class A {  ;;;; ;;;;;;\'a\'; "b"; \'c\' = 39;  "d" = 42;;;;;;;  ;;;; }',
-      options: { next: true, ranges: true },
+      options: { ranges: true },
     },
-    { code: 'class A { foo; }', options: { next: true, ranges: true } },
-    { code: 'class A { a = b = c }', options: { next: true, ranges: true } },
-    { code: 'class A { a = b += c }', options: { next: true, ranges: true } },
+    { code: 'class A { foo; }', options: { ranges: true } },
+    { code: 'class A { a = b = c }', options: { ranges: true } },
+    { code: 'class A { a = b += c }', options: { ranges: true } },
     { code: 'class C { static x }', options: { ranges: true, loc: true } },
   ]);
 });

@@ -411,7 +411,7 @@ export function scanSingleToken(parser: Parser, context: Context, state: LexerSt
           return Token.Subtract;
         }
 
-        // `/`, `/=`, `/>`, '/*..*/'
+        // `/`, `/=`, '/*..*/'
         case Token.Divide: {
           advanceChar(parser);
           if (parser.index < parser.end) {
@@ -481,6 +481,10 @@ export function scanSingleToken(parser: Parser, context: Context, state: LexerSt
         // `>`, `>=`, `>>`, `>>>`, `>>=`, `>>>=`
         case Token.GreaterThan: {
           advanceChar(parser);
+
+          if (context & Context.InJSXTag) {
+            return Token.GreaterThan;
+          }
 
           const ch = parser.currentChar;
 

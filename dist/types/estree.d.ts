@@ -15,7 +15,11 @@ export interface Position {
     line: number;
     column: number;
 }
-export type Labels = any;
+export interface Labels {
+    parent?: Labels;
+    loop?: 1;
+    names?: Set<string>;
+}
 export type IdentifierOrExpression = Identifier | Expression | ArrowFunctionExpression;
 export type ArgumentExpression = ArrayExpression | AssignmentExpression | ConditionalExpression | Literal | SpreadElement | BinaryExpression | LogicalExpression | SequenceExpression;
 export type CommentType = 'SingleLine' | 'MultiLine' | 'HTMLOpen' | 'HTMLClose' | 'HashbangComment';
@@ -29,21 +33,22 @@ export type ClassElement = FunctionExpression | MethodDefinition;
 export type DeclarationStatement = ClassDeclaration | ClassExpression | ExportDefaultDeclaration | ExportAllDeclaration | ExportNamedDeclaration | FunctionDeclaration;
 export type EntityName = Identifier;
 export type ExportDeclaration = ClassDeclaration | ClassExpression | FunctionDeclaration | VariableDeclaration;
-export type Expression = ArrowFunctionExpression | AssignmentExpression | BinaryExpression | ConditionalExpression | MetaProperty | ChainExpression | JSXClosingElement | JSXClosingFragment | JSXExpressionContainer | JSXOpeningElement | JSXOpeningFragment | JSXSpreadChild | LogicalExpression | NewExpression | RestElement | SequenceExpression | SpreadElement | AwaitExpression | LeftHandSideExpression | UnaryExpression | UpdateExpression | YieldExpression;
+export type Expression = ArrowFunctionExpression | AssignmentExpression | BinaryExpression | ConditionalExpression | MetaProperty | ChainExpression | LogicalExpression | NewExpression | SequenceExpression | AwaitExpression | LeftHandSideExpression | UnaryExpression | UpdateExpression | YieldExpression;
 export type ForInitializer = Expression | VariableDeclaration;
 export type ImportClause = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
 export type IterationStatement = DoWhileStatement | ForInStatement | ForOfStatement | ForStatement | WhileStatement;
 export type JSXChild = JSXElement | JSXExpression | JSXFragment | JSXText;
 export type JSXExpression = JSXEmptyExpression | JSXSpreadChild | JSXExpressionContainer;
 export type JSXTagNameExpression = JSXIdentifier | JSXMemberExpression | JSXNamespacedName;
-export type LeftHandSideExpression = CallExpression | ChainExpression | ImportExpression | ClassExpression | ClassDeclaration | FunctionExpression | LiteralExpression | MemberExpression | PrimaryExpression | TaggedTemplateExpression;
+export type LeftHandSideExpression = CallExpression | ChainExpression | ImportExpression | ClassExpression | FunctionExpression | LiteralExpression | MemberExpression | PrimaryExpression | TaggedTemplateExpression;
 export type LiteralExpression = Literal | TemplateLiteral;
+export type ModuleDeclaration = ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration | ImportDeclaration;
 export type ObjectLiteralElementLike = MethodDefinition | Property | RestElement | SpreadElement;
 export type Parameter = AssignmentPattern | RestElement | ArrayPattern | ObjectPattern | Identifier;
-export type PrimaryExpression = ArrayExpression | ArrayPattern | ClassExpression | FunctionExpression | Identifier | JSXElement | JSXFragment | JSXOpeningElement | Literal | LiteralExpression | MetaProperty | ObjectExpression | ObjectPattern | Super | TemplateLiteral | ThisExpression;
+export type PrimaryExpression = ArrayExpression | ClassExpression | FunctionExpression | Identifier | JSXElement | JSXFragment | Literal | LiteralExpression | MetaProperty | ObjectExpression | TemplateLiteral | ThisExpression;
 export type PrimaryExpressionExtended = ArrayExpression | ArrowFunctionExpression | ArrayPattern | AwaitExpression | Expression | ClassExpression | FunctionExpression | Identifier | JSXElement | JSXFragment | JSXOpeningElement | Literal | LiteralExpression | MetaProperty | ObjectExpression | ObjectPattern | PrivateIdentifier | NewExpression | Super | TemplateLiteral | ThisExpression | UnaryExpression | UpdateExpression;
 export type PropertyName = Identifier | Literal;
-export type Statement = BlockStatement | BreakStatement | ContinueStatement | DebuggerStatement | DeclarationStatement | EmptyStatement | ExpressionStatement | IfStatement | IterationStatement | ImportDeclaration | LabeledStatement | ReturnStatement | SwitchStatement | ThrowStatement | TryStatement | VariableDeclaration | WithStatement;
+export type Statement = BlockStatement | BreakStatement | ClassDeclaration | ContinueStatement | DebuggerStatement | EmptyStatement | ExpressionStatement | FunctionDeclaration | IfStatement | IterationStatement | LabeledStatement | ReturnStatement | SwitchStatement | ThrowStatement | TryStatement | VariableDeclaration | WithStatement;
 interface ClassDeclarationBase extends _Node {
     id: Identifier | null;
     body: ClassBody;
@@ -66,7 +71,7 @@ export interface ArrayExpression extends _Node {
 }
 export interface ArrayPattern extends _Node {
     type: 'ArrayPattern';
-    elements: Expression[];
+    elements: (Pattern | null)[];
 }
 export interface ArrowFunctionExpression extends _Node {
     type: 'ArrowFunctionExpression';
@@ -76,10 +81,11 @@ export interface ArrowFunctionExpression extends _Node {
     expression: boolean;
     generator: false;
 }
+export type AssignmentOperator = '=' | '+=' | '-=' | '*=' | '/=' | '%=' | '**=' | '<<=' | '>>=' | '>>>=' | '|=' | '^=' | '&=' | '||=' | '&&=' | '??=';
 export interface AssignmentExpression extends _Node {
     type: 'AssignmentExpression';
-    operator: string;
-    left: Expression;
+    operator: AssignmentOperator;
+    left: Pattern | MemberExpression | CallExpression;
     right: Expression;
 }
 export interface AssignmentPattern extends _Node {
@@ -91,9 +97,10 @@ export interface AwaitExpression extends _Node {
     type: 'AwaitExpression';
     argument: Expression;
 }
+export type BinaryOperator = '==' | '!=' | '===' | '!==' | '<' | '<=' | '>' | '>=' | '<<' | '>>' | '>>>' | '+' | '-' | '*' | '/' | '%' | '**' | '|' | '^' | '&' | 'in' | 'instanceof';
 export interface BinaryExpression extends _Node {
     type: 'BinaryExpression';
-    operator: string;
+    operator: BinaryOperator;
     left: Expression | PrivateIdentifier;
     right: Expression;
 }
@@ -110,6 +117,7 @@ export interface ImportExpression extends _Node {
     type: 'ImportExpression';
     source: Expression;
     options?: Expression | null;
+    phase?: 'defer' | 'source' | null;
 }
 export interface ChainExpression extends _Node {
     type: 'ChainExpression';
@@ -117,7 +125,7 @@ export interface ChainExpression extends _Node {
 }
 export interface CallExpression extends _Node {
     type: 'CallExpression';
-    callee: any;
+    callee: Expression | Super;
     arguments: (Expression | SpreadElement)[];
     optional: boolean;
 }
@@ -137,7 +145,7 @@ export interface ClassBody extends _Node {
 export interface AccessorProperty extends _Node {
     type: 'AccessorProperty';
     key: PrivateIdentifier | Expression;
-    value: any;
+    value: Expression | null;
     decorators?: Decorator[];
     computed: boolean;
     static: boolean;
@@ -145,7 +153,7 @@ export interface AccessorProperty extends _Node {
 export interface PropertyDefinition extends _Node {
     type: 'PropertyDefinition';
     key: PrivateIdentifier | Expression;
-    value: any;
+    value: Expression | null;
     decorators?: Decorator[];
     computed: boolean;
     static: boolean;
@@ -214,13 +222,13 @@ export interface ExpressionStatement extends _Node {
 }
 export interface ForInStatement extends _Node {
     type: 'ForInStatement';
-    left: ForInitializer;
+    left: VariableDeclaration | Pattern | CallExpression;
     right: Expression;
     body: Statement;
 }
 export interface ForOfStatement extends _Node {
     type: 'ForOfStatement';
-    left: ForInitializer;
+    left: VariableDeclaration | Pattern | CallExpression;
     right: Expression;
     body: Statement;
     await: boolean;
@@ -253,6 +261,7 @@ export interface ImportDeclaration extends _Node {
     source: StringLiteral;
     specifiers: ImportClause[];
     attributes: ImportAttribute[];
+    phase?: 'defer' | 'source' | null;
 }
 export interface ImportAttribute extends _Node {
     type: 'ImportAttribute';
@@ -274,7 +283,7 @@ export interface ImportSpecifier extends _Node {
 }
 export interface JSXNamespacedName extends _Node {
     type: 'JSXNamespacedName';
-    namespace: JSXIdentifier | JSXMemberExpression;
+    namespace: JSXIdentifier;
     name: JSXIdentifier;
 }
 export type JSXAttributeValue = JSXIdentifier | Literal | JSXElement | JSXFragment | JSXExpressionContainer | JSXSpreadChild | null;
@@ -315,7 +324,7 @@ export interface JSXIdentifier extends _Node {
 }
 export interface JSXMemberExpression extends _Node {
     type: 'JSXMemberExpression';
-    object: JSXTagNameExpression;
+    object: JSXIdentifier | JSXMemberExpression;
     property: JSXIdentifier;
 }
 export interface JSXOpeningElement extends _Node {
@@ -373,9 +382,10 @@ export interface RegExpLiteral extends _LiteralBase {
         flags: string;
     };
 }
+export type LogicalOperator = '||' | '&&' | '??';
 export interface LogicalExpression extends _Node {
     type: 'LogicalExpression';
-    operator: string;
+    operator: LogicalOperator;
     left: Expression;
     right: Expression;
 }
@@ -404,7 +414,7 @@ export interface MethodDefinition extends _Node {
 export interface NewExpression extends _Node {
     type: 'NewExpression';
     callee: LeftHandSideExpression;
-    arguments: Expression[];
+    arguments: (Expression | SpreadElement)[];
 }
 export interface ObjectExpression extends _Node {
     type: 'ObjectExpression';
@@ -412,11 +422,11 @@ export interface ObjectExpression extends _Node {
 }
 export interface ObjectPattern extends _Node {
     type: 'ObjectPattern';
-    properties: ObjectLiteralElementLike[];
+    properties: (AssignmentProperty | RestElement)[];
 }
 export interface Program extends _Node {
     type: 'Program';
-    body: Statement[];
+    body: (Statement | ModuleDeclaration)[];
     sourceType: 'module' | 'script';
 }
 export interface ParenthesizedExpression extends _Node {
@@ -426,15 +436,20 @@ export interface ParenthesizedExpression extends _Node {
 export interface Property extends _Node {
     type: 'Property';
     key: Expression;
-    value: Expression | AssignmentPattern | BindingPattern | Identifier;
+    value: Expression | Pattern;
     computed: boolean;
     method: boolean;
     shorthand: boolean;
     kind: 'init' | 'get' | 'set';
 }
+export interface AssignmentProperty extends Property {
+    value: Pattern;
+    kind: 'init';
+    method: boolean;
+}
 export interface RestElement extends _Node {
     type: 'RestElement';
-    argument: BindingPattern | Identifier | Expression | PropertyName;
+    argument: Pattern | CallExpression;
     value?: AssignmentPattern;
 }
 export interface ReturnStatement extends _Node {
@@ -445,10 +460,9 @@ export interface SequenceExpression extends _Node {
     type: 'SequenceExpression';
     expressions: Expression[];
 }
-export type SpreadArgument = BindingPattern | Identifier | Expression | PropertyName | SpreadElement;
 export interface SpreadElement extends _Node {
     type: 'SpreadElement';
-    argument: SpreadArgument;
+    argument: Expression;
 }
 export interface Super extends _Node {
     type: 'Super';
@@ -511,11 +525,11 @@ export interface UnaryExpression extends _Node {
 export interface VariableDeclaration extends _Node {
     type: 'VariableDeclaration';
     declarations: VariableDeclarator[];
-    kind: 'let' | 'const' | 'var';
+    kind: 'let' | 'const' | 'var' | 'using' | 'await using';
 }
 export interface VariableDeclarator extends _Node {
     type: 'VariableDeclarator';
-    id: Expression | BindingPattern | Identifier;
+    id: BindingPattern;
     init: Expression | null;
     definite?: boolean;
 }

@@ -5,7 +5,7 @@ import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
 describe('Statements - For in', () => {
-  for (const arg of [
+  for (const text of [
     'for (x+b in y);',
     'for (b++ in y);',
     'for ([...x,] in [[]]);',
@@ -35,20 +35,20 @@ describe('Statements - For in', () => {
     'for(({a: 0}) in 0);',
     'for(0 in 0);',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { webcompat: true });
+        parseSource(text, { webcompat: true });
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { webcompat: true, lexical: true });
+        parseSource(text, { webcompat: true, lexical: true });
       });
     });
   }
-  // ForInOfLoopInitializer only applies in strict mode when webCompat is off
-  for (const arg of [
+  // ForInOfLoopInitializer error only applies in strict mode or webCompat is off
+  for (const text of [
     'for(var x=1 in [1,2,3]) 0',
     'for (var x = 1 in y) {}',
     'for (var a = 0 in {});',
@@ -56,33 +56,42 @@ describe('Statements - For in', () => {
     'for (var a = b in c);',
     'for (var a = 0 in stored = a, {});',
     'for (var a = (++effects, -1) in x);',
+    'for (var a = (b in c) in {});',
+    'for (var a = 1 || (b in c) in {});',
+    'for (var a = 1 + (2 || (b in c)) in {});',
+    'for (var a = (() => b in c) in {});',
+    'for (var a = 1 || (() => b in c) in {});',
+    'for (var a = (() => { b in c; }) in {});',
+    'for (var a = [b in c] in {});',
+    'for (var a = {b: b in c} in {});',
+    'for (var a = (x = b in c) => {} in {});',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { webcompat: true });
+        parseSource(text, { webcompat: true });
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { webcompat: true, impliedStrict: true });
+        parseSource(text, { webcompat: true, impliedStrict: true });
       });
     });
 
-    it(`${arg}`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`${arg}`);
-      });
-    });
-
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { impliedStrict: true });
+        parseSource(text);
+      });
+    });
+
+    it(text, () => {
+      t.throws(() => {
+        parseSource(text, { impliedStrict: true });
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     '"use strict";\nfor (var a = 0 in {});',
     'for(var [] = 0 in {});',
     'for(var [,] = 0 in {});',
@@ -205,14 +214,14 @@ describe('Statements - For in', () => {
     'for ([].x = y in y) {}',
     'for (a() in b) break',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     'for (var a = b, c, d, b = a ; x in b ; ) { break }',
     'for ([].x in y) {}',
     'for (var {j} in x) { foo = j }',
@@ -433,39 +442,39 @@ describe('Statements - For in', () => {
     'for (function(){ a in b; };;);',
     'for (function(){ a in b; }.foo;;);',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
 
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { lexical: true });
+        parseSource(text, { lexical: true });
       });
     });
 
-    it(`async(); ${arg}`, () => {
+    it(`async(); ${text}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`async(); ${arg}`);
+        parseSource(`async(); ${text}`);
       });
     });
 
-    it(`function foo() { ${arg} }`, () => {
+    it(`function foo() { ${text} }`, () => {
       t.doesNotThrow(() => {
-        parseSource(`function foo() { ${arg} }`);
+        parseSource(`function foo() { ${text} }`);
       });
     });
   }
@@ -518,6 +527,7 @@ describe('Statements - For in', () => {
     { code: 'for (let in o) { }', options: { impliedStrict: true } },
     'for(var [...a] = 0 in {});',
     'for (var a = () => { return "a"} in {});',
+    { code: 'for (var a = () => { return "a"} in {});', options: { impliedStrict: true, webcompat: true } },
     'for (const ...x in y){}',
     'for (...x in y){}',
     'for (let a = b => b in c; ;);',
@@ -572,6 +582,7 @@ describe('Statements - For in', () => {
     { code: 'for ({ eval } in [{}]) ;', options: { impliedStrict: true } },
     { code: 'for ({ eval } in [{}]) ;', options: { impliedStrict: true, webcompat: true } },
     'for (var i, j = void 0 in [1, 2, 3]) {}',
+    'for (var i, j in [1, 2, 3]) {}',
     'function foo() { for (var i, j of {}) {} }',
     '"use strict"; for ([ x = yield ] in [[]]) ;',
     'for ([[(x, y)]] in [[[]]]) ;',
@@ -611,6 +622,22 @@ describe('Statements - For in', () => {
     'for ([].bar = x in obj);',
     'for ([]=1 in x);',
   ]);
+  fail('Statements - For in (parenthesized origin fail)', [
+    { code: 'for (var a = (x => {} in y);;);', options: { webcompat: false } },
+    { code: 'for (var a = (x => {} in y);;);', options: { webcompat: true } },
+    { code: 'for (var a = (x => {} in y) in z);', options: { webcompat: false } },
+    { code: 'for (var a = (x => {} in y) in z);', options: { webcompat: true } },
+    { code: 'for (var a = (x => {} in y), b = 1;;);', options: { webcompat: false } },
+    { code: 'for (var a = (x => {} in y), b = 1;;);', options: { webcompat: true } },
+  ]);
+  fail('Statements - For in (origin state guard fail)', [
+    { code: 'for (var a = {p: () => {} in y};;);', options: { webcompat: false } },
+    { code: 'for (var a = {p: () => {} in y};;);', options: { webcompat: true } },
+    { code: 'for (var a = f(() => {} in y);;);', options: { webcompat: false } },
+    { code: 'for (var a = f(() => {} in y);;);', options: { webcompat: true } },
+    { code: 'for (var a = function () { return () => {} in y; };;);', options: { webcompat: false } },
+    { code: 'for (var a = function () { return () => {} in y; };;);', options: { webcompat: true } },
+  ]);
   pass('Statements - For in (pass)', [
     'for ({x: a.b} in obj);',
 
@@ -618,15 +645,13 @@ describe('Statements - For in', () => {
     'for ({}.bar in obj);',
     'for ([].bar in obj);',
     'for (var {x : y} in obj);',
-    'for(var x=1 in [1,2,3]) 0',
     'for (var [foo, bar=b] of arr);',
     'for (function* y() { new.target in /(?:()|[]|(?!))/iuy };; (null))  {}',
     'for (var {[x]: y} of obj);',
-
     'for (var {x = y} in obj);',
     'for (var [] in x);',
     'for (var [foo,] in arr);',
-    'for (var a = b in c);',
+    { code: 'for (var a = b in c);', options: { webcompat: true } },
     { code: 'for (var [foo,bar] in arr);', options: { ranges: true } },
     { code: 'for (let.x in {}) {}', options: { ranges: true } },
     { code: 'for (var [foo,,] in arr);', options: { ranges: true } },
@@ -656,9 +681,6 @@ describe('Statements - For in', () => {
     'for (let a in b);',
     'for (const a in b);',
     'for (a in b=c);',
-    'for (var a = ++b in c);',
-    'for (var a = 0 in stored = a, {});',
-    'for (var a = (++effects, -1) in x);',
     'for (var a in stored = a, {a: 0, b: 1, c: 2});',
     {
       code: 'for (var a = (++effects, -1) in stored = a, {a: 0, b: 1, c: 2});',
@@ -756,5 +778,7 @@ describe('Statements - For in', () => {
     'for (x in {a: b}) {}',
     'function foo(){ "use strict"; for(x in {}, {}) {} }',
     'for(const x in [1,2,3]) {}',
+    { code: 'for (var a = () => { return "a"} in {});', options: { webcompat: true } },
+    { code: 'for (var a = (x = b in c) => {} in {});', options: { webcompat: true } },
   ]);
 });

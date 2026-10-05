@@ -4,7 +4,7 @@ import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser.ts';
 
 describe('Miscellaneous - Early errors', () => {
-  for (const arg of [
+  for (const text of [
     '{ a = 0 });',
     '(...a)',
     '(a, ...b)',
@@ -45,7 +45,9 @@ describe('Miscellaneous - Early errors', () => {
     String.raw`\u{110000}`,
     String.raw`\u{FFFFFFF}`,
     String.raw`/./\u{69}`,
-    //`async function a(){ (a = await (0)) => {}; }`,
+    'async function a(){ (a = await (0)) => {}; }',
+    'async function a(){ (a = await 0, b = yield) => {}; }',
+    'async function a(){ (a = await 0, b = (c) => 0) => {}; }',
     'async function a(b = await (0)) {}',
     '(async function(b = await (0)) {})',
     '({ async a(b = await (0)) {} })',
@@ -324,19 +326,19 @@ describe('Miscellaneous - Early errors', () => {
     'a: while (true) { (function () { break; }); }',
     'for(const a;;);',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { webcompat: true });
+        parseSource(text, { webcompat: true });
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { sourceType: 'module' });
+        parseSource(text, { sourceType: 'module' });
       });
     });
   }

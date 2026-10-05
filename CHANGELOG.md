@@ -1,3 +1,84 @@
+# [7.4.0](https://github.com/meriyah/meriyah/compare/v7.3.3...v7.4.0) (2026-10-05)
+
+### Bug Fixes
+
+* **jsx:** compare namespaced tag names by text, and type the common.ts helpers ([#655](https://github.com/meriyah/meriyah/issues/655)) ([b60eb49](https://github.com/meriyah/meriyah/commit/b60eb49d2fc16ba363ffb9f05b190d92f51cc746))
+* **lexer:** treat LS/PS after a backslash in templates as a line continuation ([#665](https://github.com/meriyah/meriyah/issues/665)) ([205f6f0](https://github.com/meriyah/meriyah/commit/205f6f0250f924368ca73488d00b2ac74092b2fb))
+* **parser:** allow await identifiers in ordinary parameter defaults ([#666](https://github.com/meriyah/meriyah/issues/666)) ([02c894b](https://github.com/meriyah/meriyah/commit/02c894bb5d0637f681347a7731862881015a8a58))
+* **parser:** parse `/` after an `await` identifier as division ([#659](https://github.com/meriyah/meriyah/issues/659)) ([7424452](https://github.com/meriyah/meriyah/commit/7424452d09317a01d6766944873bd36bd7eb8125))
+* **parser:** reject `await` in class field initializers ([#651](https://github.com/meriyah/meriyah/issues/651)) ([51dfdcb](https://github.com/meriyah/meriyah/commit/51dfdcb7c3d7c60b7e68581919629fd9250b9549))
+* **parser:** reject escaped `await` in async arrow parameters ([#647](https://github.com/meriyah/meriyah/issues/647)) ([e45a36c](https://github.com/meriyah/meriyah/commit/e45a36c89821e6725701f761699b13cdf17575b1))
+* **parser:** report yield-in-parameter errors at the yield token ([#656](https://github.com/meriyah/meriyah/issues/656)) ([754a550](https://github.com/meriyah/meriyah/commit/754a550c5896b6d1a8dbead95208ae206a15466d))
+* **parser:** restrict continue targets to iteration statement labels ([#646](https://github.com/meriyah/meriyah/issues/646)) ([3df8ade](https://github.com/meriyah/meriyah/commit/3df8adea6fb57e01d81478e4b2453a3b29248fe3))
+
+### Features
+
+* support Unicode 18 ([#660](https://github.com/meriyah/meriyah/issues/660)) ([d666dca](https://github.com/meriyah/meriyah/commit/d666dca10294abbfadd2c0b0a31a3e1501ab946f))
+
+## [7.3.3](https://github.com/meriyah/meriyah/compare/v7.3.2...v7.3.3) (2026-09-05)
+
+### Bug Fixes
+
+* **jsx:** count line terminators and decode entities in attribute values ([#635](https://github.com/meriyah/meriyah/issues/635)) ([75e591d](https://github.com/meriyah/meriyah/commit/75e591de2202da990acca0a5ff13487fa2964ea6))
+* **jsx:** count line terminators in JSXText ([#645](https://github.com/meriyah/meriyah/issues/645)) ([933ab26](https://github.com/meriyah/meriyah/commit/933ab2658f61ac8dcd8242194f3564ea96042d30))
+* **jsx:** fix `JSXText` value decoding ([#642](https://github.com/meriyah/meriyah/issues/642)) ([8e96fc7](https://github.com/meriyah/meriyah/commit/8e96fc76200d9e0b80733faddd45cd86ee912de4))
+* **jsx:** fix named entries decoding in `JSXText` ([#638](https://github.com/meriyah/meriyah/issues/638)) ([9d237a2](https://github.com/meriyah/meriyah/commit/9d237a27ee6dee9046bb648a6911a27635b52b25))
+* **parser:** allow `async of` in for await-of statement ([#633](https://github.com/meriyah/meriyah/issues/633)) ([0d8893e](https://github.com/meriyah/meriyah/commit/0d8893ecb99cf5306edc6beb3e485e053c07f007))
+* **parser:** allow constructor/accessor identifiers and using arrows ([#637](https://github.com/meriyah/meriyah/issues/637)) ([1248953](https://github.com/meriyah/meriyah/commit/1248953939675c68fe5faaf580e3e750073bd35d))
+* **parser:** propagate `DestructuringKind.Await` alongside `Yield` ([#634](https://github.com/meriyah/meriyah/issues/634)) ([3e87ff3](https://github.com/meriyah/meriyah/commit/3e87ff38da80149e7ee4e80f89beea2f7ac60fc8))
+* **parser:** restrict private identifiers to in expressions ([#644](https://github.com/meriyah/meriyah/issues/644)) ([875d8eb](https://github.com/meriyah/meriyah/commit/875d8ebff64242eb9d208ece6efee4358afd5849))
+
+## [7.3.2](https://github.com/meriyah/meriyah/compare/v7.3.1...v7.3.2) (2026-08-17)
+
+### Bug Fixes
+
+* **jsx:** fix pasring jsx contextual identifier ([#630](https://github.com/meriyah/meriyah/issues/630)) ([503bc24](https://github.com/meriyah/meriyah/commit/503bc2425d4af95df328f6c1e676269aaeccb54d)), closes [#629](https://github.com/meriyah/meriyah/issues/629)
+* **jsx:** fix tokenizing ">" when "=" is after ([#632](https://github.com/meriyah/meriyah/issues/632)) ([6d419ac](https://github.com/meriyah/meriyah/commit/6d419aca1b76c36b379c595ca26a3fe96ed1cf77)), closes [#631](https://github.com/meriyah/meriyah/issues/631)
+* **parser:** fix error location for duplicate binding ([#628](https://github.com/meriyah/meriyah/issues/628)) ([49500e1](https://github.com/meriyah/meriyah/commit/49500e17acfff303dff4768523cbecfd66e09dba))
+
+## [7.3.1](https://github.com/meriyah/meriyah/compare/v7.3.0...v7.3.1) (2026-08-06)
+
+### Bug Fixes
+
+* **jsx:** forbid `}` and `>` in JSX element children ([#622](https://github.com/meriyah/meriyah/issues/622)) ([9dde69a](https://github.com/meriyah/meriyah/commit/9dde69ac80f808c1f76e267ea76f8d057a5a2d1b)), closes [#619](https://github.com/meriyah/meriyah/issues/619)
+* **parser:** allow top-level `using` declarations in commonjs source type ([#627](https://github.com/meriyah/meriyah/issues/627)) ([ec524bc](https://github.com/meriyah/meriyah/commit/ec524bc2402ff3dadd4858a46031b61a4ecd1e59))
+* **parser:** delay the process of 'in' token after arrow func expression ([86f1acd](https://github.com/meriyah/meriyah/commit/86f1acdcfa962b09e672c2a5766f1d434a05962b)), closes [#273](https://github.com/meriyah/meriyah/issues/273)
+* **parser:** For-In initializer is only available in non-strict webcompat code ([aa0797f](https://github.com/meriyah/meriyah/commit/aa0797f67dcd8a318c637e84fe7c6277801e0a25))
+* **parser:** forbid await in parenthesized async arrow parameters ([#623](https://github.com/meriyah/meriyah/issues/623)) ([fb12e77](https://github.com/meriyah/meriyah/commit/fb12e77fa09ef1bba6c00f6a45eca63f44e34814)), closes [#620](https://github.com/meriyah/meriyah/issues/620) [#337](https://github.com/meriyah/meriyah/issues/337)
+* **parser:** reset origin for parenthesized contents ([3c3ce74](https://github.com/meriyah/meriyah/commit/3c3ce749dfd3c9186fa21663cef2ae6559f816cb))
+
+# [7.3.0](https://github.com/meriyah/meriyah/compare/v7.2.0...v7.3.0) (2026-07-29)
+
+### Bug Fixes
+
+* **parser:** fix class keyword check after decorator for class expression ([#617](https://github.com/meriyah/meriyah/issues/617)) ([faa2324](https://github.com/meriyah/meriyah/commit/faa2324975c3723cc885f23cb1ed8f0c711ddff6)), closes [#612](https://github.com/meriyah/meriyah/issues/612)
+* **parser:** restrict decorator expressions to the decorators grammar ([#612](https://github.com/meriyah/meriyah/issues/612)) ([2047ba4](https://github.com/meriyah/meriyah/commit/2047ba4110f8d37d8ffbc61b4fb5d6e476c6a2a9))
+* **parser:** scope pending octal errors to the code unit that produced them ([#615](https://github.com/meriyah/meriyah/issues/615)) ([865731a](https://github.com/meriyah/meriyah/commit/865731a56ece9c61d6c74e984bfee7374140605f))
+
+### Features
+
+* **parser:** support import defer and import source phases ([#588](https://github.com/meriyah/meriyah/issues/588)) ([c7458a3](https://github.com/meriyah/meriyah/commit/c7458a360dad51517dd20914c8c3eecd02a4ac84))
+
+### Performance Improvements
+
+* **lexer:** replace keyword table with Map and add length pre-filter ([#604](https://github.com/meriyah/meriyah/issues/604)) ([4b53020](https://github.com/meriyah/meriyah/commit/4b5302082e3386e8bc2a2be175dae8f93aba0086))
+
+# [7.2.0](https://github.com/meriyah/meriyah/compare/v7.1.2...v7.2.0) (2026-07-24)
+
+### Bug Fixes
+
+* export map missing `import` ([#585](https://github.com/meriyah/meriyah/issues/585)) ([bcd697e](https://github.com/meriyah/meriyah/commit/bcd697e9e9ac1f28037748a5b5879c29d49d1326))
+* **lexer:** normalize template carriage returns per TV/TRV ([#580](https://github.com/meriyah/meriyah/issues/580)) ([d1dcd16](https://github.com/meriyah/meriyah/commit/d1dcd16bb78e83e79a1b72370cc8e9d67ef16abf))
+* **parser:** reject assignments to optional chain members ([#587](https://github.com/meriyah/meriyah/issues/587)) ([d1fd37d](https://github.com/meriyah/meriyah/commit/d1fd37d6294d4d248cc4a4d1dba1e4908f75c05e))
+
+### Features
+
+* **parser:** support explicit resource management declarations ([#579](https://github.com/meriyah/meriyah/issues/579)) ([d40161d](https://github.com/meriyah/meriyah/commit/d40161d245b966da3a058c0cca4d6c054a97f296))
+
+### Performance Improvements
+
+* skip template CR normalization when scan saw no carriage returns ([#583](https://github.com/meriyah/meriyah/issues/583)) ([65c3bf9](https://github.com/meriyah/meriyah/commit/65c3bf9c3dd2add375be599f9af4dd51e2c695e7))
+
 ## [7.1.2](https://github.com/meriyah/meriyah/compare/v7.1.1...v7.1.2) (2026-07-11)
 
 ### Bug Fixes

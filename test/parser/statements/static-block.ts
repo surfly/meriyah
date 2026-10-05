@@ -4,8 +4,8 @@ import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
-describe('Next - Class static initialization block', () => {
-  fail('Next - Class static initialization block (fail)', [
+describe('Class static initialization block', () => {
+  fail('Class static initialization block (fail)', [
     'class A { static { super() } }',
     'class A {}; class B extends A { static { super() } }',
     'class A { static async {} }',
@@ -13,7 +13,7 @@ describe('Next - Class static initialization block', () => {
     'async function t() { class A { static { await 0 } } }',
   ]);
 
-  for (const arg of [
+  for (const text of [
     outdent`
       class C {
         static {
@@ -50,14 +50,14 @@ describe('Next - Class static initialization block', () => {
       }
     `,
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
   }
 
-  pass('Next - Class static initialization block (pass)', [
+  pass('Class static initialization block (pass)', [
     { code: 'class A { static {} }', options: { loc: true, ranges: true } },
     'class A { static { this.a } }',
     'class A {}; class B extends A { static { super.a } }',

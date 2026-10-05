@@ -1,11 +1,12 @@
 import * as t from 'node:assert/strict';
 import { outdent } from 'outdent';
 import { describe, it } from 'vitest';
+import type * as ESTree from '../../../src/estree.ts';
 import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
 describe('Miscellaneous - JSX', () => {
-  for (const arg of [
+  for (const text of [
     '<Component {...x}></Component>;',
     '<Component.Test />;',
     '<div>{...this.props.children}</div>;',
@@ -25,15 +26,94 @@ describe('Miscellaneous - JSX', () => {
     '<p>{1/2}</p>',
     '<p>{/w/.test(s)}</p>',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { jsx: true, next: true });
+        parseSource(text, { jsx: true });
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg}`, { jsx: true, next: true, webcompat: true });
+        parseSource(text, { jsx: true, webcompat: true });
       });
+    });
+  }
+
+  // Line terminators inside a JSX attribute value have to be counted, or every
+  // location after the attribute is wrong. https://github.com/meriyah/meriyah/issues/90
+  for (const [name, separator] of [
+    ['<LF>', '\n'],
+    ['<CR>', '\r'],
+    ['<CR><LF>', '\r\n'],
+    ['<LS>', '\u2028'],
+    ['<PS>', '\u2029'],
+  ] as const) {
+    it(`${name} in a JSX attribute value counts as one line`, () => {
+      // The attribute value holds one line terminator, `var after = 1;` follows
+      // one more, so the program ends on line 3.
+      const { loc } = parseSource(`<a b="x${separator}y" />;\nvar after = 1;`, { jsx: true, loc: true });
+
+      t.equal(loc?.end.line, 3);
+      t.equal(loc?.end.column, 14);
+    });
+  }
+
+  // `nextJSXToken` previously looked up line terminators through `CharTypes`,
+  // which has the `CarriageReturn`/`LineFeed` flags swapped relative to the
+  // conventional `\r`/`\n` mapping and only covers the first 128 code points.
+  // That made `<CR><LF>` two line terminators (instead of one), `<LF><CR>`
+  // one (instead of two), and skipped `<LS>` / `<PS>` entirely. The decoded
+  // `JSXText.value` also kept `<CR><LF>` raw instead of normalizing it to
+  // `<LF>`, which Babel and acorn-jsx both do.
+  for (const [name, source, expectedValue, expectedEndLine] of [
+    ['<LF>', '<a>foo\nbar</a>', 'foo\nbar', 2],
+    ['<CR>', '<a>foo\rbar</a>', 'foo\rbar', 2],
+    ['<CR><LF>', '<a>foo\r\nbar</a>', 'foo\nbar', 2],
+    ['<LF><CR>', '<a>foo\n\rbar</a>', 'foo\n\rbar', 3],
+    ['<LS>', '<a>foo\u2028bar</a>', 'foo\u2028bar', 2],
+    ['<PS>', '<a>foo\u2029bar</a>', 'foo\u2029bar', 2],
+    ['two <CR><LF>', '<a>\r\n\r\n</a>', '\n\n', 3],
+  ] as const) {
+    it(`${name} in JSX text counts as one line terminator`, () => {
+      const ast = parseSource(source, { jsx: true, loc: true });
+      const element = (ast.body[0] as ESTree.ExpressionStatement).expression as ESTree.JSXElement;
+      const text = element.children[0] as ESTree.JSXText;
+
+      t.equal(text.value, expectedValue);
+      t.equal(text.loc?.end.line, expectedEndLine);
+    });
+  }
+
+  it('normalizes <CR><LF> to <LF> in JSX text value but keeps a lone <CR>', () => {
+    const ast = parseSource('<a>foo\r\nbar\rbaz</a>', { jsx: true });
+    const element = (ast.body[0] as ESTree.ExpressionStatement).expression as ESTree.JSXElement;
+    const text = element.children[0] as ESTree.JSXText;
+
+    // `<CR><LF>` -> `<LF>`, lone `<CR>` stays.
+    t.equal(text.value, 'foo\nbar\rbaz');
+  });
+
+  // `nextJSXToken` decodes HTML entities in JSX text, `scanJSXString` has to do
+  // the same for attribute values. https://github.com/meriyah/meriyah/issues/133
+  for (const [attributeValue, value] of [
+    ['&amp;', '&'],
+    ['&#38;', '&'],
+    ['&#x26;', '&'],
+    ['&nbsp;', '\u00a0'],
+    ['&#0123;&hellip;&#x7D;', '{…}'],
+    // Not entities, kept as is
+    ['&notanentity;', '&notanentity;'],
+    ['&amp', '&amp'],
+    ['&#;', '&#;'],
+  ] as const) {
+    it(`decodes ${attributeValue} in a JSX attribute value`, () => {
+      const ast = parseSource(`<a b="${attributeValue}" />`, { jsx: true, raw: true });
+      const element = (ast.body[0] as ESTree.ExpressionStatement).expression as ESTree.JSXElement;
+      const attribute = element.openingElement.attributes[0] as ESTree.JSXAttribute;
+      const literal = attribute.value as ESTree.StringLiteral;
+
+      t.equal(literal.value, value);
+      // The raw text is the source slice, decoding must not touch it
+      t.equal(literal.raw, `"${attributeValue}"`);
     });
   }
 
@@ -56,6 +136,10 @@ describe('Miscellaneous - JSX', () => {
     { code: '<p></>', options: { jsx: true } },
     { code: '<p><q></p>', options: { jsx: true } },
     { code: '<1/>', options: { jsx: true } },
+    { code: '<div>}</div>', options: { jsx: true } },
+    { code: '<div>foo}bar</div>', options: { jsx: true } },
+    { code: '<div>></div>', options: { jsx: true } },
+    { code: '<div>foo>bar</div>', options: { jsx: true } },
     { code: '<div id={}></div>', options: { jsx: true } },
     { code: '<div>one</div><div>two</div>', options: { jsx: true } },
     { code: '</>', options: { jsx: true } },
@@ -70,6 +154,9 @@ describe('Miscellaneous - JSX', () => {
     { code: '<f><g/></ff>;', options: { jsx: true } },
     { code: '<:path />', options: { jsx: true } },
     { code: '<path></svg:path>', options: { jsx: true } },
+    { code: '<a:b></c:d>', options: { jsx: true } },
+    { code: '<a:x></b:x>', options: { jsx: true } },
+    { code: '<x:a></x:b>', options: { jsx: true } },
     { code: '<foo.bar></foo.baz>', options: { jsx: true } },
     { code: '<chinese:alladinfoo.bar></foo.baz>', options: { jsx: true } },
     { code: '<foo:bar></foo.baz>', options: { jsx: true } },
@@ -121,6 +208,9 @@ describe('Miscellaneous - JSX', () => {
     { code: '<div=/>', options: { jsx: true } },
     { code: '<div =/>', options: { jsx: true } },
     { code: '<div=+-%&([)]}.../>', options: { jsx: true } },
+    // The error location has to account for the line terminator in the attribute value
+    { code: '<a b="x\ny', options: { jsx: true } },
+    { code: '<a b="x\r\ny"', options: { jsx: true } },
   ]);
 
   pass('Miscellaneous - JSX (pass)', [
@@ -263,15 +353,21 @@ describe('Miscellaneous - JSX', () => {
     },
     {
       code: '<SolarSystem.Earth.America.USA.California.mountain-view></SolarSystem.Earth.America.USA.California.mountain-view>',
-      options: { jsx: true, next: true },
+      options: { jsx: true },
     },
-    { code: 'function *g() { yield <h1>Hello</h1> }', options: { jsx: true, next: true } },
-    { code: '<a>{`${1}`}</a>', options: { jsx: true, next: true } },
-    { code: '<strong><em><a href="{link}"><test/></a></em></strong>', options: { jsx: true, next: true } },
-    { code: '<x y="&#123abc &#123;" />', options: { jsx: true, next: true } },
-    { code: '<a b="&#xA2; &#x00A3;"/>', options: { jsx: true, next: true } },
-    { code: '<p q="Just my &#xA2;2" />', options: { jsx: true, next: true } },
-    { code: 'class C {  static a = <C.z></C.z> }', options: { jsx: true, next: true } },
+    { code: 'function *g() { yield <h1>Hello</h1> }', options: { jsx: true } },
+    { code: '<a>{`${1}`}</a>', options: { jsx: true } },
+    { code: '<strong><em><a href="{link}"><test/></a></em></strong>', options: { jsx: true } },
+    { code: '<x y="&#123abc &#123;" />', options: { jsx: true } },
+    { code: '<a b="&#xA2; &#x00A3;"/>', options: { jsx: true } },
+    { code: '<p q="Just my &#xA2;2" />', options: { jsx: true } },
+    { code: '<a b="&amp;&#38;&#x26;" />;\nvar after = 1;', options: { jsx: true, ranges: true, loc: true, raw: true } },
+    { code: '<a b="x\ny" />;\nvar after = 1;', options: { jsx: true, ranges: true, loc: true, raw: true } },
+    { code: '<a b="x\ry" />;\nvar after = 1;', options: { jsx: true, ranges: true, loc: true, raw: true } },
+    { code: '<a b="x\r\ny" />;\nvar after = 1;', options: { jsx: true, ranges: true, loc: true, raw: true } },
+    { code: '<a b="x\u2028y" />;\nvar after = 1;', options: { jsx: true, ranges: true, loc: true, raw: true } },
+    { code: '<a b="x\u2029y" />;\nvar after = 1;', options: { jsx: true, ranges: true, loc: true, raw: true } },
+    { code: 'class C {  static a = <C.z></C.z> }', options: { jsx: true } },
 
     { code: '<n:a n:v />', options: { jsx: true } },
 
@@ -521,5 +617,11 @@ describe('Miscellaneous - JSX', () => {
     { code: '<a></* block */\n/a>;', options: { jsx: true } },
     { code: '</* open fragment */>\n</ /* close fragment */>;', options: { jsx: true, ranges: true } },
     { code: '<a><  /a>', options: { jsx: true, ranges: true } },
+    { code: '<a with-dash />', options: { jsx: true } },
+    { code: '<with-dash />', options: { jsx: true } },
+    { code: '<a with />', options: { jsx: true } },
+    { code: '<with/>', options: { jsx: true } },
+    { code: '<a>=</a>', options: { jsx: true } },
+    { code: '<a/>==1', options: { jsx: true } },
   ]);
 });

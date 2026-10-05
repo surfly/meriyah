@@ -4,7 +4,7 @@ import { describe, it } from 'vitest';
 import { parseSource } from '../../../src/parser.ts';
 
 describe('Miscellaneous - Failure', () => {
-  for (const arg of [
+  for (const text of [
     'async function f(await) {}',
     'async await => {}',
     'eval => {"use strict";}',
@@ -684,13 +684,34 @@ describe('Miscellaneous - Failure', () => {
     'for ({}.x);',
     'async (a, ...b, ...c) => {}',
     'function* a(){ async (yield) => {}; }',
-    // FIXME: #337
-    // 'async (a = await => {}) => {}',
-    // 'async (a = aw\\u{61}it => {}) => {}',
-    // 'async (a = (b = await (0)) => {}) => {}',
-    // `async ({x} = await bar) => {}`,
-    // `let z = async ({x} = await bar) => {}`,
-    // `async ({x} = await bar);`,
+    'async (a = await => {}) => {}',
+    'async (a = (b = await (0)) => {}) => {}',
+    'async ({x} = await bar) => {}',
+    'let z = async ({x} = await bar) => {}',
+    'async (yield, await) => 1',
+    'async (await, yield) => 1',
+    'async (a = yield, b = await) => 1',
+    'async (a = await, b = yield) => 1',
+    'async ([yield, await]) => 1',
+    'async ([a = yield, b = await]) => 1',
+    'async ([yield], [await]) => 1',
+    'async (...[yield, await]) => 1',
+    'async ({a: [b = yield]}, {c: [d = await]}) => 1',
+    'async (a = yield, [b = await]) => 1',
+    'async (a = await, b = (c) => 1) => 1',
+    String.raw`async (a = aw\u{61}it => {}) => {}`,
+    String.raw`async (a = aw\u0061it => {}) => {}`,
+    String.raw`async (aw\u{61}it) => {}`,
+    String.raw`async (a = aw\u{61}it) => {}`,
+    String.raw`async aw\u{61}it => {}`,
+    String.raw`async ([aw\u{61}it]) => {}`,
+    String.raw`async ({aw\u{61}it}) => {}`,
+    String.raw`async ({a: aw\u{61}it}) => {}`,
+    String.raw`async ({a = aw\u{61}it}) => {}`,
+    String.raw`async (...aw\u{61}it) => {}`,
+    String.raw`async (a = (aw\u{61}it) => {}) => {}`,
+    String.raw`async (a = async (aw\u{61}it) => {}) => {}`,
+    String.raw`async (a = aw\u{61}it (2)) => {}`,
     '(a, ...b,) => 0',
     'function a(b, ...c,) {}',
     '({ a (,) {} })',
@@ -2126,47 +2147,47 @@ describe('Miscellaneous - Failure', () => {
     'async function a(){ async (foo = [{m: 5 + t(+await bar)}]) => {}     }',
     '++(x) => b',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { webcompat: true });
+        parseSource(text, { webcompat: true });
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`);
+        parseSource(text);
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { lexical: true });
+        parseSource(text, { lexical: true });
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { sourceType: 'module', lexical: true });
+        parseSource(text, { sourceType: 'module', lexical: true });
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { sourceType: 'module' });
+        parseSource(text, { sourceType: 'module' });
       });
     });
   }
 
-  for (const arg of [
+  for (const text of [
     String.raw`let l\u0065t = 1`,
     String.raw`const l\u0065t = 1`,
     String.raw`for (let l\u0065t in {}) {}`,
     'const package = 1;',
   ]) {
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { sourceType: 'module', lexical: true });
+        parseSource(text, { sourceType: 'module', lexical: true });
       });
     });
-    it(`${arg}`, () => {
+    it(text, () => {
       t.throws(() => {
-        parseSource(`${arg}`, { impliedStrict: true });
+        parseSource(text, { impliedStrict: true });
       });
     });
   }

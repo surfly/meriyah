@@ -5,7 +5,7 @@ import { parseSource } from '../../../src/parser.ts';
 import { fail, pass } from '../../test-utils.ts';
 
 describe('Expressions - Async arrow', () => {
-  for (const arg of [
+  for (const text of [
     '(a, b, (c, d) => 0)',
     '(a, b) => 0, (c, d) => 1',
     '(a, b => {}, a => a + 1)',
@@ -77,51 +77,45 @@ describe('Expressions - Async arrow', () => {
     '((a, b) => a + b)(1, 4), 5',
     '((a, b) => { return a + b; })(1, 5), 6',
   ]) {
-    it(`async ${arg}`, () => {
+    it(`async ${text}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`async ${arg}`);
+        parseSource(`async ${text}`);
       });
     });
 
-    it(`async ${arg}`, () => {
+    it(`async ${text}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`async ${arg}`, { lexical: true });
+        parseSource(`async ${text}`, { lexical: true });
       });
     });
 
-    it(`async ${arg}`, () => {
+    it(`async ${text}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`async ${arg}`, { webcompat: true });
+        parseSource(`async ${text}`, { webcompat: true });
       });
     });
 
-    it(`bar, async ${arg};`, () => {
+    it(`bar, async ${text};`, () => {
       t.doesNotThrow(() => {
-        parseSource(`bar, async ${arg};`);
+        parseSource(`bar, async ${text};`);
       });
     });
 
-    it(`bar ? async (${arg}) : baz;`, () => {
+    it(`bar ? async (${text}) : baz;`, () => {
       t.doesNotThrow(() => {
-        parseSource(`bar ? async (${arg}) : baz;`);
+        parseSource(`bar ? async (${text}) : baz;`);
       });
     });
 
-    it(`bar ? baz : async  (${arg});`, () => {
+    it(`bar ? baz : async  (${text});`, () => {
       t.doesNotThrow(() => {
-        parseSource(`bar ? baz : async  (${arg});`);
+        parseSource(`bar ? baz : async  (${text});`);
       });
     });
 
-    it(`async ${arg}, bar;`, () => {
+    it(`async ${text}, bar;`, () => {
       t.doesNotThrow(() => {
-        parseSource(`async ${arg}, bar;`);
-      });
-    });
-
-    it(`async ${arg}, bar;`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`async ${arg}, bar;`, { next: true });
+        parseSource(`async ${text}, bar;`);
       });
     });
   }
@@ -229,6 +223,10 @@ describe('Expressions - Async arrow', () => {
     'async ([{x: y.z} = a]) => b',
     'async(foo = super()) => {}',
     'async(x = await) => {  }',
+    { code: 'async(x = await (0)) => 1', options: { sourceType: 'module' } },
+    { code: 'async(x = await(0)) => 1', options: { sourceType: 'module' } },
+    { code: 'async (x = await (2)) => {};', options: { sourceType: 'module' } },
+    'async function t() { async(foo = await 0) => 1 }',
     'async (x = 1) => {"use strict"}',
     'async(await) => {  }',
     'async(foo) => { super() };',
@@ -530,9 +528,23 @@ describe('Expressions - Async arrow', () => {
     '(async(...a, ...b) => x)',
     'async (/foo/) => bar',
     'async({a = 1}, {b = 2} = {}, {c = 3} = {})',
+    'async (yield, await) => 1',
+    'async (await, yield) => 1',
+    'async (a = yield, b = await) => 1',
+    'async (a = await, b = yield) => 1',
+    'async ([yield, await]) => 1',
+    'async ([await, yield]) => 1',
+    'async ([a = yield, b = await]) => 1',
+    'async ([yield], [await]) => 1',
+    'async (...[yield, await]) => 1',
+    'async ({a: [b = yield]}, {c: [d = await]}) => 1',
+    'async (a = yield, [b = await]) => 1',
+    'async (a = await, b = (c) => 1) => 1',
+    'async (a = await, b = ([c]) => 1) => 1',
+    { code: 'function* g(){ async (a = yield, b = (c) => 1) => 1; }', options: { webcompat: true } },
   ]);
 
-  for (const arg of [
+  for (const text of [
     'async(async(async(async(async(async())))))',
     'async()(async() => {})',
     'async(a)(s)(y)(n)(c)',
@@ -853,39 +865,33 @@ describe('Expressions - Async arrow', () => {
     `,
     'var f = cond ? x=>{x.foo } : x=>x + x + x + x + x + x + (x =>x)',
   ]) {
-    it(`${arg};`, () => {
+    it(`${text};`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg};`);
+        parseSource(`${text};`);
       });
     });
 
-    it(`${arg};`, () => {
+    it(`${text};`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg};`, { lexical: true });
+        parseSource(`${text};`, { lexical: true });
       });
     });
 
-    it(`${arg};`, () => {
+    it(`${text};`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg};`, { webcompat: true, lexical: true });
+        parseSource(`${text};`, { webcompat: true, lexical: true });
       });
     });
 
-    it(`${arg};`, () => {
+    it(`${text};`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg};`, { webcompat: true });
+        parseSource(`${text};`, { webcompat: true });
       });
     });
 
-    it(`${arg};`, () => {
+    it(`function foo() { ${text}}`, () => {
       t.doesNotThrow(() => {
-        parseSource(`${arg};`, { next: true });
-      });
-    });
-
-    it(`function foo() { ${arg}}`, () => {
-      t.doesNotThrow(() => {
-        parseSource(`function foo() { ${arg}}`, { webcompat: true });
+        parseSource(`function foo() { ${text}}`, { webcompat: true });
       });
     });
   }
@@ -926,5 +932,6 @@ describe('Expressions - Async arrow', () => {
     { code: 'f(async ()=>c)', options: { ranges: true } },
     { code: 'a => a => a => async a => a', options: { ranges: true } },
     { code: 'f(a, async (b, c) => await [b, c], d)', options: { ranges: true } },
+    'async function t() { async(foo = await 0) }',
   ]);
 });

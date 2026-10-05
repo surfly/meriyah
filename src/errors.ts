@@ -110,6 +110,8 @@ export const enum Errors {
   InvalidExportImportSource,
   InvalidKeywordAsAlias,
   InvalidDefaultImport,
+  InvalidDeferImport,
+  InvalidSourceImport,
   TrailingDecorators,
   GeneratorConstructor,
   AwaitIdentInModuleOrAsyncFunc,
@@ -180,6 +182,8 @@ export const enum Errors {
   InvalidEscapedImportMeta,
   InvalidAwaitAsIdentifier,
   InvalidAwaitInStaticBlock,
+  UnexpectedRightBraceInJSXText,
+  UnexpectedGreaterThanInJSXText,
 }
 
 const errorMessages: {
@@ -303,6 +307,8 @@ const errorMessages: {
   [Errors.InvalidExportImportSource]: '%0 source must be string',
   [Errors.InvalidKeywordAsAlias]: 'Only a identifier or string can be used to indicate alias',
   [Errors.InvalidDefaultImport]: "Only '*' or '{...}' can be imported after default",
+  [Errors.InvalidDeferImport]: "'import defer' must be followed by a namespace import",
+  [Errors.InvalidSourceImport]: "'import source' must be followed by a default import",
   [Errors.TrailingDecorators]: 'Trailing decorator may be followed by method',
   [Errors.GeneratorConstructor]: "Decorators can't be used with a constructor",
   [Errors.AwaitIdentInModuleOrAsyncFunc]: 'Can not use `await` as identifier in module or async func',
@@ -330,7 +336,7 @@ const errorMessages: {
   [Errors.UnexpectedCharAfterObjLit]: 'Unexpected character after object literal property name',
   [Errors.InvalidKeyToken]: 'Invalid key token',
   [Errors.LabelRedeclaration]: "Label '%0' has already been declared",
-  [Errors.InvalidNestedStatement]: 'continue statement must be nested within an iteration statement',
+  [Errors.InvalidNestedStatement]: "Label '%0' does not denote an iteration statement",
   [Errors.UnknownLabel]: "Undefined label '%0'",
   [Errors.InvalidImportTail]: 'Trailing comma is disallowed inside import(...) arguments',
   [Errors.InvalidJSONImportBinding]: 'Invalid binding in JSON import',
@@ -371,6 +377,8 @@ const errorMessages: {
   [Errors.InvalidEscapedImportMeta]: "'import.meta' must not contain escaped characters",
   [Errors.InvalidAwaitAsIdentifier]: 'cannot use "await" as identifier inside an async function',
   [Errors.InvalidAwaitInStaticBlock]: 'cannot use "await" in static blocks',
+  [Errors.UnexpectedRightBraceInJSXText]: "Unexpected token `}`. Did you mean `&rbrace;` or `{'}'}`?",
+  [Errors.UnexpectedGreaterThanInJSXText]: "Unexpected token `>`. Did you mean `&gt;` or `{'>'}`?",
 };
 
 export class ParseError extends SyntaxError implements _Node {
@@ -382,7 +390,7 @@ export class ParseError extends SyntaxError implements _Node {
   public description: string;
 
   constructor(start: Location, end: Location, type: Errors, ...params: string[]) {
-    const description = errorMessages[type].replace(/%(\d+)/g, (_: string, i: number) => params[i]);
+    const description = errorMessages[type].replaceAll(/%(\d+)/g, (_: string, i: number) => params[i]);
     const message = '[' + start.line + ':' + start.column + '-' + end.line + ':' + end.column + ']: ' + description;
     super(message);
     this.start = start.index;
