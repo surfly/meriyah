@@ -14,7 +14,7 @@
 ## Surfly Notes
 
 We use meriyah directly from `dist/meriyah.umd.js`.
-Therefore, after each change we need to compile updated version with `npm run bundle` and commit it.
+Therefore, after each change we need to compile updated version with `npm run build` and commit it.
 
 [Interactive Playground](https://meriyah.github.io/meriyah)
 [Benchmark](https://meriyah.github.io/meriyah/performance)

@@ -1,4 +1,5 @@
 import type * as ESTree from './estree.ts';
+import { type Comment } from './estree.ts';
 import { type Parser } from './parser/parser.ts';
 import { Token } from './token.ts';
 export declare const enum Context {
